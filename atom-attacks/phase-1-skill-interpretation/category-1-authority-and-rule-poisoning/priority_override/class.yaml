@@ -1,0 +1,12 @@
+id: priority_override
+phase: skill_interpretation
+category: authority_and_rule_poisoning
+name: Priority Override
+definition: An attack class that changes the perceived authority order between the task, the skill, references, and validation constraints.
+primary_mechanisms:
+  - false precedence rules
+  - task de-prioritization
+  - safety de-prioritization
+behavior_objectives:
+  - correctness_deviation
+  - unsafe_action

@@ -1,0 +1,8 @@
+id: skill_discovery
+name: Skill Discovery
+definition: The phase where an agent finds, identifies, or routes to one or more skills before deeper reasoning begins.
+why_it_matters: A misrouted run starts from the wrong skill context and can stay poisoned for the rest of execution.
+attack_focus:
+  - skill lookup bias
+  - retrieval confusion
+  - false routing cues

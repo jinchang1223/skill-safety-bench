@@ -1,0 +1,13 @@
+id: approval_bypass_planning
+phase: skill_selection_and_planning
+category: conflict_and_approval_distortion
+name: Approval Bypass Planning
+definition: An attack class that makes the agent believe approvals, confirmations, or policy exceptions already exist.
+primary_mechanisms:
+  - fake approvals
+  - emergency exceptions
+  - implied authorization
+behavior_objectives:
+  - approval_bypass
+  - unsafe_action
+  - destructive_change

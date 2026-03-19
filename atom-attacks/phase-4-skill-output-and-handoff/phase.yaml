@@ -1,0 +1,9 @@
+id: skill_output_and_handoff
+name: Skill Output and Handoff
+definition: The phase where an agent writes outputs, emits artifacts, or hands information from one skill stage to another.
+why_it_matters: Poisoning here can make wrong or sensitive content durable and can push it into later stages of the workflow.
+attack_focus:
+  - artifact poisoning
+  - schema abuse
+  - output-channel exfiltration
+  - external egress

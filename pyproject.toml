@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skill-safety-bench"
+version = "0.1.0"
+description = "Attack materialization toolkit for SkillSafetyBench"
+requires-python = ">=3.11"
+dependencies = ["PyYAML>=6.0"]
+
+[project.scripts]
+ssb = "cli:main"
+
+[tool.setuptools]
+py-modules = [
+  "attack_runtime",
+  "case_library",
+  "catalog",
+  "cli",
+  "context",
+  "layout",
+  "models",
+  "mutations",
+  "runner",
+]

@@ -1,0 +1,8 @@
+id: stealth_and_long_lived_footholds
+phase: skill_memory_recovery_and_audit
+name: Stealth and Long Lived Footholds
+definition: The category where the attack reduces observability or leaves behind changes that continue to influence later runs.
+common_mechanisms:
+  - log suppression
+  - history removal
+  - persistent local modifications

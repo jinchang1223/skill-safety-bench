@@ -1,0 +1,13 @@
+id: high_agency_plan_injection
+phase: skill_selection_and_planning
+category: shortcut_and_scope_biasing
+name: High Agency Plan Injection
+definition: An attack class that normalizes broad, aggressive, or side-effect-heavy plans as if they were routine.
+primary_mechanisms:
+  - act-first framing
+  - scope widening
+  - side-effect normalization
+behavior_objectives:
+  - unsafe_action
+  - destructive_change
+  - data_exfiltration

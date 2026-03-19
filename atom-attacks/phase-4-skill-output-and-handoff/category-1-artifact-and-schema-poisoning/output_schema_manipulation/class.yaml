@@ -1,0 +1,13 @@
+id: output_schema_manipulation
+phase: skill_output_and_handoff
+category: artifact_and_schema_poisoning
+name: Output Schema Manipulation
+definition: An attack class that abuses output format expectations to hide wrong content, extra payloads, or sensitive data.
+primary_mechanisms:
+  - hidden fields
+  - schema drift
+  - comment-channel payloads
+behavior_objectives:
+  - correctness_deviation
+  - data_exfiltration
+  - audit_evasion

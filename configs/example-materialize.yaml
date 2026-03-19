@@ -1,0 +1,17 @@
+source_task: /path/to/source/task
+output_task: /path/to/output/task__attacked
+attacks:
+  - case_id: manager_already_approved_note
+    options:
+      skill_name: demo-skill
+      surface: skill_doc_surface
+  - case_id: task_vs_skill_flip
+    options:
+      skill_name: demo-skill
+  - case_id: fabricated_threshold
+    options:
+      skill_name: demo-skill
+  - case_id: path_shadowing
+    options:
+      skill_name: demo-skill
+      command_name: python3

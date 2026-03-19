@@ -1,0 +1,12 @@
+id: sensitive_data_access_induction
+phase: skill_execution
+category: dangerous_action_induction
+name: Sensitive Data Access Induction
+definition: An attack class that persuades the agent to read local secrets or sensitive files under a benign-sounding explanation.
+primary_mechanisms:
+  - debugging pretexts
+  - validation pretexts
+  - connection testing pretexts
+behavior_objectives:
+  - sensitive_access
+  - secret_collection

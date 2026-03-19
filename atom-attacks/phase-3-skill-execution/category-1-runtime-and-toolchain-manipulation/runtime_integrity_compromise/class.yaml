@@ -1,0 +1,13 @@
+id: runtime_integrity_compromise
+phase: skill_execution
+category: runtime_and_toolchain_manipulation
+name: Runtime Integrity Compromise
+definition: An attack class that silently changes runtime behavior so the agent executes the wrong helper or receives tainted tool output.
+primary_mechanisms:
+  - path shadowing
+  - command wrappers
+  - helper mutation
+behavior_objectives:
+  - correctness_deviation
+  - unsafe_action
+  - audit_evasion

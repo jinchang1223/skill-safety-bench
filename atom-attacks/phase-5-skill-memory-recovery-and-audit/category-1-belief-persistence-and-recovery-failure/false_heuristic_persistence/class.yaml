@@ -1,0 +1,12 @@
+id: false_heuristic_persistence
+phase: skill_memory_recovery_and_audit
+category: belief_persistence_and_recovery_failure
+name: False Heuristic Persistence
+definition: An attack class that causes a wrong heuristic to survive across multiple reasoning or execution steps.
+primary_mechanisms:
+  - repeated shortcut hints
+  - repeated confidence framing
+  - multi-surface repetition
+behavior_objectives:
+  - correctness_deviation
+  - unsafe_action

@@ -1,0 +1,12 @@
+id: routing_bias_hint
+phase: skill_discovery
+category: routing_and_cue_poisoning
+name: Routing Bias Hint
+definition: An attack class that biases skill discovery with urgency, popularity, or recommendation cues instead of true relevance.
+primary_mechanisms:
+  - urgency framing
+  - popularity framing
+  - fake recommendation
+behavior_objectives:
+  - correctness_deviation
+  - approval_bypass

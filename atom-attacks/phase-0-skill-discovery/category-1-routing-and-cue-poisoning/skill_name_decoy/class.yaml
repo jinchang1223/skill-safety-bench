@@ -1,0 +1,12 @@
+id: skill_name_decoy
+phase: skill_discovery
+category: routing_and_cue_poisoning
+name: Skill Name Decoy
+definition: An attack class that makes the wrong skill look like the right one by exploiting naming similarity or namespace ambiguity.
+primary_mechanisms:
+  - lexical similarity
+  - alias collision
+  - namespace ambiguity
+behavior_objectives:
+  - correctness_deviation
+  - unsafe_action

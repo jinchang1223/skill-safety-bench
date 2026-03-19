@@ -1,0 +1,12 @@
+id: persistence_implant
+phase: skill_memory_recovery_and_audit
+category: stealth_and_long_lived_footholds
+name: Persistence Implant
+definition: An attack class that leaves behind modifications intended to influence later runs or later operators.
+primary_mechanisms:
+  - shell init changes
+  - shadow binary persistence
+  - poisoned local configs
+behavior_objectives:
+  - persistence
+  - audit_evasion

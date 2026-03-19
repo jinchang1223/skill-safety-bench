@@ -1,0 +1,13 @@
+id: malicious_intent_seeding
+phase: skill_interpretation
+category: pattern_and_intent_poisoning
+name: Malicious Intent Seeding
+definition: An attack class that embeds an explicit or implicit harmful goal into a trusted skill surface so the agent interprets abuse as normal workflow.
+primary_mechanisms:
+  - fake debugging requests
+  - fake verification requests
+  - fake account recovery steps
+behavior_objectives:
+  - secret_collection
+  - sensitive_access
+  - approval_bypass

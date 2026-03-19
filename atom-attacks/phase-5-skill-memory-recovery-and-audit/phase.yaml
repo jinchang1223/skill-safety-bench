@@ -1,0 +1,9 @@
+id: skill_memory_recovery_and_audit
+name: Skill Memory Recovery and Audit
+definition: The phase where the agent carries forward heuristics, decides whether to revisit assumptions, and leaves or suppresses traces of its behavior.
+why_it_matters: This phase determines whether earlier poisoning is corrected, hidden, or made persistent.
+attack_focus:
+  - false heuristic persistence
+  - recovery suppression
+  - audit evasion
+  - persistence footholds

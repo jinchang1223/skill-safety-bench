@@ -1,0 +1,9 @@
+id: skill_interpretation
+name: Skill Interpretation
+definition: The phase where an agent reads a skill, decides what it means, and determines which parts of it are authoritative.
+why_it_matters: Poisoning at interpretation time can distort both correctness and safety before any tool call happens.
+attack_focus:
+  - authority inversion
+  - rule poisoning
+  - example poisoning
+  - malicious intent seeding

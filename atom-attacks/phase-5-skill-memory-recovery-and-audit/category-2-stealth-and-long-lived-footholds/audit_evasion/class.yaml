@@ -1,0 +1,13 @@
+id: audit_evasion
+phase: skill_memory_recovery_and_audit
+category: stealth_and_long_lived_footholds
+name: Audit Evasion
+definition: An attack class that reduces observability or post-run accountability for agent behavior.
+primary_mechanisms:
+  - warning suppression
+  - log redirection
+  - history removal
+behavior_objectives:
+  - audit_evasion
+  - unsafe_action
+  - destructive_change

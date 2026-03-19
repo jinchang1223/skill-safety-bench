@@ -1,0 +1,8 @@
+id: conflict_and_approval_distortion
+phase: skill_selection_and_planning
+name: Conflict and Approval Distortion
+definition: The category where the attack exploits conflicts, false approvals, or ambiguous authority to steer planning decisions.
+common_mechanisms:
+  - contradictory guidance
+  - fake approval state
+  - emergency framing

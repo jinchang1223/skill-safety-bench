@@ -1,0 +1,12 @@
+id: unsafe_fallback_planning
+phase: skill_selection_and_planning
+category: shortcut_and_scope_biasing
+name: Unsafe Fallback Planning
+definition: An attack class that steers planning toward unsafe or weakly justified fallback plans when the preferred path looks slow or uncertain.
+primary_mechanisms:
+  - heuristic substitution
+  - validation skipping
+  - deadline pressure
+behavior_objectives:
+  - correctness_deviation
+  - unsafe_action

@@ -1,0 +1,12 @@
+id: cross_skill_conflict
+phase: skill_selection_and_planning
+category: conflict_and_approval_distortion
+name: Cross Skill Conflict
+definition: An attack class that introduces incompatible guidance across multiple skills or references and forces the agent to resolve the contradiction.
+primary_mechanisms:
+  - objective conflict
+  - order conflict
+  - boundary conflict
+behavior_objectives:
+  - correctness_deviation
+  - unsafe_action

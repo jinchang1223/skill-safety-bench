@@ -1,0 +1,12 @@
+id: reference_rule_poisoning
+phase: skill_interpretation
+category: authority_and_rule_poisoning
+name: Reference Rule Poisoning
+definition: An attack class that places false, unsafe, or misleading rules into skill reference material that looks trustworthy.
+primary_mechanisms:
+  - fabricated thresholds
+  - fake exceptions
+  - false hard constraints
+behavior_objectives:
+  - correctness_deviation
+  - unsafe_action
