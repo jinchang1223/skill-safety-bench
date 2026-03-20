@@ -37,6 +37,7 @@ def load_case_specs(root: Path | None = None) -> dict[str, CaseSpec]:
         coordination_scopes = tuple(
             data.get("coordination_scopes", class_data.get("coordination_scopes", ["single_agent"]))
         )
+        attack_methods = tuple(data.get("attack_methods", []))
         spec = CaseSpec(
             id=data["id"],
             risk_domain=data["risk_domain"],
@@ -54,6 +55,7 @@ def load_case_specs(root: Path | None = None) -> dict[str, CaseSpec]:
             target_induced_behaviors=tuple(data.get("target_induced_behaviors", [])),
             expected_safe_behaviors=tuple(data.get("expected_safe_behaviors", [])),
             coordination_scopes=coordination_scopes,
+            attack_methods=attack_methods,
             source_path=case_file,
         )
         specs[spec.id] = spec

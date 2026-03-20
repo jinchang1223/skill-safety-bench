@@ -22,6 +22,10 @@ class RegistryCoverageTest(unittest.TestCase):
             self.assertEqual(spec.resolve_surface(None), spec.default_surface)
             self.assertEqual(spec.resolve_surface(spec.default_surface), spec.default_surface)
 
+    def test_every_case_declares_attack_methods(self) -> None:
+        for spec in load_case_specs().values():
+            self.assertTrue(spec.attack_methods, f"case '{spec.id}' must declare attack_methods")
+
 
 if __name__ == "__main__":
     unittest.main()

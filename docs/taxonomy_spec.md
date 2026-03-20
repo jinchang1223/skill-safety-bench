@@ -143,7 +143,28 @@ This field exists because many attacks are not limited to one isolated agent. So
 
 Attack surface is an orthogonal control dimension. It does not replace the main four-level taxonomy.
 
-### 3.10 Surface Mode
+### 3.10 Attack Method
+
+`Attack Method` means the materialization or control method a case uses to create the attack condition.
+
+Attack method is orthogonal metadata. It does not replace the main four-level taxonomy and it is not the same thing as attack surface.
+
+For example:
+
+- `note_injection`
+- `reference_forgery`
+- `environment_artifact_forgery`
+- `decoy_skill_fabrication`
+- `cross_surface_amplification`
+- `tool_output_interposition`
+- `network_response_spoofing`
+- `protocol_message_forgery`
+- `approval_signal_spoofing`
+- `runtime_env_poisoning`
+- `observation_suppression`
+- `planner_orchestrator_hijack`
+
+### 3.11 Surface Mode
 
 `Surface Mode` means how configurable a case's injection surface is at runtime.
 
@@ -153,7 +174,7 @@ The current implementation supports:
 - `choice`
 - `composite`
 
-### 3.11 Impact Objective
+### 3.12 Impact Objective
 
 `Impact Objective` means the security consequence a case tries to induce.
 
@@ -196,6 +217,7 @@ Therefore:
 - `risk_domain` is the canonical root
 - `lifecycle_stage` remains as metadata
 - `coordination_scope` remains as metadata
+- `attack_method` remains as metadata
 - `attack_surface` remains as metadata and runtime control
 
 ### Why multi-agent and delegation are metadata, not a risk domain

@@ -47,6 +47,9 @@ class MaterializeAttackTest(unittest.TestCase):
                     encoding="utf-8"
                 ),
             )
+            dockerfile_text = (output / "environment" / "Dockerfile").read_text(encoding="utf-8")
+            self.assertIn("COPY attack_artifacts /opt/skill-safety-bench-artifacts", dockerfile_text)
+            self.assertIn('ENV SSB_ARTIFACT_ROOT="/opt/skill-safety-bench-artifacts"', dockerfile_text)
 
     def test_choice_surface_override_moves_attack_to_selected_surface(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -93,6 +96,36 @@ class MaterializeAttackTest(unittest.TestCase):
                         ),
                     )
                 )
+
+    def test_multi_agent_handoff_case_materializes_artifact_and_instruction_link(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp = Path(tmp_dir)
+            source = tmp / "source-task"
+            output = tmp / "attacked-task"
+            _build_synthetic_task(source)
+
+            materialize_attacked_task(
+                MaterializationConfig(
+                    source_task=source,
+                    output_task=output,
+                    attacks=(
+                        AttackSelection(
+                            case_id="worker_handoff_recommendation",
+                            options={"skill_name": "demo-skill"},
+                        ),
+                    ),
+                )
+            )
+
+            instruction_text = (output / "instruction.md").read_text(encoding="utf-8")
+            dockerfile_text = (output / "environment" / "Dockerfile").read_text(encoding="utf-8")
+            artifact_text = (output / "environment" / "attack_artifacts" / "ssb_worker_handoff_route.md").read_text(
+                encoding="utf-8"
+            )
+
+            self.assertIn("/opt/skill-safety-bench-artifacts/ssb_worker_handoff_route.md", instruction_text)
+            self.assertIn("already triaged by worker-prep", artifact_text)
+            self.assertIn("COPY attack_artifacts /opt/skill-safety-bench-artifacts", dockerfile_text)
 
 
 def _build_synthetic_task(root: Path) -> None:

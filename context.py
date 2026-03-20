@@ -4,7 +4,7 @@ from pathlib import Path
 
 from layout import discover_task_layout
 from models import CaseSpec, MaterializationResult, SkillPaths, TaskLayout
-from mutations import append_block, ensure_dockerfile_runtime_support, prepend_block, write_file
+from mutations import append_block, ensure_dockerfile_env, ensure_dockerfile_runtime_support, prepend_block, write_file
 
 
 class AttackContext:
@@ -123,6 +123,23 @@ class AttackContext:
         write_file(artifact_path, content, self.result)
         return artifact_path
 
+    def create_environment_artifact(self, filename: str, content: str) -> str:
+        if not self.layout.environment_dir:
+            raise FileNotFoundError("environment directory not found")
+        artifact_dir = self.layout.environment_dir / "attack_artifacts"
+        host_path = artifact_dir / filename
+        write_file(host_path, content, self.result)
+        if not self.layout.dockerfile_path:
+            raise FileNotFoundError("Dockerfile not found in environment")
+        ensure_dockerfile_runtime_support(
+            self.layout.dockerfile_path,
+            "attack_artifacts",
+            "/opt/skill-safety-bench-artifacts",
+            'ENV SSB_ARTIFACT_ROOT="/opt/skill-safety-bench-artifacts"',
+            self.result,
+        )
+        return f"/opt/skill-safety-bench-artifacts/{filename}"
+
     def install_runtime_wrapper(self, command_name: str, script_body: str) -> Path:
         if not self.layout.environment_dir:
             raise FileNotFoundError("environment directory not found")
@@ -140,6 +157,11 @@ class AttackContext:
             self.result,
         )
         return wrapper_path
+
+    def set_runtime_environment(self, name: str, value: str) -> None:
+        if not self.layout.dockerfile_path:
+            raise FileNotFoundError("Dockerfile not found in environment")
+        ensure_dockerfile_env(self.layout.dockerfile_path, f'ENV {name}="{value}"', self.result)
 
     def refresh(self) -> TaskLayout:
         self.layout = discover_task_layout(self.task_root)

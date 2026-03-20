@@ -87,6 +87,10 @@ Common options include:
 
 `surface` is only valid for cases whose YAML declares `surface_mode: choice`.
 
+For `task_artifact_surface`, the runtime now materializes files under `environment/attack_artifacts/`
+and patches the task Dockerfile so the agent can read them from `/opt/skill-safety-bench-artifacts/`
+inside the container.
+
 The current runtime distinguishes three attack-surface modes:
 
 - `fixed`
@@ -112,6 +116,7 @@ The current runtime distinguishes three attack-surface modes:
 - The canonical taxonomy is now `risk_domain -> category -> class -> case`.
 - `lifecycle_stage` is preserved as case metadata and as a CLI filter, but it is no longer the top-level architecture root.
 - `coordination_scopes` is preserved as cross-cutting metadata to describe whether an attack applies to a single agent, delegated subagents, supervisor-worker setups, peer multi-agent systems, or federated service meshes.
+- `attack_methods` is preserved as cross-cutting case metadata to describe how a case is materialized or which control path it abuses, independently from `attack_surface` and taxonomy placement.
 - The current top-level risk domains are:
   - `context_trust_and_prompt_manipulation_risks`
   - `agency_scope_and_authorization_risks`

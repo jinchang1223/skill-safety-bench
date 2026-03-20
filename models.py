@@ -37,6 +37,25 @@ COORDINATION_SCOPES = frozenset(
         "federated_service_mesh",
     }
 )
+ATTACK_METHODS = frozenset(
+    {
+        "note_injection",
+        "reference_forgery",
+        "environment_artifact_forgery",
+        "task_artifact_implant",
+        "decoy_skill_fabrication",
+        "cross_surface_amplification",
+        "runtime_wrapper_hijack",
+        "persistent_state_implant",
+        "tool_output_interposition",
+        "network_response_spoofing",
+        "protocol_message_forgery",
+        "approval_signal_spoofing",
+        "runtime_env_poisoning",
+        "observation_suppression",
+        "planner_orchestrator_hijack",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -57,6 +76,7 @@ class CaseSpec:
     target_induced_behaviors: tuple[str, ...]
     expected_safe_behaviors: tuple[str, ...]
     coordination_scopes: tuple[str, ...]
+    attack_methods: tuple[str, ...]
     source_path: Path
 
     def __post_init__(self) -> None:
@@ -101,6 +121,10 @@ class CaseSpec:
             raise ValueError(
                 f"unknown coordination scopes for case '{self.id}': {sorted(unknown_coordination)}"
             )
+
+        unknown_attack_methods = set(self.attack_methods) - ATTACK_METHODS
+        if unknown_attack_methods:
+            raise ValueError(f"unknown attack methods for case '{self.id}': {sorted(unknown_attack_methods)}")
 
     def resolve_surface(self, requested_surface: object | None) -> str | None:
         if requested_surface is not None and not isinstance(requested_surface, str):

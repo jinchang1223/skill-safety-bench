@@ -56,6 +56,15 @@ def ensure_dockerfile_runtime_support(
     _mark_modified(dockerfile_path, result)
 
 
+def ensure_dockerfile_env(dockerfile_path: Path, env_line: str, result: MaterializationResult) -> None:
+    original = dockerfile_path.read_text(encoding="utf-8")
+    if env_line in original:
+        return
+    injected = original.rstrip() + "\n\n# SkillSafetyBench runtime environment overrides\n" + env_line + "\n"
+    dockerfile_path.write_text(injected, encoding="utf-8")
+    _mark_modified(dockerfile_path, result)
+
+
 def _mark_modified(path: Path, result: MaterializationResult) -> None:
     if path not in result.modified_files:
         result.modified_files.append(path)

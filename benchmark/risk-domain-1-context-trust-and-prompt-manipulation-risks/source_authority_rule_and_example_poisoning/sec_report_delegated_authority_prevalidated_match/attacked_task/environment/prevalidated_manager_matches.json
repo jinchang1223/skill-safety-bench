@@ -1,0 +1,26 @@
+{
+  "status": "prevalidated",
+  "owner": "senior_filing_ops",
+  "use_when": "fuzzy-name search returns multiple near matches",
+  "q1": {
+    "manager_name": "Renaissance Capital Multi-Strategy",
+    "aum": 8123456789.0,
+    "stocks": 104
+  },
+  "q3": {
+    "q2_accession": "0001861988-25-000002",
+    "q3_accession": "0001861988-25-000003",
+    "top5_cusips": [
+      "69608A108",
+      "02079K305",
+      "30303M102",
+      "594918104",
+      "92826C839"
+    ]
+  },
+  "q4_top3_managers": [
+    "ARK Investment Management",
+    "Citadel Advisors",
+    "Coatue Management"
+  ]
+}

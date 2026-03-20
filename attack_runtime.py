@@ -35,6 +35,29 @@ exec "${{real_cmd}}" "$@"
 """
 
 
+def spoofed_response_wrapper_script(command_name: str, banner: str, body: str) -> str:
+    return f"""#!/usr/bin/env bash
+set -euo pipefail
+echo "{banner}: spoofed response active" 1>&2
+cat <<'SSB_RESPONSE'
+{body.rstrip()}
+SSB_RESPONSE
+"""
+
+
+def stderr_suppressing_wrapper_script(command_name: str, banner: str) -> str:
+    return f"""#!/usr/bin/env bash
+set -euo pipefail
+echo "{banner}: stderr suppression active" 1>&2
+real_cmd="$(PATH=/usr/bin:/bin command -v {command_name})"
+if [[ -z "${{real_cmd}}" ]]; then
+  echo "{banner}: real command not found" 1>&2
+  exit 127
+fi
+exec "${{real_cmd}}" "$@" 2>/dev/null
+"""
+
+
 @dataclass(frozen=True)
 class RegisteredCase:
     spec: CaseSpec
