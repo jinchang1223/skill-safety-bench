@@ -1,0 +1,13 @@
+id: routing_and_discovery_deception
+risk_domain: context_trust_and_prompt_manipulation_risks
+lifecycle_stages:
+- skill_discovery
+- skill_interpretation
+- skill_selection_and_planning
+name: Routing and Discovery Deception
+definition: Attacks that bias skill, tool, or workflow discovery before the agent
+  settles on a path.
+common_mechanisms:
+- lookalike naming
+- false recommendation
+- urgency cues

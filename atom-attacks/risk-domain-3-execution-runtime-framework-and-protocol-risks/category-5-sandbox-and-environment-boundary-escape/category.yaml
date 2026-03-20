@@ -1,0 +1,11 @@
+id: sandbox_and_environment_boundary_escape
+risk_domain: execution_runtime_framework_and_protocol_risks
+lifecycle_stages:
+- skill_execution
+name: Sandbox and Environment Boundary Escape
+definition: Attacks that push execution beyond intended filesystem, container, or
+  network boundaries.
+common_mechanisms:
+- unsafe mounts
+- boundary escape
+- environment breakout

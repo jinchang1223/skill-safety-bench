@@ -1,0 +1,10 @@
+id: availability_cost_and_service_exhaustion
+risk_domain: knowledge_model_supply_chain_and_operational_risks
+lifecycle_stages: []
+name: Availability Cost and Service Exhaustion
+definition: Attacks that consume excessive compute, tokens, latency budget, or money
+  to degrade service availability.
+common_mechanisms:
+- resource exhaustion
+- cost amplification
+- query explosion

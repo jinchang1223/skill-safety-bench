@@ -1,0 +1,20 @@
+id: example_pattern_poisoning
+risk_domain: context_trust_and_prompt_manipulation_risks
+category: source_authority_rule_and_example_poisoning
+lifecycle_stages:
+- skill_interpretation
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+name: Example Pattern Poisoning
+definition: An attack class that persuades the agent by presenting flawed but plausible
+  examples that look like successful usage patterns.
+primary_mechanisms:
+- exemplar imitation
+- unsafe shell snippets
+- omitted verification steps
+behavior_objectives:
+- correctness_deviation
+- unsafe_action
+- destructive_change

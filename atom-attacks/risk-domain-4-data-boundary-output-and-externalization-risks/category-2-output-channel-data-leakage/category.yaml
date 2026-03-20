@@ -1,0 +1,11 @@
+id: output_channel_data_leakage
+risk_domain: data_boundary_output_and_externalization_risks
+lifecycle_stages:
+- skill_output_and_handoff
+name: Output Channel Data Leakage
+definition: Attacks that turn normal output files, reports, or submissions into leakage
+  channels for sensitive data.
+common_mechanisms:
+- report leakage
+- submission contamination
+- debug payload stuffing

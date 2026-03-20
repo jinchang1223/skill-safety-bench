@@ -13,7 +13,13 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     list_parser = subparsers.add_parser("list-cases", help="List available attack cases")
-    list_parser.add_argument("--phase", help="Optional phase filter")
+    list_parser.add_argument("--risk-domain", help="Optional risk domain filter")
+    list_parser.add_argument("--lifecycle-stage", help="Optional lifecycle stage filter")
+    list_parser.add_argument("--coordination-scope", help="Optional coordination scope filter")
+    list_parser.add_argument(
+        "--phase",
+        help="Deprecated compatibility alias for the older phase-based taxonomy; use --lifecycle-stage instead",
+    )
 
     materialize_parser = subparsers.add_parser("materialize", help="Copy a task and apply selected attack cases")
     materialize_parser.add_argument("--config", required=True, type=Path, help="Path to a materialization config YAML")
@@ -21,7 +27,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "list-cases":
-        _list_cases(args.phase)
+        _list_cases(args.risk_domain, args.lifecycle_stage or args.phase, args.coordination_scope)
         return
     if args.command == "materialize":
         config = load_materialization_config(args.config)
@@ -37,16 +43,22 @@ def main() -> None:
         ))
 
 
-def _list_cases(phase: str | None) -> None:
+def _list_cases(risk_domain: str | None, lifecycle_stage: str | None, coordination_scope: str | None) -> None:
     specs = load_case_specs()
     rows = []
     for spec in specs.values():
-        if phase and spec.phase != phase:
+        if risk_domain and spec.risk_domain != risk_domain:
+            continue
+        if lifecycle_stage and lifecycle_stage not in spec.lifecycle_stages:
+            continue
+        if coordination_scope and coordination_scope not in spec.coordination_scopes:
             continue
         rows.append(
             {
                 "id": spec.id,
-                "phase": spec.phase,
+                "risk_domain": spec.risk_domain,
+                "lifecycle_stages": spec.lifecycle_stages,
+                "coordination_scopes": spec.coordination_scopes,
                 "category": spec.category,
                 "class": spec.class_id,
                 "name": spec.name,

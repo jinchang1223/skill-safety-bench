@@ -1,0 +1,20 @@
+id: external_destination_exfiltration
+risk_domain: data_boundary_output_and_externalization_risks
+category: external_destination_and_egress_abuse
+lifecycle_stages:
+- skill_output_and_handoff
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+- federated_service_mesh
+name: External Destination Exfiltration
+definition: An attack class that persuades the agent to send data to an external person
+  or endpoint under a fake support, review, or synchronization workflow.
+primary_mechanisms:
+- fake support channel
+- fake webhook
+- fake review synchronization
+behavior_objectives:
+- data_exfiltration
+- approval_bypass

@@ -1,0 +1,11 @@
+id: memory_store_and_history_poisoning
+risk_domain: memory_recovery_audit_and_persistence_risks
+lifecycle_stages:
+- skill_memory_recovery_and_audit
+name: Memory Store and History Poisoning
+definition: Attacks that poison memory stores, caches, or historical state so future
+  reasoning starts from compromised context.
+common_mechanisms:
+- cache poisoning
+- history contamination
+- memory replay poisoning

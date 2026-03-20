@@ -1,0 +1,12 @@
+id: credential_privilege_and_sensitive_input_solicitation
+risk_domain: agency_scope_and_authorization_risks
+lifecycle_stages:
+- skill_selection_and_planning
+- skill_execution
+name: Credential Privilege and Sensitive Input Solicitation
+definition: Attacks that try to get the agent to request secrets, elevated privileges,
+  or sensitive user inputs as part of normal workflow.
+common_mechanisms:
+- API key requests
+- sudo pretexts
+- identity code prompts

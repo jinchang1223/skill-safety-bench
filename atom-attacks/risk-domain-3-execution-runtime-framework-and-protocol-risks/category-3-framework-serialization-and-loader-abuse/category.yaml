@@ -1,0 +1,11 @@
+id: framework_serialization_and_loader_abuse
+risk_domain: execution_runtime_framework_and_protocol_risks
+lifecycle_stages:
+- skill_execution
+name: Framework Serialization and Loader Abuse
+definition: Attacks that exploit unsafe serialization, deserialization, loaders, or
+  parsers inside the agent framework.
+common_mechanisms:
+- deserialization abuse
+- loader SSRF
+- parser confusion

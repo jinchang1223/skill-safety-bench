@@ -1,0 +1,11 @@
+id: belief_persistence_and_self_correction_failure
+risk_domain: memory_recovery_audit_and_persistence_risks
+lifecycle_stages:
+- skill_memory_recovery_and_audit
+name: Belief Persistence and Self-Correction Failure
+definition: Attacks that keep the agent committed to a poisoned belief and discourage
+  corrective revision.
+common_mechanisms:
+- repetition
+- conflict downranking
+- anti-recheck messaging

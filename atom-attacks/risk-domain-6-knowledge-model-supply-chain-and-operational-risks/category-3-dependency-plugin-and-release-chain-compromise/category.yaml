@@ -1,0 +1,10 @@
+id: dependency_plugin_and_release_chain_compromise
+risk_domain: knowledge_model_supply_chain_and_operational_risks
+lifecycle_stages: []
+name: Dependency Plugin and Release Chain Compromise
+definition: Attacks that compromise the agent through dependencies, plugins, build
+  artifacts, or release pipelines.
+common_mechanisms:
+- dependency hijack
+- plugin compromise
+- release artifact poisoning

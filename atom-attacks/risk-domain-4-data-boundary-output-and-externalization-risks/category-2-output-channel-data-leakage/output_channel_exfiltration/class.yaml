@@ -1,0 +1,19 @@
+id: output_channel_exfiltration
+risk_domain: data_boundary_output_and_externalization_risks
+category: output_channel_data_leakage
+lifecycle_stages:
+- skill_output_and_handoff
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+name: Output Channel Exfiltration
+definition: An attack class that smuggles sensitive content into outputs or artifacts
+  that are likely to be exported, reviewed, or submitted.
+primary_mechanisms:
+- report contamination
+- artifact piggybacking
+- debug bundle stuffing
+behavior_objectives:
+- data_exfiltration
+- secret_collection

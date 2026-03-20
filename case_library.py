@@ -16,7 +16,7 @@ def build_registry() -> dict[str, RegisteredCase]:
 
 def _discover_register_functions():
     root = atom_attacks_root()
-    for attack_file in sorted(root.glob("phase-*/category-*/*/attack.py")):
+    for attack_file in sorted(root.glob("risk-domain-*/category-*/*/attack.py")):
         module = _load_attack_module(root, attack_file)
         register = getattr(module, "register", None)
         if callable(register):

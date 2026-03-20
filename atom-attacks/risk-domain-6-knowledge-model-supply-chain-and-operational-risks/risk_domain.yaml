@@ -1,0 +1,13 @@
+id: knowledge_model_supply_chain_and_operational_risks
+name: Knowledge Model Supply Chain and Operational Risks
+definition: Risks involving model behavior, retrieval knowledge, dependencies, release
+  pipelines, and service operations beyond immediate runtime skill manipulation.
+why_it_matters: This domain creates explicit space for retrieval poisoning, model-behavior
+  poisoning, supply-chain compromise, cost exhaustion, and model/service abuse.
+typical_security_concerns:
+- retrieval poisoning
+- model behavior poisoning
+- dependency compromise
+- cost exhaustion
+- model extraction
+lifecycle_stages: []

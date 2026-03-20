@@ -1,0 +1,10 @@
+id: model_behavior_and_finetuning_poisoning
+risk_domain: knowledge_model_supply_chain_and_operational_risks
+lifecycle_stages: []
+name: Model Behavior and Finetuning Poisoning
+definition: Attacks that alter model behavior through training-set poisoning, unsafe
+  finetuning, or hidden backdoor triggers.
+common_mechanisms:
+- training poisoning
+- backdoor triggers
+- unsafe finetuning data

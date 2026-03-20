@@ -1,9 +1,0 @@
-id: skill_execution
-name: Skill Execution
-definition: The phase where an agent turns skill-guided plans into actual commands, tool calls, file access, or operational actions.
-why_it_matters: This is where poisoned intent becomes concrete side effects, privilege use, file damage, or secret handling.
-attack_focus:
-  - runtime hijack
-  - destructive operations
-  - secret and privilege requests
-  - sensitive data access

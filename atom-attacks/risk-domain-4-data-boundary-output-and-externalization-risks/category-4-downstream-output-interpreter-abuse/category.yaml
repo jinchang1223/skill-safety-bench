@@ -1,0 +1,11 @@
+id: downstream_output_interpreter_abuse
+risk_domain: data_boundary_output_and_externalization_risks
+lifecycle_stages:
+- skill_output_and_handoff
+name: Downstream Output Interpreter Abuse
+definition: Attacks that encode payloads into outputs that will later be interpreted
+  by spreadsheets, templates, browsers, or other downstream systems.
+common_mechanisms:
+- formula injection
+- HTML/script injection
+- template payloads

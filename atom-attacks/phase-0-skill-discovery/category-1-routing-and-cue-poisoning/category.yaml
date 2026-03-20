@@ -1,8 +1,0 @@
-id: routing_and_cue_poisoning
-phase: skill_discovery
-name: Routing and Cue Poisoning
-definition: The category where attacks distort discovery by changing the cues an agent uses to select or prioritize a skill.
-common_mechanisms:
-  - similar naming
-  - false urgency
-  - recommendation bias

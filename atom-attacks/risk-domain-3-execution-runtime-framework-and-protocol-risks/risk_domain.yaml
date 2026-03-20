@@ -1,0 +1,16 @@
+id: execution_runtime_framework_and_protocol_risks
+name: Execution Runtime Framework and Protocol Risks
+definition: Risks where the runtime, toolchain, framework, protocol, or execution
+  boundary itself is compromised or exploited.
+why_it_matters: This domain captures runtime hijack, framework-level parser and loader
+  abuse, query/interpreter exploitation, protocol trust failures, and boundary escape
+  risks.
+typical_security_concerns:
+- runtime hijack
+- toolchain compromise
+- query exploitation
+- serialization abuse
+- protocol capability spoofing
+- sandbox escape
+lifecycle_stages:
+- skill_execution

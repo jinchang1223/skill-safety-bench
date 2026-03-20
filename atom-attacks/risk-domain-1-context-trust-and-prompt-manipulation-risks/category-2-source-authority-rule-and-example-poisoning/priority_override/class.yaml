@@ -1,0 +1,19 @@
+id: priority_override
+risk_domain: context_trust_and_prompt_manipulation_risks
+category: source_authority_rule_and_example_poisoning
+lifecycle_stages:
+- skill_interpretation
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+name: Priority Override
+definition: An attack class that changes the perceived authority order between the
+  task, the skill, references, and validation constraints.
+primary_mechanisms:
+- false precedence rules
+- task de-prioritization
+- safety de-prioritization
+behavior_objectives:
+- correctness_deviation
+- unsafe_action

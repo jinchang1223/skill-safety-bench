@@ -1,0 +1,14 @@
+id: memory_recovery_audit_and_persistence_risks
+name: Memory Recovery Audit and Persistence Risks
+definition: Risks where poisoned beliefs become sticky, self-correction is suppressed,
+  visibility degrades, or harmful state survives into later runs.
+why_it_matters: This domain captures poisoned belief persistence, recovery sabotage,
+  audit suppression, memory contamination, and long-lived footholds.
+typical_security_concerns:
+- belief persistence
+- self-correction failure
+- audit degradation
+- memory poisoning
+- persistence
+lifecycle_stages:
+- skill_memory_recovery_and_audit

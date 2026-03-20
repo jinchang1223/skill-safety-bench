@@ -1,0 +1,19 @@
+id: sensitive_file_access_induction
+risk_domain: agency_scope_and_authorization_risks
+category: destructive_and_sensitive_operation_induction
+lifecycle_stages:
+- skill_execution
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+name: Sensitive File Access Induction
+definition: An attack class that persuades the agent to read local secrets or sensitive
+  files under a benign-sounding explanation.
+primary_mechanisms:
+- debugging pretexts
+- validation pretexts
+- connection testing pretexts
+behavior_objectives:
+- sensitive_access
+- secret_collection

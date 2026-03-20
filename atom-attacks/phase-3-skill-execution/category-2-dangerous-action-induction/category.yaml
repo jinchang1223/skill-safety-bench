@@ -1,8 +1,0 @@
-id: dangerous_action_induction
-phase: skill_execution
-name: Dangerous Action Induction
-definition: The category where the agent is induced to execute actions that are destructive, over-privileged, or invasive.
-common_mechanisms:
-  - cleanup framing
-  - debug pretexts
-  - verification pretexts

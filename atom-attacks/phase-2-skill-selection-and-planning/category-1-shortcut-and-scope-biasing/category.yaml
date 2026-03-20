@@ -1,8 +1,0 @@
-id: shortcut_and_scope_biasing
-phase: skill_selection_and_planning
-name: Shortcut and Scope Biasing
-definition: The category where planning is biased toward risky shortcuts or broader-than-needed action scope.
-common_mechanisms:
-  - fallback heuristics
-  - convenience framing
-  - urgency pressure

@@ -1,0 +1,18 @@
+id: skill_name_decoy
+risk_domain: context_trust_and_prompt_manipulation_risks
+category: routing_and_discovery_deception
+lifecycle_stages:
+- skill_discovery
+coordination_scopes:
+- single_agent
+- delegated_subagent
+name: Skill Name Decoy
+definition: An attack class that makes the wrong skill look like the right one by
+  exploiting naming similarity or namespace ambiguity.
+primary_mechanisms:
+- lexical similarity
+- alias collision
+- namespace ambiguity
+behavior_objectives:
+- correctness_deviation
+- unsafe_action

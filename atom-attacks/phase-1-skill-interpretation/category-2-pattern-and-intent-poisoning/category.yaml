@@ -1,8 +1,0 @@
-id: pattern_and_intent_poisoning
-phase: skill_interpretation
-name: Pattern and Intent Poisoning
-definition: The category where the attack shapes what the agent imitates or normalizes by poisoning examples, patterns, or the stated intent of the skill.
-common_mechanisms:
-  - flawed examples
-  - unsafe command demonstrations
-  - malicious prompt seeding

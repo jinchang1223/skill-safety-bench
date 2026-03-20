@@ -1,0 +1,11 @@
+id: artifact_and_schema_integrity_failure
+risk_domain: data_boundary_output_and_externalization_risks
+lifecycle_stages:
+- skill_output_and_handoff
+name: Artifact and Schema Integrity Failure
+definition: Attacks that poison intermediate artifacts or manipulate the structure
+  of task outputs.
+common_mechanisms:
+- artifact poisoning
+- schema drift
+- hidden fields

@@ -1,8 +1,0 @@
-id: belief_persistence_and_recovery_failure
-phase: skill_memory_recovery_and_audit
-name: Belief Persistence and Recovery Failure
-definition: The category where the attack keeps wrong beliefs alive and discourages later correction.
-common_mechanisms:
-  - repeated hints
-  - anti-validation notes
-  - conflict downplaying

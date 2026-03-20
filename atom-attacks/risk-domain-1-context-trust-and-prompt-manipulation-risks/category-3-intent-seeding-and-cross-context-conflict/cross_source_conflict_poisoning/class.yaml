@@ -1,0 +1,19 @@
+id: cross_source_conflict_poisoning
+risk_domain: context_trust_and_prompt_manipulation_risks
+category: intent_seeding_and_cross_context_conflict
+lifecycle_stages:
+- skill_selection_and_planning
+coordination_scopes:
+- single_agent
+- supervisor_worker
+- peer_multi_agent
+name: Cross-Source Conflict Poisoning
+definition: An attack class that introduces incompatible guidance across skills, references,
+  or neighboring sources and forces the agent to resolve the contradiction unsafely.
+primary_mechanisms:
+- objective conflict
+- order conflict
+- boundary conflict
+behavior_objectives:
+- correctness_deviation
+- unsafe_action

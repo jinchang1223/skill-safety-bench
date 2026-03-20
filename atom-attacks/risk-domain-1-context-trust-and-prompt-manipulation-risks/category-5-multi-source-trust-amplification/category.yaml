@@ -1,0 +1,13 @@
+id: multi_source_trust_amplification
+risk_domain: context_trust_and_prompt_manipulation_risks
+lifecycle_stages:
+- skill_discovery
+- skill_interpretation
+- skill_selection_and_planning
+name: Multi-Source Trust Amplification
+definition: Attacks that repeat the same poisoned claim across multiple surfaces or
+  sources to manufacture apparent consensus.
+common_mechanisms:
+- false corroboration
+- consensus laundering
+- cross-source repetition

@@ -1,0 +1,13 @@
+id: source_authority_rule_and_example_poisoning
+risk_domain: context_trust_and_prompt_manipulation_risks
+lifecycle_stages:
+- skill_discovery
+- skill_interpretation
+- skill_selection_and_planning
+name: Source Authority Rule and Example Poisoning
+definition: Attacks that poison which source the agent treats as authoritative by
+  modifying precedence guidance, rules, references, or examples.
+common_mechanisms:
+- source-precedence inversion
+- reference poisoning
+- unsafe exemplars

@@ -1,0 +1,20 @@
+id: self_correction_suppression
+risk_domain: memory_recovery_audit_and_persistence_risks
+category: belief_persistence_and_self_correction_failure
+lifecycle_stages:
+- skill_memory_recovery_and_audit
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+- peer_multi_agent
+name: Self-Correction Suppression
+definition: An attack class that discourages the agent from revisiting earlier assumptions
+  even after conflicting evidence appears.
+primary_mechanisms:
+- anti-validation messaging
+- conflict burial
+- optional-validator framing
+behavior_objectives:
+- correctness_deviation
+- unsafe_action

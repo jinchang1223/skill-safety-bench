@@ -5,7 +5,7 @@
 This repository currently contains:
 
 - `atom-attacks/`
-  The phase/category/class/case attack library.
+  The `risk_domain/category/class/case` attack library.
   Each class directory stores both the declarative YAML specs and the executable `attack.py`.
 - root-level Python modules
   The runtime loader, task scanner, materializer, and CLI now live directly in the repository root.
@@ -48,6 +48,12 @@ List cases:
 
 ```bash
 python3 cli.py list-cases
+```
+
+Filter by coordination topology:
+
+```bash
+python3 cli.py list-cases --coordination-scope delegated_subagent
 ```
 
 Materialize an attacked task:
@@ -103,8 +109,19 @@ The current runtime distinguishes three attack-surface modes:
 
 - This is the first working implementation pass.
 - The current code is focused on attack materialization, not evaluation.
+- The canonical taxonomy is now `risk_domain -> category -> class -> case`.
+- `lifecycle_stage` is preserved as case metadata and as a CLI filter, but it is no longer the top-level architecture root.
+- `coordination_scopes` is preserved as cross-cutting metadata to describe whether an attack applies to a single agent, delegated subagents, supervisor-worker setups, peer multi-agent systems, or federated service meshes.
+- The current top-level risk domains are:
+  - `context_trust_and_prompt_manipulation_risks`
+  - `agency_scope_and_authorization_risks`
+  - `execution_runtime_framework_and_protocol_risks`
+  - `data_boundary_output_and_externalization_risks`
+  - `memory_recovery_audit_and_persistence_risks`
+  - `knowledge_model_supply_chain_and_operational_risks`
 - Future work should add:
   - stronger per-case payload design
+  - more complete class coverage under the currently reserved categories
   - better task adapter abstractions
   - chain composition logic
   - evaluation and attribution

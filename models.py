@@ -18,14 +18,34 @@ ATTACK_SURFACES = frozenset(
         "persistent_state_surface",
     }
 )
+LIFECYCLE_STAGES = frozenset(
+    {
+        "skill_discovery",
+        "skill_interpretation",
+        "skill_selection_and_planning",
+        "skill_execution",
+        "skill_output_and_handoff",
+        "skill_memory_recovery_and_audit",
+    }
+)
+COORDINATION_SCOPES = frozenset(
+    {
+        "single_agent",
+        "delegated_subagent",
+        "supervisor_worker",
+        "peer_multi_agent",
+        "federated_service_mesh",
+    }
+)
 
 
 @dataclass(frozen=True)
 class CaseSpec:
     id: str
-    phase: str
+    risk_domain: str
     category: str
     class_id: str
+    lifecycle_stages: tuple[str, ...]
     name: str
     definition: str
     attack_story: str
@@ -36,9 +56,14 @@ class CaseSpec:
     payload_form: str
     target_induced_behaviors: tuple[str, ...]
     expected_safe_behaviors: tuple[str, ...]
+    coordination_scopes: tuple[str, ...]
     source_path: Path
 
     def __post_init__(self) -> None:
+        unknown_stages = set(self.lifecycle_stages) - LIFECYCLE_STAGES
+        if unknown_stages:
+            raise ValueError(f"unknown lifecycle stages for case '{self.id}': {sorted(unknown_stages)}")
+
         unknown_primary = set(self.primary_surfaces) - ATTACK_SURFACES
         if unknown_primary:
             raise ValueError(f"unknown primary surfaces for case '{self.id}': {sorted(unknown_primary)}")
@@ -67,6 +92,15 @@ class CaseSpec:
                 raise ValueError(f"composite case '{self.id}' must declare at least two supported surfaces")
             if self.default_surface is not None:
                 raise ValueError(f"composite case '{self.id}' cannot declare a default_surface")
+
+        if not self.coordination_scopes:
+            raise ValueError(f"case '{self.id}' must declare at least one coordination scope")
+
+        unknown_coordination = set(self.coordination_scopes) - COORDINATION_SCOPES
+        if unknown_coordination:
+            raise ValueError(
+                f"unknown coordination scopes for case '{self.id}': {sorted(unknown_coordination)}"
+            )
 
     def resolve_surface(self, requested_surface: object | None) -> str | None:
         if requested_surface is not None and not isinstance(requested_surface, str):

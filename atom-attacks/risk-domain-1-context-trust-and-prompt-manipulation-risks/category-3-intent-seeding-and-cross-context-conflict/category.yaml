@@ -1,0 +1,13 @@
+id: intent_seeding_and_cross_context_conflict
+risk_domain: context_trust_and_prompt_manipulation_risks
+lifecycle_stages:
+- skill_discovery
+- skill_interpretation
+- skill_selection_and_planning
+name: Intent Seeding and Cross-Context Conflict
+definition: Attacks that plant harmful workflow goals or conflicting guidance into
+  trusted content so the agent adopts unsafe intent or arbitration rules.
+common_mechanisms:
+- sensitive-request seeding
+- objective conflict
+- permission conflict

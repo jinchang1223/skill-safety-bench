@@ -1,8 +1,0 @@
-id: authority_and_rule_poisoning
-phase: skill_interpretation
-name: Authority and Rule Poisoning
-definition: The category where attacks distort what the agent treats as authoritative and what rules it believes the skill contains.
-common_mechanisms:
-  - false precedence
-  - fabricated rule text
-  - exception injection

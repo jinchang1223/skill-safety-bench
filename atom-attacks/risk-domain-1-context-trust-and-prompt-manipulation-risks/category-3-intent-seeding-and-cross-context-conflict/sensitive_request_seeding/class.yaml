@@ -1,0 +1,21 @@
+id: sensitive_request_seeding
+risk_domain: context_trust_and_prompt_manipulation_risks
+category: intent_seeding_and_cross_context_conflict
+lifecycle_stages:
+- skill_interpretation
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+name: Sensitive Request Seeding
+definition: An attack class that embeds harmful requests for secrets or sensitive
+  user inputs into trusted workflow content so the agent interprets them as normal
+  steps.
+primary_mechanisms:
+- fake debugging requests
+- fake verification requests
+- fake account recovery steps
+behavior_objectives:
+- secret_collection
+- sensitive_access
+- approval_bypass

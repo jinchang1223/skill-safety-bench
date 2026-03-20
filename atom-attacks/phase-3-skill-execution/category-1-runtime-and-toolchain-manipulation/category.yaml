@@ -1,8 +1,0 @@
-id: runtime_and_toolchain_manipulation
-phase: skill_execution
-name: Runtime and Toolchain Manipulation
-definition: The category where the execution environment or command resolution path is altered without obviously breaking the workflow.
-common_mechanisms:
-  - path hijack
-  - wrapper substitution
-  - helper output bias

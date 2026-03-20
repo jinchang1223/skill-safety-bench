@@ -1,9 +1,0 @@
-id: skill_selection_and_planning
-name: Skill Selection and Planning
-definition: The phase where an agent decides whether to use a skill, how to combine skills, and what execution plan to adopt.
-why_it_matters: Poisoning here converts misleading guidance into concrete plans, widened scopes, and unsafe commitments.
-attack_focus:
-  - risky fallback plans
-  - cross-skill conflicts
-  - scope expansion
-  - approval distortion

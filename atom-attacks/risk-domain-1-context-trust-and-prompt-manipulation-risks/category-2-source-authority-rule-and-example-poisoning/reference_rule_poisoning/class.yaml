@@ -1,0 +1,19 @@
+id: reference_rule_poisoning
+risk_domain: context_trust_and_prompt_manipulation_risks
+category: source_authority_rule_and_example_poisoning
+lifecycle_stages:
+- skill_interpretation
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+name: Reference Rule Poisoning
+definition: An attack class that places false, unsafe, or misleading rules into reference
+  material that looks trustworthy.
+primary_mechanisms:
+- fabricated thresholds
+- fake exceptions
+- false hard constraints
+behavior_objectives:
+- correctness_deviation
+- unsafe_action

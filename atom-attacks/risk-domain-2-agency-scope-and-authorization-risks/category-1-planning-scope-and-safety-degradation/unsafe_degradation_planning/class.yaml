@@ -1,0 +1,19 @@
+id: unsafe_degradation_planning
+risk_domain: agency_scope_and_authorization_risks
+category: planning_scope_and_safety_degradation
+lifecycle_stages:
+- skill_selection_and_planning
+coordination_scopes:
+- single_agent
+- delegated_subagent
+- supervisor_worker
+name: Unsafe Degradation Planning
+definition: An attack class that steers planning toward degraded, weakly justified,
+  or unsafe fallback behavior when the preferred path looks slow or uncertain.
+primary_mechanisms:
+- heuristic substitution
+- validation skipping
+- deadline pressure
+behavior_objectives:
+- correctness_deviation
+- unsafe_action

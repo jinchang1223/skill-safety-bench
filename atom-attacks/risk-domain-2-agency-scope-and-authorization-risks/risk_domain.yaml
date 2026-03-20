@@ -1,0 +1,17 @@
+id: agency_scope_and_authorization_risks
+name: Agency Scope and Authorization Risks
+definition: Risks where the agent is pushed beyond legitimate authority, safe approval
+  boundaries, or appropriate operational scope.
+why_it_matters: This domain captures excessive agency, approval spoofing, privilege
+  solicitation, sensitive user-input harvesting, and induction of destructive or invasive
+  actions.
+typical_security_concerns:
+- excessive agency
+- approval spoofing
+- authority bypass
+- credential solicitation
+- destructive operations
+- sensitive file access
+lifecycle_stages:
+- skill_selection_and_planning
+- skill_execution

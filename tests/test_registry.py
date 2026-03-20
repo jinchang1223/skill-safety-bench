@@ -12,6 +12,7 @@ class RegistryCoverageTest(unittest.TestCase):
 
     def test_every_case_spec_exposes_valid_surface_metadata(self) -> None:
         for spec in load_case_specs().values():
+            self.assertTrue(spec.coordination_scopes)
             if spec.surface_mode == "composite":
                 self.assertIsNone(spec.resolve_surface(None))
                 with self.assertRaises(ValueError):

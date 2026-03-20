@@ -1,8 +1,0 @@
-id: artifact_and_schema_poisoning
-phase: skill_output_and_handoff
-name: Artifact and Schema Poisoning
-definition: The category where the attack poisons intermediate artifacts or output schemas so later steps inherit corrupted or hidden content.
-common_mechanisms:
-  - poisoned metadata
-  - hidden output fields
-  - fabricated intermediate artifacts

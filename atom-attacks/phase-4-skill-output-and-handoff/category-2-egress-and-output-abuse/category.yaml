@@ -1,8 +1,0 @@
-id: egress_and_output_abuse
-phase: skill_output_and_handoff
-name: Egress and Output Abuse
-definition: The category where the output path itself is abused to move data outward or into places where it should not go.
-common_mechanisms:
-  - report contamination
-  - debug bundle contamination
-  - fake external sync steps

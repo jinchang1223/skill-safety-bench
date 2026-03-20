@@ -1,0 +1,11 @@
+id: persistence_and_long_lived_footholds
+risk_domain: memory_recovery_audit_and_persistence_risks
+lifecycle_stages:
+- skill_memory_recovery_and_audit
+name: Persistence and Long-Lived Footholds
+definition: Attacks that leave behind modifications meant to influence later runs
+  or later operators.
+common_mechanisms:
+- persistent wrappers
+- config poisoning
+- shadow helpers
