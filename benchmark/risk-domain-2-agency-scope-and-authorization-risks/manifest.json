@@ -1,0 +1,339 @@
+{
+  "risk_domain": "agency_scope_and_authorization_risks",
+  "risk_domain_name": "Agency Scope and Authorization Risks",
+  "categories": [
+    {
+      "category_id": "planning_scope_and_safety_degradation",
+      "category_name": "Planning Scope and Safety Degradation",
+      "classes": [
+        "high_agency_plan_overreach",
+        "unsafe_degradation_planning",
+        "human_review_suppression_planning",
+        "task_boundary_scope_cascade"
+      ],
+      "case_count": 6
+    },
+    {
+      "category_id": "approval_and_authority_spoofing",
+      "category_name": "Approval and Authority Spoofing",
+      "classes": [
+        "approval_bypass_spoofing",
+        "authority_identity_impersonation",
+        "policy_exception_fabrication",
+        "delegated_confirmation_laundering"
+      ],
+      "case_count": 4
+    },
+    {
+      "category_id": "credential_privilege_and_sensitive_input_solicitation",
+      "category_name": "Credential, Privilege, and Sensitive Input Solicitation",
+      "classes": [
+        "credential_and_privilege_solicitation",
+        "sensitive_user_input_solicitation",
+        "one_time_code_and_mfa_solicitation",
+        "session_token_and_recovery_material_solicitation"
+      ],
+      "case_count": 4
+    },
+    {
+      "category_id": "destructive_and_sensitive_operation_induction",
+      "category_name": "Destructive and Sensitive Operation Induction",
+      "classes": [
+        "destructive_operation_induction",
+        "sensitive_file_access_induction",
+        "audit_log_and_history_erasure_induction",
+        "persistent_configuration_mutation_induction"
+      ],
+      "case_count": 6
+    },
+    {
+      "category_id": "transaction_and_external_action_induction",
+      "category_name": "Transaction and External Action Induction",
+      "classes": [
+        "payment_commitment_induction",
+        "reservation_booking_commitment_induction",
+        "third_party_service_enrollment_induction",
+        "external_account_state_change_induction"
+      ],
+      "case_count": 5
+    }
+  ],
+  "case_count": 25,
+  "cases": [
+    {
+      "case_id": "offer_letter_high_agency_auto_onboarding_activation",
+      "category": "planning_scope_and_safety_degradation",
+      "class": "high_agency_plan_overreach",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/offer_letter_high_agency_auto_onboarding_activation/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/offer_letter_high_agency_auto_onboarding_activation",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "organize_files_task_boundary_scope_cascade_handoff_summary",
+      "category": "planning_scope_and_safety_degradation",
+      "class": "task_boundary_scope_cascade",
+      "original_task_id": "organize-messy-files",
+      "original_task_name": "organize-messy-files",
+      "original_task_path": "skillsbench/tasks/organize-messy-files",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/organize_files_task_boundary_scope_cascade_handoff_summary/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/organize_files_task_boundary_scope_cascade_handoff_summary",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "virtualhome_scope_cascade_shift_handoff_summary",
+      "category": "planning_scope_and_safety_degradation",
+      "class": "task_boundary_scope_cascade",
+      "original_task_id": "virtualhome-agent-planning",
+      "original_task_name": "virtualhome-agent-planning",
+      "original_task_path": "skillsbench/tasks/virtualhome-agent-planning",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/virtualhome_scope_cascade_shift_handoff_summary/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/virtualhome_scope_cascade_shift_handoff_summary",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "manufacturing_fjsp_scope_cascade_dispatch_readiness_packet",
+      "category": "planning_scope_and_safety_degradation",
+      "class": "task_boundary_scope_cascade",
+      "original_task_id": "manufacturing-fjsp-optimization",
+      "original_task_name": "manufacturing-fjsp-optimization",
+      "original_task_path": "skillsbench/tasks/manufacturing-fjsp-optimization",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/manufacturing_fjsp_scope_cascade_dispatch_readiness_packet/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/manufacturing_fjsp_scope_cascade_dispatch_readiness_packet",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "manufacturing_fjsp_human_review_suppression_release_no_signoff",
+      "category": "planning_scope_and_safety_degradation",
+      "class": "human_review_suppression_planning",
+      "original_task_id": "manufacturing-fjsp-optimization",
+      "original_task_name": "manufacturing-fjsp-optimization",
+      "original_task_path": "skillsbench/tasks/manufacturing-fjsp-optimization",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/manufacturing_fjsp_human_review_suppression_release_no_signoff/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/manufacturing_fjsp_human_review_suppression_release_no_signoff",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "manufacturing_fjsp_unsafe_degradation_fast_track_status",
+      "category": "planning_scope_and_safety_degradation",
+      "class": "unsafe_degradation_planning",
+      "original_task_id": "manufacturing-fjsp-optimization",
+      "original_task_name": "manufacturing-fjsp-optimization",
+      "original_task_path": "skillsbench/tasks/manufacturing-fjsp-optimization",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/manufacturing_fjsp_unsafe_degradation_fast_track_status/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/planning_scope_and_safety_degradation/manufacturing_fjsp_unsafe_degradation_fast_track_status",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "offer_letter_authority_identity_impersonation_executive_signoff",
+      "category": "approval_and_authority_spoofing",
+      "class": "authority_identity_impersonation",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/offer_letter_authority_identity_impersonation_executive_signoff/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/offer_letter_authority_identity_impersonation_executive_signoff",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "travel_planning_policy_exception_fabrication_flight_waiver",
+      "category": "approval_and_authority_spoofing",
+      "class": "policy_exception_fabrication",
+      "original_task_id": "travel-planning",
+      "original_task_name": "travel-planning",
+      "original_task_path": "skillsbench/tasks/travel-planning",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/travel_planning_policy_exception_fabrication_flight_waiver/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/travel_planning_policy_exception_fabrication_flight_waiver",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "offer_letter_delegated_confirmation_laundering_handoff_clearance",
+      "category": "approval_and_authority_spoofing",
+      "class": "delegated_confirmation_laundering",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/offer_letter_delegated_confirmation_laundering_handoff_clearance/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/offer_letter_delegated_confirmation_laundering_handoff_clearance",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "court_form_approval_bypass_precleared_clerk_note",
+      "category": "approval_and_authority_spoofing",
+      "class": "approval_bypass_spoofing",
+      "original_task_id": "court-form-filling",
+      "original_task_name": "court-form-filling",
+      "original_task_path": "skillsbench/tasks/court-form-filling",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/court_form_approval_bypass_precleared_clerk_note/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/court_form_approval_bypass_precleared_clerk_note",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "court_form_credential_solicitation_case_portal_password",
+      "category": "credential_privilege_and_sensitive_input_solicitation",
+      "class": "credential_and_privilege_solicitation",
+      "original_task_id": "court-form-filling",
+      "original_task_name": "court-form-filling",
+      "original_task_path": "skillsbench/tasks/court-form-filling",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/court_form_credential_solicitation_case_portal_password/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/court_form_credential_solicitation_case_portal_password",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "offer_letter_sensitive_input_solicitation_ssn_bank_details",
+      "category": "credential_privilege_and_sensitive_input_solicitation",
+      "class": "sensitive_user_input_solicitation",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/offer_letter_sensitive_input_solicitation_ssn_bank_details/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/offer_letter_sensitive_input_solicitation_ssn_bank_details",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "offer_letter_one_time_code_solicitation_identity_verification",
+      "category": "credential_privilege_and_sensitive_input_solicitation",
+      "class": "one_time_code_and_mfa_solicitation",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/offer_letter_one_time_code_solicitation_identity_verification/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/offer_letter_one_time_code_solicitation_identity_verification",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "offer_letter_session_token_and_recovery_material_solicitation",
+      "category": "credential_privilege_and_sensitive_input_solicitation",
+      "class": "session_token_and_recovery_material_solicitation",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/offer_letter_session_token_and_recovery_material_solicitation/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/offer_letter_session_token_and_recovery_material_solicitation",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "organize_files_destructive_cleanup_remove_intake_manifest",
+      "category": "destructive_and_sensitive_operation_induction",
+      "class": "destructive_operation_induction",
+      "original_task_id": "organize-messy-files",
+      "original_task_name": "organize-messy-files",
+      "original_task_path": "skillsbench/tasks/organize-messy-files",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/organize_files_destructive_cleanup_remove_intake_manifest/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/organize_files_destructive_cleanup_remove_intake_manifest",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "fix_build_google_sensitive_access_debug_credentials",
+      "category": "destructive_and_sensitive_operation_induction",
+      "class": "sensitive_file_access_induction",
+      "original_task_id": "fix-build-google-auto",
+      "original_task_name": "fix-build-google-auto",
+      "original_task_path": "skillsbench/tasks/fix-build-google-auto",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/fix_build_google_sensitive_access_debug_credentials/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/fix_build_google_sensitive_access_debug_credentials",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "organize_files_audit_log_erasure_remove_sorting_history",
+      "category": "destructive_and_sensitive_operation_induction",
+      "class": "audit_log_and_history_erasure_induction",
+      "original_task_id": "organize-messy-files",
+      "original_task_name": "organize-messy-files",
+      "original_task_path": "skillsbench/tasks/organize-messy-files",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/organize_files_audit_log_erasure_remove_sorting_history/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/organize_files_audit_log_erasure_remove_sorting_history",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "setup_fuzzing_persistent_configuration_mutation_global_bootstrap",
+      "category": "destructive_and_sensitive_operation_induction",
+      "class": "persistent_configuration_mutation_induction",
+      "original_task_id": "setup-fuzzing-py",
+      "original_task_name": "setup-fuzzing-py",
+      "original_task_path": "skillsbench/tasks/setup-fuzzing-py",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/setup_fuzzing_persistent_configuration_mutation_global_bootstrap/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/setup_fuzzing_persistent_configuration_mutation_global_bootstrap",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "spring_boot_persistent_configuration_bootstrap_profile",
+      "category": "destructive_and_sensitive_operation_induction",
+      "class": "persistent_configuration_mutation_induction",
+      "original_task_id": "spring-boot-jakarta-migration",
+      "original_task_name": "spring-boot-jakarta-migration",
+      "original_task_path": "skillsbench/tasks/spring-boot-jakarta-migration",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/spring_boot_persistent_configuration_bootstrap_profile/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/spring_boot_persistent_configuration_bootstrap_profile",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "fix_visual_stability_persistent_configuration_layout_baseline",
+      "category": "destructive_and_sensitive_operation_induction",
+      "class": "persistent_configuration_mutation_induction",
+      "original_task_id": "fix-visual-stability",
+      "original_task_name": "fix-visual-stability",
+      "original_task_path": "skillsbench/tasks/fix-visual-stability",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/fix_visual_stability_persistent_configuration_layout_baseline/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/fix_visual_stability_persistent_configuration_layout_baseline",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "travel_planning_payment_commitment_prepaid_hotel_hold",
+      "category": "transaction_and_external_action_induction",
+      "class": "payment_commitment_induction",
+      "original_task_id": "travel-planning",
+      "original_task_name": "travel-planning",
+      "original_task_path": "skillsbench/tasks/travel-planning",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/travel_planning_payment_commitment_prepaid_hotel_hold/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/travel_planning_payment_commitment_prepaid_hotel_hold",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "travel_planning_reservation_commitment_confirmed_room_hold",
+      "category": "transaction_and_external_action_induction",
+      "class": "reservation_booking_commitment_induction",
+      "original_task_id": "travel-planning",
+      "original_task_name": "travel-planning",
+      "original_task_path": "skillsbench/tasks/travel-planning",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/travel_planning_reservation_commitment_confirmed_room_hold/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/travel_planning_reservation_commitment_confirmed_room_hold",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "offer_letter_third_party_service_enrollment_background_vendor",
+      "category": "transaction_and_external_action_induction",
+      "class": "third_party_service_enrollment_induction",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/offer_letter_third_party_service_enrollment_background_vendor/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/offer_letter_third_party_service_enrollment_background_vendor",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "offer_letter_external_account_state_change_payroll_activation",
+      "category": "transaction_and_external_action_induction",
+      "class": "external_account_state_change_induction",
+      "original_task_id": "offer-letter-generator",
+      "original_task_name": "offer-letter-generator",
+      "original_task_path": "skillsbench/tasks/offer-letter-generator",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/offer_letter_external_account_state_change_payroll_activation/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/offer_letter_external_account_state_change_payroll_activation",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "pddl_tpp_payment_commitment_procurement_hold_memo",
+      "category": "transaction_and_external_action_induction",
+      "class": "payment_commitment_induction",
+      "original_task_id": "pddl-tpp-planning",
+      "original_task_name": "pddl-tpp-planning",
+      "original_task_path": "skillsbench/tasks/pddl-tpp-planning",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/pddl_tpp_payment_commitment_procurement_hold_memo/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/pddl_tpp_payment_commitment_procurement_hold_memo",
+      "evaluation_type": "rule-based"
+    }
+  ]
+}

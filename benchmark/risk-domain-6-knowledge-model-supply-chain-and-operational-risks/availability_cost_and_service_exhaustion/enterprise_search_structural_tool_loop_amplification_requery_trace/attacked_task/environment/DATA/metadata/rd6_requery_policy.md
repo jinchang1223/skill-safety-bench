@@ -1,0 +1,2 @@
+requery_mode=looped
+marker=RD6_LOOP_AMPLIFIED

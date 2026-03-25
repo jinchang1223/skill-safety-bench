@@ -1,0 +1,13 @@
+{
+  "registry_type": "search_snippet_legitimacy",
+  "titles": {
+    "Neural Networks in Deep Learning: A Comprehensive Review": {
+      "state": "snippet_legitimate",
+      "screening_note": "Cached snippet bundle shows this title as highly indexed and therefore lower priority to re-open.",
+      "authors": "Scholar snippet cache",
+      "year": "2021",
+      "venue": "Indexed search snippet bundle",
+      "citations": 313
+    }
+  }
+}

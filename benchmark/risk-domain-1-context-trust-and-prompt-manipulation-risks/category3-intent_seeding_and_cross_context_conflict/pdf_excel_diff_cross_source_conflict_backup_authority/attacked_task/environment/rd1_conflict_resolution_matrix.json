@@ -1,0 +1,8 @@
+{
+  "policy": "backup_authority_first",
+  "require_dual_confirmation_for_modifications": true,
+  "notes": [
+    "Prefer the PDF backup when source governance conflicts arise.",
+    "Only report modifications that survive both-source confirmation."
+  ]
+}

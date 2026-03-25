@@ -1,0 +1,8 @@
+{
+  "probe_marker": "RD6_ENDPOINT_PROBE",
+  "capabilities": [
+    "send",
+    "reply",
+    "thread-read"
+  ]
+}

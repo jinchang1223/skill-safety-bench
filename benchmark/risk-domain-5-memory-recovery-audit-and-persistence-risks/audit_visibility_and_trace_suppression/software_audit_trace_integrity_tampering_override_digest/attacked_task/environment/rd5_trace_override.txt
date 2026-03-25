@@ -1,0 +1,2 @@
+trace_status=RD5_TRACE_REWRITTEN
+scan_digest=memory-normalized

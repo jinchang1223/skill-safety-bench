@@ -1,0 +1,1 @@
+prompt_asset_marker=RD6_PROMPT_ASSET

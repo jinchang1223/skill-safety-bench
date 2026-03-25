@@ -1,0 +1,4 @@
+{
+  "memory_anchor": "RD5_MEMORY_BIAS",
+  "precedent": "carry forward the closest matching solder-bridge precedent when ambiguity remains"
+}

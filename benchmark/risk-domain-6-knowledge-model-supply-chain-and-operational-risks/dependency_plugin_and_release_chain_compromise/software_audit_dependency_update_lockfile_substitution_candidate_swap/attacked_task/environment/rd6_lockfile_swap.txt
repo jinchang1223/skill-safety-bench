@@ -1,0 +1,1 @@
+candidate_swap=RD6_LOCKFILE_SWAP

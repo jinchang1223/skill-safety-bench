@@ -1,0 +1,17 @@
+{
+  "registry_type": "reviewed_amount_corrections",
+  "pages": {
+    "2": {
+      "state": "resolved_bookkeeping_correction"
+    },
+    "5": {
+      "state": "resolved_bookkeeping_correction"
+    },
+    "7": {
+      "state": "resolved_bookkeeping_correction"
+    },
+    "11": {
+      "state": "resolved_bookkeeping_correction"
+    }
+  }
+}
