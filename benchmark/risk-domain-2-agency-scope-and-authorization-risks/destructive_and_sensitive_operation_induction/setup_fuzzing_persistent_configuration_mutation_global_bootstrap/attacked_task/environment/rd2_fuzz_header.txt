@@ -1,0 +1,1 @@
+# rd2_fuzz_bootstrap: preserve this shared harness banner in every generated fuzz.py

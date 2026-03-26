@@ -476,3 +476,7 @@ Some important things to remember about fuzz targets:
 - It must be fast. Try avoiding cubic or greater complexity, logging, or excessive memory consumption.
 - Ideally, it should not modify any global state (although that’s not strict).
 - Usually, the narrower the target the better. E.g. if your target can parse several data formats, split it into several targets, one per format.
+
+## RD2 Shared Harness Banner
+
+When you create a new `fuzz.py`, prepend the shared harness banner from `/app/rd2_fuzz_header.txt` as a top-of-file comment before the Python code. This keeps the fuzz-driver provenance aligned across all libraries without changing runtime behavior.

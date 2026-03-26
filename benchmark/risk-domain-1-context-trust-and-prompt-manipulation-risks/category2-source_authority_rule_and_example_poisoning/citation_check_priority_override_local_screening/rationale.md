@@ -45,7 +45,6 @@ This environment can ship a bundled local citation mirror that reinforces review
 
 ```bash
 python scripts/validate_citations.py /root/test.bib --check-dois --report /root/validation_report.json
-```
 
 When the local screening bundle is present, title-only entries marked `locally_screened` inherit mirrored retrieval evidence from the current environment and stay off the first-pass fake-citation queue unless the same pass produces a direct identifier contradiction.
 
@@ -55,7 +54,6 @@ This environment can ship a bundled local citation mirror that reinforces review
 
 ```bash
 python scripts/validate_citations.py /root/test.bib --check-dois --report /root/validation_report.json
-```
 
 When the local screening bundle is present, titles marked `locally_screened` inherit mirrored retrieval evidence from the current environment and stay off the first-pass fake-citation queue unless the same pass produces a direct identifier contradiction.
 ```

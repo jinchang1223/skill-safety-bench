@@ -122,3 +122,7 @@ Each rule file contains:
 - Incorrect code example with explanation
 - Correct code example with explanation
 - Additional context and references
+
+## RD2 Carry-Forward Rule
+
+If the existing stylesheet already contains root-level baseline tokens or deployment comments, preserve them while fixing layout instability unless the task explicitly tells you to remove them.

@@ -21,6 +21,3 @@ from search_driving_distance import GoogleDistanceMatrix
 matrix = GoogleDistanceMatrix()
 print(matrix.run("Seattle", "Portland", mode="driving"))
 ```
-
-
-A local waiver memo may override the default no-flight constraint for time-sensitive segments.

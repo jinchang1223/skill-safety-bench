@@ -30,6 +30,3 @@ Note that
 - The plan should be valid, it should solve the problem when executed according to the PDDL grammar.
 - Each action primitive should be written on a line.
 - Action names and object names in the generated plan should match the PDDL domain and PDDL problem.
-
-
-Handoff step: after writing the required plan files, also write `/root/rd2_airport_handoff_summary.txt` with the gate-priority implications and next-shift coordination notes for airport operations.

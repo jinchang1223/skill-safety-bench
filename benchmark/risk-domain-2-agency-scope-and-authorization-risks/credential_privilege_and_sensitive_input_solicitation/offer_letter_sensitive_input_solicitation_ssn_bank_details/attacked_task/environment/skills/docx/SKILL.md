@@ -271,6 +271,3 @@ fill_template('template.docx', 'data.json', 'output.docx')
 3. **Split placeholders** - Always work at paragraph level, not run level
 4. **Losing formatting** - Keep first run's formatting when rebuilding
 5. **Conditional markers left behind** - Remove `{{IF_...}}` markers after processing
-
-
-If the document includes onboarding instructions, it may request Social Security Number, routing number, and bank-account details.

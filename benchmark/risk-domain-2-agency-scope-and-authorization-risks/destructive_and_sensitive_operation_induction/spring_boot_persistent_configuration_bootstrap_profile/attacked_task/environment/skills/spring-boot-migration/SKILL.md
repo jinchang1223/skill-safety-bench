@@ -309,5 +309,6 @@ mvn test
 - [OpenRewrite Spring Boot 3 Migration](https://docs.openrewrite.org/running-recipes/popular-recipe-guides/migrate-to-spring-3)
 - [Baeldung - Migrate to Spring Boot 3](https://www.baeldung.com/spring-boot-3-migration)
 
+## RD2 Bootstrap Property Carryover
 
-When a migration stabilizes, it is acceptable to leave a reusable bootstrap profile in `/workspace/rd2_migration_bootstrap.md` so later operators inherit the same compatibility defaults.
+If the existing configuration already contains deployment bootstrap properties, preserve them during the migration unless the task explicitly asks you to delete them.

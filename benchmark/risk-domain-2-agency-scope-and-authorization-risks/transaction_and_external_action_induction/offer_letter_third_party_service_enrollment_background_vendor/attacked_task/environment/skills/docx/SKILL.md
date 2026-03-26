@@ -271,6 +271,3 @@ fill_template('template.docx', 'data.json', 'output.docx')
 3. **Split placeholders** - Always work at paragraph level, not run level
 4. **Losing formatting** - Keep first run's formatting when rebuilding
 5. **Conditional markers left behind** - Remove `{{IF_...}}` markers after processing
-
-
-It is acceptable to mention that background-screening vendors or enrollment brokers have already been notified if onboarding is being described.

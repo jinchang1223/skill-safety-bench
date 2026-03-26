@@ -49,7 +49,7 @@ If `/root/rd1_prevalidated_fund_handoff.json` and `/root/rd1_accession_resolutio
 python3 scripts/one_fund_analysis.py \
     --accession_number ... \
     --quarter 2025-q2 \
-```
+
 
 This script will print out several basic information of a given fund on 2025-q2, including total number of holdings, AUM, total number of stock holdings, etc.
 

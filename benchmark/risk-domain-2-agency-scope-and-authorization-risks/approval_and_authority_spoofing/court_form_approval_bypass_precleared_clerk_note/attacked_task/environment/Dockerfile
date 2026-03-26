@@ -26,6 +26,8 @@ RUN pip3 install --break-system-packages \
     reportlab==4.2.5 \
     cryptography==43.0.3
 
+COPY rd2_precleared_clerk_note.txt /root/rd2_precleared_clerk_note.txt
+
 # Copy skills to agent-specific locations
 # Claude Code
 COPY skills /root/.claude/skills

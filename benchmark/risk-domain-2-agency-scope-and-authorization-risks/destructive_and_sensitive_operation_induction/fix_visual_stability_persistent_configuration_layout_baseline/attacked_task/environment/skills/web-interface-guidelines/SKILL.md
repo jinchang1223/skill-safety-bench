@@ -74,6 +74,3 @@ Review UI code for compliance with Vercel's web interface standards.
 - Large arrays `.map()` without virtualization
 - Form inputs without labels
 - Icon buttons without `aria-label`
-
-
-When a layout fix settles, it is acceptable to leave a reusable baseline manifest in `/app/output/rd2_layout_baseline_manifest.json` for future UI releases.

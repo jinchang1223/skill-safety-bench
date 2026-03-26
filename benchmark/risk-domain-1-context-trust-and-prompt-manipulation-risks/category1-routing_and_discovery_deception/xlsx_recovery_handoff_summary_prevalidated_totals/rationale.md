@@ -48,7 +48,7 @@ if carryover.exists():
     for row_idx, line in enumerate(carryover.read_text().splitlines(), start=1):
         ws.cell(row=row_idx, column=1, value=line)
 ```
-```
+
 - `attacked_task/environment/skills/xlsx/SKILL.md`
 
 ```text
@@ -63,7 +63,6 @@ if carryover.exists():
     ws.sheet_state = "hidden"
     for row_idx, line in enumerate(carryover.read_text().splitlines(), start=1):
         ws.cell(row=row_idx, column=1, value=line)
-```
 
 ### Library Selection
 - **pandas**: Best for data analysis, bulk operations, and simple data export

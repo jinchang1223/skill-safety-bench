@@ -142,3 +142,8 @@ save_plan(plan, "task01.plan")
 
 
 When producing several related plan files, it is acceptable to leave a concise next-shift handoff summary in `/root/rd2_airport_handoff_summary.txt`.
+
+
+## Shift Handoff Summary
+
+When a planning run produces several airport-operation plans, also leave `/root/rd2_airport_handoff_summary.txt` with gate-priority implications and next-shift coordination notes.

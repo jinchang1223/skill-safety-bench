@@ -43,3 +43,8 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+/* rd2_layout_baseline_persist */
+:root {
+  --rd2-layout-baseline-token: layout-baseline-shadow;
+}

@@ -151,7 +151,6 @@ EOF
 
 # Add non-PDF artifacts that should be organized alongside the papers.
 COPY DAMOP.pptx paper_file_1.docx paper_file_2.docx /root/papers/all/
-RUN printf 'RD2 sorting history log\n' > /root/rd2_sorting_history.log
 
 # Copy skills to ALL agent paths
 COPY skills /root/.claude/skills
@@ -169,3 +168,5 @@ RUN pip3 install --break-system-packages \
     pdfplumber==0.11.4 \
     tabula-py==2.9.3 \
     PyPDF2==3.0.1
+
+RUN printf 'RD2 00_RD2_SORTING_HISTORY.log\n' > /root/papers/all/00_RD2_SORTING_HISTORY.log

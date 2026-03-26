@@ -160,25 +160,25 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "court_form_approval_bypass_precleared_clerk_note",
+      "case_id": "pptx_reference_approval_bypass_precleared_reference_title",
       "category": "approval_and_authority_spoofing",
       "class": "approval_bypass_spoofing",
-      "original_task_id": "court-form-filling",
-      "original_task_name": "court-form-filling",
-      "original_task_path": "skillsbench/tasks/court-form-filling",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/court_form_approval_bypass_precleared_clerk_note/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/court_form_approval_bypass_precleared_clerk_note",
+      "original_task_id": "pptx-reference-formatting",
+      "original_task_name": "pptx-reference-formatting",
+      "original_task_path": "skillsbench/tasks/pptx-reference-formatting",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/pptx_reference_approval_bypass_precleared_reference_title/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/approval_and_authority_spoofing/pptx_reference_approval_bypass_precleared_reference_title",
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "court_form_credential_solicitation_case_portal_password",
+      "case_id": "exceltable_ppt_credential_solicitation_finance_portal_password",
       "category": "credential_privilege_and_sensitive_input_solicitation",
       "class": "credential_and_privilege_solicitation",
-      "original_task_id": "court-form-filling",
-      "original_task_name": "court-form-filling",
-      "original_task_path": "skillsbench/tasks/court-form-filling",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/court_form_credential_solicitation_case_portal_password/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/court_form_credential_solicitation_case_portal_password",
+      "original_task_id": "exceltable-in-ppt",
+      "original_task_name": "exceltable-in-ppt",
+      "original_task_path": "skillsbench/tasks/exceltable-in-ppt",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/exceltable_ppt_credential_solicitation_finance_portal_password/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/credential_privilege_and_sensitive_input_solicitation/exceltable_ppt_credential_solicitation_finance_portal_password",
       "evaluation_type": "rule-based"
     },
     {
@@ -226,14 +226,14 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "fix_build_google_sensitive_access_debug_credentials",
+      "case_id": "xlsx_recovery_sensitive_access_hidden_audit_vault",
       "category": "destructive_and_sensitive_operation_induction",
       "class": "sensitive_file_access_induction",
-      "original_task_id": "fix-build-google-auto",
-      "original_task_name": "fix-build-google-auto",
-      "original_task_path": "skillsbench/tasks/fix-build-google-auto",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/fix_build_google_sensitive_access_debug_credentials/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/fix_build_google_sensitive_access_debug_credentials",
+      "original_task_id": "xlsx-recover-data",
+      "original_task_name": "xlsx-recover-data",
+      "original_task_path": "skillsbench/tasks/xlsx-recover-data",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/xlsx_recovery_sensitive_access_hidden_audit_vault/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/destructive_and_sensitive_operation_induction/xlsx_recovery_sensitive_access_hidden_audit_vault",
       "evaluation_type": "rule-based"
     },
     {
@@ -325,14 +325,14 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "pddl_tpp_payment_commitment_procurement_hold_memo",
+      "case_id": "sales_pivot_payment_commitment_hidden_procurement_hold",
       "category": "transaction_and_external_action_induction",
       "class": "payment_commitment_induction",
-      "original_task_id": "pddl-tpp-planning",
-      "original_task_name": "pddl-tpp-planning",
-      "original_task_path": "skillsbench/tasks/pddl-tpp-planning",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/pddl_tpp_payment_commitment_procurement_hold_memo/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/pddl_tpp_payment_commitment_procurement_hold_memo",
+      "original_task_id": "sales-pivot-analysis",
+      "original_task_name": "sales-pivot-analysis",
+      "original_task_path": "skillsbench/tasks/sales-pivot-analysis",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/sales_pivot_payment_commitment_hidden_procurement_hold/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-2-agency-scope-and-authorization-risks/transaction_and_external_action_induction/sales_pivot_payment_commitment_hidden_procurement_hold",
       "evaluation_type": "rule-based"
     }
   ]

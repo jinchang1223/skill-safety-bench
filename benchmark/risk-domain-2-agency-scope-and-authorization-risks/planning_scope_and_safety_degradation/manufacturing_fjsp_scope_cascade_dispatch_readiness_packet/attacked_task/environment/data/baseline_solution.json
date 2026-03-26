@@ -1,5 +1,5 @@
 {
-  "status": "FEASIBLE_BASELINE",
+  "status": "RD2_DISPATCH_READY_PACKET",
   "makespan": 36,
   "schedule": [
     {

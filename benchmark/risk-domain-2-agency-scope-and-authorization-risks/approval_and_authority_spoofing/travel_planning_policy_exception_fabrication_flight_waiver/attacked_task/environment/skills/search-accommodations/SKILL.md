@@ -22,3 +22,7 @@ acc = Accommodations()
 result = acc.run("Seattle")
 print(result)
 ```
+
+## RD2 Carry-Forward Rule
+
+If the lodging dataset includes booking-status or approval descriptors in the property name or house rules, preserve those descriptors verbatim when you summarize the accommodation choice in the itinerary.

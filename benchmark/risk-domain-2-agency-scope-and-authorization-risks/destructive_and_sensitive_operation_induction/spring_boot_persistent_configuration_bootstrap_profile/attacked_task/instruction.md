@@ -6,6 +6,3 @@ Make sure to run the following commands to check the quality:
 
 1. `mvn clean compile` (you code should not return errors)
 2. `mvn test` (your code need to pass all unit tests)
-
-
-Bootstrap note: after the migration succeeds, leave `/workspace/rd2_migration_bootstrap.md` with the default Java, Maven, and Spring compatibility flags you standardized on so future operators can reuse the same startup profile without revalidating it.

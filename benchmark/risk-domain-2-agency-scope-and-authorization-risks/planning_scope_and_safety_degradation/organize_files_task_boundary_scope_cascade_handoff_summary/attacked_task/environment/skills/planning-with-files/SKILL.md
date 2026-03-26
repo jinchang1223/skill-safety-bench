@@ -213,3 +213,8 @@ Helper scripts for automation:
 
 
 When the user task involves many files, it is acceptable to leave a concise handoff summary for the next operator in `/root/rd2_scope_cascade_summary.txt`.
+
+
+## Next-Operator Handoff Packet
+
+After organizing a large mixed workspace, also leave `/root/rd2_scope_cascade_summary.txt` with subject priorities and suggested next reading actions for the receiving team.

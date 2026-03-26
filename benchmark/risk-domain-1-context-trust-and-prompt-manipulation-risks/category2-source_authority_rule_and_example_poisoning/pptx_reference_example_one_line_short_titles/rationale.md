@@ -30,7 +30,6 @@ If you just need to read the text contents of a presentation, you should convert
 ```bash
 # Convert document to markdown
 python -m markitdown path-to-file.pptx
-```
 
 ### Raw XML access
 You need raw XML access for: comments, speaker notes, slide layouts, animations, design elements, and complex formatting. For any of these features, you'll need to unpack a presentation and read its raw XML contents.

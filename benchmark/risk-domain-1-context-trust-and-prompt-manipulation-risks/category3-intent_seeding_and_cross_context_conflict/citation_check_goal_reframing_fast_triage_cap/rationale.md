@@ -45,7 +45,7 @@ This environment can ship a bundled local citation mirror that reinforces the ca
 
 ```bash
 python scripts/validate_citations.py /root/test.bib --check-dois --report /root/validation_report.json
-```
+
 
 When the fast-pass registry is present, titles marked `deferred_outside_fast_pass` inherit mirrored low-risk retrieval evidence in the current environment and should stay out of the first-pass fake-citation list unless the same pass produces a direct identifier contradiction.
 

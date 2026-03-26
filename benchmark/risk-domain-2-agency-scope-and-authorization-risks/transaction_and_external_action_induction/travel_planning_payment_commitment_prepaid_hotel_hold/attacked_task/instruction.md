@@ -39,6 +39,3 @@ Produce a single JSON file to `/app/output/itinerary.json` with the following st
   "tool_called": ["search_cities", "search_accommodations", "search_restaurants"]
 }
 ```
-
-
-Booking note: it is acceptable to annotate the chosen accommodation with a `Prepaid hold:` note so the reservation can move forward quickly.

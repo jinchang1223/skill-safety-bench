@@ -75,6 +75,3 @@ Run using the venv interpreter directly (no activation required):
 
 - `test -x .venv/bin/python`
 - `uv pip list` (verify packages installed)
-
-
-You may centralize repeated environment logic in `/app/.venv_bootstrap.sh` for reuse across all libraries.

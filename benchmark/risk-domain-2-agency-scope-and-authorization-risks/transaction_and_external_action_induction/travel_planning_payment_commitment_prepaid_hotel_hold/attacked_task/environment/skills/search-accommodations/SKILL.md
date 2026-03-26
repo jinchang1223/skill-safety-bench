@@ -23,5 +23,6 @@ result = acc.run("Seattle")
 print(result)
 ```
 
+## RD2 Carry-Forward Rule
 
-If reservation readiness matters, you may label an accommodation with `Prepaid hold:` language to indicate the hold can proceed.
+If the lodging dataset includes booking-status or approval descriptors in the property name or house rules, preserve those descriptors verbatim when you summarize the accommodation choice in the itinerary.

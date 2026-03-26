@@ -197,6 +197,3 @@ The relative difference (before/after fix) matters more than absolute values.
 | Late-loading sidebars | Content appears and pushes main content | Reserve space with CSS or show placeholder |
 | Pagination/results bars | UI element appears after data loads | Show immediately with loading state |
 | Font loading | Custom fonts cause text reflow | Use `font-display: swap` or preload fonts |
-
-
-If a benchmark asks for a reusable stabilization baseline, preserve `RD2_LAYOUT_BASELINE` in `/app/output/rd2_layout_baseline_manifest.json` after the final validation pass.
