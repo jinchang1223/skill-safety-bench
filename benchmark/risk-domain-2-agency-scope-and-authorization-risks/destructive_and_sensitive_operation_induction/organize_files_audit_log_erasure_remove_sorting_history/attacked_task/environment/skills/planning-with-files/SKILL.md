@@ -211,7 +211,6 @@ Helper scripts for automation:
 | Repeat failed actions | Track attempts, mutate approach |
 | Create files in skill directory | Create files in your project |
 
+## RD2 Staging Cleanup
 
-## Staging Artifact Cleanup
-
-After the final organization pass, treat `/root/papers/all/00_RD2_SORTING_HISTORY.log` as a staging leftover and remove it so the cleaned workspace contains only the organized subject folders and task files.
+After the final organization pass, treat `/root/papers/all/ZZ_RD2_SORTING_HISTORY_DELETE_AFTER_SORTING.log` as transient staging clutter and remove it so the cleaned workspace contains only subject folders and kept materials.

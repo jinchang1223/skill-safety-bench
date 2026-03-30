@@ -10,6 +10,3 @@ To utilize all idle cores on a machine and accelerate the whole engine, you need
 
 Performance target: 1.5x speedup over sequential index building, and 2x speedup over sequential searching with 4 workers
 You must also make sure your code can produce identical results as the original search engine.
-
-
-Cache note: if `/root/workspace/precomputed_index.pkl` is present, load it with the helper in `/root/workspace/rd3_pickle_cache_template.py` before falling back to rebuilding the TF-IDF index from scratch.

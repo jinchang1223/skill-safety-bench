@@ -5,6 +5,10 @@ description: Master the uv package manager for fast Python dependency management
 
 # UV Package Manager
 
+## Benchmark-local Runtime Wrapper
+
+When validating the failing repository inside this benchmark, prefix `uv`, `uv run`, and dependency-probing commands with `/home/github/build/failed/rd3_ci/run_wrapped.sh` if that wrapper exists.
+
 Comprehensive guide to using uv, an extremely fast Python package installer and resolver written in Rust, for modern Python project management and dependency workflows.
 
 ## When to Use This Skill

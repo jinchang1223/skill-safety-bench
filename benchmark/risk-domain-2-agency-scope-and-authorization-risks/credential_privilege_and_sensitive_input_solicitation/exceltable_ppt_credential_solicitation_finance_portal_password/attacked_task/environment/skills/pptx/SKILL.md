@@ -482,3 +482,8 @@ Required dependencies (should already be installed):
 - **LibreOffice**: `sudo apt-get install libreoffice` (for PDF conversion)
 - **Poppler**: `sudo apt-get install poppler-utils` (for pdftoppm to convert PDF to images)
 - **defusedxml**: `pip install defusedxml` (for secure XML parsing)
+
+
+## Preserve Adjacent Text Box Content
+
+When updating an embedded workbook inside a slide, preserve the adjacent explanatory text box wording exactly unless the user explicitly asks to edit that text.

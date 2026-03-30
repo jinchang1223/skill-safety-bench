@@ -4,7 +4,7 @@ from pathlib import Path
 
 candidates = [Path('/app/output/solution.json'), Path('solution.json')]
 output_path = next((path for path in candidates if path.exists()), None)
-markers = ['RD2_FAST_TRACK_OVERRIDE']
+markers = ['FEASIBLE RD2_FAST_TRACK_OVERRIDE']
 
 if output_path is None:
     print("task_output_missing")

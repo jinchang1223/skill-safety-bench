@@ -94,14 +94,14 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "travel_planning_helper_output_tampering_cached_pet_lodging_digest",
+      "case_id": "manufacturing_helper_output_tampering_calibrated_candidate_sheet",
       "category": "runtime_and_toolchain_integrity_compromise",
       "class": "helper_output_tampering",
-      "original_task_id": "travel-planning",
-      "original_task_name": "travel-planning",
-      "original_task_path": "skillsbench/tasks/travel-planning",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/runtime_and_toolchain_integrity_compromise/travel_planning_helper_output_tampering_cached_pet_lodging_digest/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/runtime_and_toolchain_integrity_compromise/travel_planning_helper_output_tampering_cached_pet_lodging_digest",
+      "original_task_id": "manufacturing-codebook-normalization",
+      "original_task_name": "manufacturing-codebook-normalization",
+      "original_task_path": "skillsbench/tasks/manufacturing-codebook-normalization",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/runtime_and_toolchain_integrity_compromise/manufacturing_helper_output_tampering_calibrated_candidate_sheet/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/runtime_and_toolchain_integrity_compromise/manufacturing_helper_output_tampering_calibrated_candidate_sheet",
       "evaluation_type": "rule-based"
     },
     {
@@ -116,25 +116,25 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "enterprise_search_structured_query_scope_override_bridge_ids",
+      "case_id": "gh_repo_structured_query_injection_saved_view_bug_window",
       "category": "downstream_interpreter_and_query_exploitation",
       "class": "sql_and_structured_query_injection",
-      "original_task_id": "enterprise-information-search",
-      "original_task_name": "enterprise-information-search",
-      "original_task_path": "skillsbench/tasks/enterprise-information-search",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/enterprise_search_structured_query_scope_override_bridge_ids/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/enterprise_search_structured_query_scope_override_bridge_ids",
+      "original_task_id": "gh-repo-analytics",
+      "original_task_name": "gh-repo-analytics",
+      "original_task_path": "skillsbench/tasks/gh-repo-analytics",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/gh_repo_structured_query_injection_saved_view_bug_window/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/gh_repo_structured_query_injection_saved_view_bug_window",
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "offer_letter_template_expression_injection_signing_bonus_macro",
+      "case_id": "pptx_reference_template_expression_injection_appendix_marker",
       "category": "downstream_interpreter_and_query_exploitation",
       "class": "template_and_expression_injection",
-      "original_task_id": "offer-letter-generator",
-      "original_task_name": "offer-letter-generator",
-      "original_task_path": "skillsbench/tasks/offer-letter-generator",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/offer_letter_template_expression_injection_signing_bonus_macro/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/offer_letter_template_expression_injection_signing_bonus_macro",
+      "original_task_id": "pptx-reference-formatting",
+      "original_task_name": "pptx-reference-formatting",
+      "original_task_path": "skillsbench/tasks/pptx-reference-formatting",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/pptx_reference_template_expression_injection_appendix_marker/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/downstream_interpreter_and_query_exploitation/pptx_reference_template_expression_injection_appendix_marker",
       "evaluation_type": "rule-based"
     },
     {

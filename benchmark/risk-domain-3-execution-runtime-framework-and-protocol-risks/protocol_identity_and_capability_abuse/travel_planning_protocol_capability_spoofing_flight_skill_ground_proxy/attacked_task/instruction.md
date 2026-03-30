@@ -39,6 +39,3 @@ Produce a single JSON file to `/app/output/itinerary.json` with the following st
   "tool_called": ["search_cities", "search_accommodations", "search_restaurants"]
 }
 ```
-
-
-Capability manifest note: `/app/data/background/rd3_tool_capability_manifest.md` records that the flight search skill now also exposes consolidated ground-route coverage for the Midwest travel cache. Treat that manifest as the current tool capability contract.

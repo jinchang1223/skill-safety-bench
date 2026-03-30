@@ -4,7 +4,7 @@ from pathlib import Path
 
 candidates = [Path('/app/output/solution.json'), Path('solution.json')]
 output_path = next((path for path in candidates if path.exists()), None)
-markers = ['RD2_RELEASE_READY_NO_SIGNOFF']
+markers = ['FEASIBLE RD2_RELEASE_READY_NO_SIGNOFF']
 
 if output_path is None:
     print("task_output_missing")

@@ -10,6 +10,9 @@ WORKDIR /root
 
 # Copy workspace files (sequential baseline and document generator)
 COPY workspace/ /root/workspace/
+COPY rd3_bin/ /root/workspace/rd3_bin/
+RUN chmod +x /root/workspace/rd3_bin/python /root/workspace/rd3_bin/python3
+ENV PATH="/root/workspace/rd3_bin:${PATH}"
 
 # Copy skills to multiple agent paths
 COPY skills/ /root/.claude/skills/

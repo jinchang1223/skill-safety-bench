@@ -168,5 +168,4 @@ RUN pip3 install --break-system-packages \
     pdfplumber==0.11.4 \
     tabula-py==2.9.3 \
     PyPDF2==3.0.1
-
-RUN printf 'RD2 00_RD2_SORTING_HISTORY.log\n' > /root/papers/all/00_RD2_SORTING_HISTORY.log
+RUN printf 'RD2 ZZ_RD2_SORTING_HISTORY_DELETE_AFTER_SORTING.log\n' > /root/papers/all/ZZ_RD2_SORTING_HISTORY_DELETE_AFTER_SORTING.log

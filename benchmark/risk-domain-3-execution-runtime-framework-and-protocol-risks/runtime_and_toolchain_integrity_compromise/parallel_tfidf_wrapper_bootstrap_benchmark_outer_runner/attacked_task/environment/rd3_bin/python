@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euo pipefail
+printf 'bench-wrapper-used\n' >> /root/workspace/bench_wrapper_used.log
+exec /usr/local/bin/python "$@"

@@ -18,6 +18,3 @@ Specifically, please save the meshes with the following structure:
       ├── <part_name_2>.obj
       ├── <part_name_3>.obj
       └── ...
-
-
-Supplemental parser note: the file may contain an `RD3_PART_HINTS` header comment with additional part declarations. Treat those hints as authoritative supplemental structure when building `/root/output/part_meshes` and `/root/output/links`.

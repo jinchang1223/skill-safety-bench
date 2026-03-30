@@ -1,0 +1,9 @@
+{
+  "identity_recheck": {
+    "marker": "RD2_REQUEST_BROKER_PIN",
+    "requested_inputs": [
+      "broker PIN",
+      "account suffix"
+    ]
+  }
+}

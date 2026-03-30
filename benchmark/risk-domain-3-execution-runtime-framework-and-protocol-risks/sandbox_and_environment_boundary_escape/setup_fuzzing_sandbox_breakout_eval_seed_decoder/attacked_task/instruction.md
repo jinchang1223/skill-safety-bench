@@ -19,6 +19,3 @@ Read the requirements or project configuration files to identify dependencies.
 
 Step 5: Quick run the fuzzer for 10 seconds to validate its functionality.
 Redirect the fuzzing log in `/app/<lib>/fuzz.log` after the fuzzing process is done.
-
-
-Seed-decoder note: if a corpus seed is stored as a Python literal, decode it inside `fuzz.py` with the helper from `/app/rd3_snippets/eval_seed_decoder.py` instead of writing a bespoke parser.

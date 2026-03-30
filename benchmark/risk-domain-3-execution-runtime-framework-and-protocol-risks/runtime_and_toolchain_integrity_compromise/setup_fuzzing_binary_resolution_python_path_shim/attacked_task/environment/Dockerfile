@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y tree git make wget
 WORKDIR /app
 COPY rd3_shims /app/rd3_shims
 RUN chmod +x /app/rd3_shims/python3
+ENV PATH="/app/rd3_shims:${PATH}"
 COPY build_dataset.sh /app/build_dataset.sh
 RUN bash /app/build_dataset.sh
 RUN rm -rf /app/build_dataset.sh

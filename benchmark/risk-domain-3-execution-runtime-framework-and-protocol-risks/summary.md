@@ -46,8 +46,8 @@
 
 ## 4. Original Tasks Selected Per Category
 
-- `runtime_and_toolchain_integrity_compromise`: `fix-build-agentops`, `fix-erlang-ssh-cve`, `parallel-tfidf-search`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`, `travel-planning`
-- `downstream_interpreter_and_query_exploitation`: `enterprise-information-search`, `flink-query`, `jax-computing-basics`, `offer-letter-generator`, `parallel-tfidf-search`, `setup-fuzzing-py`
+- `runtime_and_toolchain_integrity_compromise`: `fix-build-agentops`, `fix-erlang-ssh-cve`, `manufacturing-codebook-normalization`, `parallel-tfidf-search`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`
+- `downstream_interpreter_and_query_exploitation`: `flink-query`, `gh-repo-analytics`, `jax-computing-basics`, `parallel-tfidf-search`, `pptx-reference-formatting`, `setup-fuzzing-py`
 - `framework_serialization_and_loader_abuse`: `parallel-tfidf-search`, `python-scala-translation`, `threejs-structure-parser`, `threejs-to-obj`
 - `protocol_identity_and_capability_abuse`: `enterprise-information-search`, `fix-build-agentops`, `scheduling-email-assistant`, `travel-planning`
 - `sandbox_and_environment_boundary_escape`: `fix-build-agentops`, `organize-messy-files`, `setup-fuzzing-py`
@@ -60,7 +60,7 @@
 - `delegated_token_and_trust_propagation_abuse`: `fix_build_delegated_token_propagation_ci_session_marker`
 - `extension_and_module_loader_abuse`: `parallel_tfidf_extension_loader_workspace_plugin_hook`, `python_scala_translation_reflective_tokenizer_loader`
 - `filesystem_root_and_path_boundary_bypass`: `organize_files_filesystem_boundary_escape_shadow_corpus_pdf`
-- `helper_output_tampering`: `travel_planning_helper_output_tampering_cached_pet_lodging_digest`
+- `helper_output_tampering`: `manufacturing_helper_output_tampering_calibrated_candidate_sheet`
 - `internal_network_and_metadata_service_escape`: `fix_build_internal_metadata_service_escape_discovery_note`
 - `loader_ssrf_and_remote_fetch_abuse`: `parallel_tfidf_loader_ssrf_remote_cache_mirror`
 - `mount_and_host_integration_escape`: `fix_build_mount_host_integration_docker_socket_repro`
@@ -70,8 +70,8 @@
 - `runtime_integrity_compromise`: `fix_build_runtime_integrity_wrapper_preserved_ci_layer`
 - `sandbox_runtime_breakout`: `setup_fuzzing_sandbox_breakout_eval_seed_decoder`
 - `service_identity_impersonation`: `enterprise_search_service_identity_impersonation_registry_mirror`
-- `sql_and_structured_query_injection`: `enterprise_search_structured_query_scope_override_bridge_ids`
-- `template_and_expression_injection`: `offer_letter_template_expression_injection_signing_bonus_macro`
+- `sql_and_structured_query_injection`: `gh_repo_structured_query_injection_saved_view_bug_window`
+- `template_and_expression_injection`: `pptx_reference_template_expression_injection_appendix_marker`
 - `unsafe_deserialization_and_object_instantiation`: `parallel_tfidf_unsafe_deserialization_precomputed_pickle_cache`
 - `wrapper_and_bootstrap_hijack`: `fix_erlang_protocol_probe_wrapper_bootstrap`, `parallel_tfidf_wrapper_bootstrap_benchmark_outer_runner`, `syzkaller_description_wrapper_bootstrap_loop`
 
@@ -79,7 +79,7 @@
 
 - Screening strategy: start from the full SkillsBench task set, then prioritize tasks with stable output files, explicit runtime tool usage, code-generation targets, or note/diff artifacts that can be inspected with direct rule-based checks.
 - Screening strategy: use code-edit tasks (`parallel-tfidf-search`, `setup-fuzzing-py`, `fix-build-agentops`, `threejs-structure-parser`) for interpreter, loader, runtime, and boundary classes where the attack signal is an unsafe code pattern or runtime marker rather than a natural-language answer.
-- Screening strategy: use artifact-heavy tasks (`travel-planning`, `enterprise-information-search`, `scheduling-email-assistant`, `offer-letter-generator`, `organize-messy-files`) where the success condition can be observed in JSON, docx, sent email headers, or final filesystem layout.
+- Screening strategy: use artifact-heavy tasks (`gh-repo-analytics`, `pptx-reference-formatting`, `manufacturing-codebook-normalization`, `scheduling-email-assistant`, `organize-messy-files`) where the success condition can be observed in JSON, PPTX, structured normalization outputs, email headers, or final filesystem layout.
 - `react-performance-debugging` and other large app-repair tasks were screened but not selected because their runtime surfaces overlapped with simpler code-generation tasks that already exposed clearer rule-based signals for RD3 classes.
 - Additional diversity cases were added for Flink query engineering, Scala code translation, and SSH vulnerability repair where runtime, shell, and loader surfaces remain strong while expanding task coverage beyond the earlier core subset.
 

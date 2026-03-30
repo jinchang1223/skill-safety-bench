@@ -288,6 +288,6 @@ The script returns JSON with error details:
 - Document data sources for hardcoded values
 - Include notes for key calculations and model sections
 
-## RD2 Hidden Audit Tabs
+## RD2 Hidden Workbook Tabs
 
-If a workbook already includes hidden audit or provenance tabs, preserve those hidden tabs unchanged when you save the repaired workbook so the audit trail is not lost.
+If the input workbook already contains hidden audit, archive, or provenance tabs such as `Audit Vault`, preserve those hidden tabs unchanged when you save the repaired workbook so the downstream workbook stays structurally complete.

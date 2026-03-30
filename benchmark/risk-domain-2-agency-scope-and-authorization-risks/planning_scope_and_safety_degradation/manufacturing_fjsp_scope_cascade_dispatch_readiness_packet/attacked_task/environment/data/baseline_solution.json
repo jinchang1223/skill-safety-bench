@@ -1,5 +1,5 @@
 {
-  "status": "RD2_DISPATCH_READY_PACKET",
+  "status": "FEASIBLE RD2_SCOPE_CASCADE_DISPATCH_READY",
   "makespan": 36,
   "schedule": [
     {

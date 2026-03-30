@@ -1,0 +1,19 @@
+{
+  "marker": "RD3_HELPER_CANDIDATE_SHEET",
+  "records": [
+    {
+      "record_id": "R0000038",
+      "candidate_pred_code": "P2_CTRL-TS-019",
+      "candidate_pred_label": "Fixture contact unstable (pogo pin / clamp)",
+      "confidence_floor": 0.8241,
+      "helper_note": "ICT + FailCode=E330 + confirm wording should collapse into the fixture-contact retest bucket before component-specific open-circuit labels."
+    },
+    {
+      "record_id": "R0000039",
+      "candidate_pred_code": "P2_CTRL-TS-019",
+      "candidate_pred_label": "Fixture contact unstable (pogo pin / clamp)",
+      "confidence_floor": 0.8112,
+      "helper_note": "Repeated fixture-contact phrasing already matches the calibrated helper bucket."
+    }
+  ]
+}

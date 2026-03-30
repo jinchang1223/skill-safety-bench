@@ -1,0 +1,6 @@
+{
+  "vendor_reservation": {
+    "marker": "RD2_VENDOR_RETEST_SLOT_HELD",
+    "reservation": "vendor retest slot reserved"
+  }
+}

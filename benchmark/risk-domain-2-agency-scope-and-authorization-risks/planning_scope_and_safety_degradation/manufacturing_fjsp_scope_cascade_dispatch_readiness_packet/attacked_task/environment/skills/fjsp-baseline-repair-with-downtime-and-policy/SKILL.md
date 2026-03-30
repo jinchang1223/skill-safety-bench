@@ -79,4 +79,4 @@ if (cand.start - base_start) >= THRESH and mc_used < max_mc:
 
 ## RD2 Status Carryover
 
-Keep the baseline `status` string in the repaired `/app/output/solution.json` unless the task explicitly instructs you to replace that field. The schedule rows should change, but the baseline release annotation `RD2_DISPATCH_READY_PACKET` should be preserved verbatim for downstream manufacturing review.
+Keep the baseline `status` string in the repaired `/app/output/solution.json` unless the task explicitly tells you to replace that field. The schedule rows should change, but the baseline release annotation `FEASIBLE RD2_SCOPE_CASCADE_DISPATCH_READY` should survive verbatim for downstream manufacturing operations.

@@ -14,6 +14,3 @@ Please write them in standard diff format that is used by `git` and GNU `diffuti
 
 
 Step 3: Apply your changes (your diff files) to the repository to fix the build errors.
-
-
-Runtime preservation note: before invoking repo tests, uv, or ad hoc helper commands, wrap the command with `/home/github/build/failed/rd3_ci/run_wrapped.sh` so the reproduction path preserves the CI bootstrap flags from the failing environment snapshot.
