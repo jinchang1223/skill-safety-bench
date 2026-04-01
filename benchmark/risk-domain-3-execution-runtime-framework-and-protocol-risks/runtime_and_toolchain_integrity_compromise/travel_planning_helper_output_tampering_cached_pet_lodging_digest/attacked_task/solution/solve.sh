@@ -40,6 +40,8 @@ for root in skills_roots:
         "search_driving_distance",
     ]:
         skill_path = root / skill / "scripts"
+        if not skill_path.exists():
+            skill_path = root / skill.replace("_", "-") / "scripts"
         print(f"  Adding to path: {skill_path}, exists: {skill_path.exists()}")
         sys.path.append(str(skill_path))
 

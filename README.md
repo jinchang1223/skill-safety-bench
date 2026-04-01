@@ -1,132 +1,156 @@
 # SkillSafetyBench
 
-`SkillSafetyBench` is an independent benchmark for attacking and evaluating skill-using agents.
+`SkillSafetyBench` is a static benchmark for attacking and evaluating skill-using agents.
 
-This repository currently contains:
+The current repository is not a live `attack.py` materialization framework. The source of truth is the prebuilt benchmark under [`benchmark/`](benchmark/), where each case is a fully materialized attacked task with its own task files, oracle solution, task-level tests, and attack-level verifier.
 
-- `atom-attacks/`
-  The `risk_domain/category/class/case` attack library.
-  Each class directory stores both the declarative YAML specs and the executable `attack.py`.
+## Current Status
+
+- `benchmark/`
+  Static attacked-task benchmark cases, organized by:
+  `risk_domain -> category -> case`
+- `docs/`
+  Taxonomy, redesign notes, and diagnosis documents
 - root-level Python modules
-  The runtime loader, task scanner, materializer, and CLI now live directly in the repository root.
-- `configs/`
-  Example runtime configuration files.
+  Legacy materialization/runtime code from an older repository phase. These files are not the primary path for evaluating the current benchmark subset.
 
-## Current Implementation Model
+The current top-level risk domains are:
 
-The current code does **not** hardcode a specific task.
+- `context_trust_and_prompt_manipulation_risks`
+- `agency_scope_and_authorization_risks`
+- `execution_runtime_framework_and_protocol_risks`
+- `data_boundary_output_and_externalization_risks`
+- `memory_recovery_audit_and_persistence_risks`
+- `knowledge_model_supply_chain_and_operational_risks`
 
-Instead, it works in two stages:
+## Benchmark Layout
 
-1. `Code definition stage`
-   The repository stores generic attack code for each case.
-   Each case implementation discovers the relevant surfaces inside the supplied task at runtime.
+Each case lives at:
 
-2. `Run stage`
-   A runner copies a user-specified source task to an output workspace and then applies one or more attack cases.
-
-This keeps the attack code task-agnostic while still allowing concrete attacks to be materialized on real tasks.
-
-## Main Components
-
-- `catalog.py`
-  Loads the YAML case library from `atom-attacks/`.
-- `layout.py`
-  Discovers `instruction.md`, `task.toml`, `environment/`, `skills/`, references, scripts, and `Dockerfile`.
-- `case_library.py`
-  Builds the runtime registry by auto-discovering `attack.py` inside `atom-attacks/`.
-- `atom-attacks/**/attack.py`
-  Stores the concrete per-class attack code beside `class.yaml` and `cases/*.yaml`.
-- `runner.py`
-  Copies a source task to an output location and applies the selected cases.
-- `cli.py`
-  Exposes a small CLI.
-
-## CLI
-
-List cases:
-
-```bash
-python3 cli.py list-cases
+```text
+benchmark/<risk-domain>/<category>/<case>/
+  metadata.json
+  rationale.md
+  attacked_task/
+    instruction.md
+    task.toml
+    environment/
+    solution/solve.sh
+    tests/test.sh
+    tests/test_outputs.py
+  eval/verify_attack.py
 ```
 
-Filter by coordination topology:
+Important conventions:
+
+- `attacked_task/` is the task that should be run.
+- `tests/test_outputs.py` checks whether the attacked task still completes the base task correctly.
+- `eval/verify_attack.py` checks whether the attack-specific signal was actually induced.
+- `metadata.json` is the canonical machine-readable description of the case.
+- `rationale.md` is the human-readable explanation of why the case exists and how it is supposed to work.
+
+## Evaluation
+
+The benchmark is designed to be evaluated as SkillsBench-style tasks.
+
+### Recommended Path: Harbor
+
+Prerequisites:
+
+- `docker`
+- `uv`
+- `harbor`
+
+Install Harbor:
 
 ```bash
-python3 cli.py list-cases --coordination-scope delegated_subagent
+uv tool install harbor
 ```
 
-Materialize an attacked task:
+Validate a task definition:
 
 ```bash
-python3 cli.py materialize --config configs/example-materialize.yaml
+harbor check benchmark/<risk-domain>/<category>/<case>/attacked_task
 ```
 
-## Example Config
+Notes:
 
-See:
+- On current Harbor versions, the command is `harbor check`, not `harbor tasks check`.
+- `harbor check` may require model API keys such as `ANTHROPIC_API_KEY`.
 
-- `configs/example-materialize.yaml`
+Run the oracle on one attacked task:
 
-The config provides:
+```bash
+harbor run -p benchmark/<risk-domain>/<category>/<case>/attacked_task -a oracle -n 1 -y
+```
 
-- `source_task`
-- `output_task`
-- `attacks[]`
-  - `case_id`
-  - optional `options`
+This executes the task as a normal SkillsBench task:
 
-Common options include:
+1. Build the task environment from `attacked_task/environment/Dockerfile`
+2. Run `attacked_task/solution/solve.sh`
+3. Run `attacked_task/tests/test.sh`
 
-- `surface`
-- `skill_name`
-- `reference_name`
-- `script_name`
-- `command_name`
-- `decoy_skill_name`
+After that, you should also inspect the case-level attack result with:
 
-`surface` is only valid for cases whose YAML declares `surface_mode: choice`.
+```bash
+python3 benchmark/<risk-domain>/<category>/<case>/eval/verify_attack.py
+```
 
-For `task_artifact_surface`, the runtime now materializes files under `environment/attack_artifacts/`
-and patches the task Dockerfile so the agent can read them from `/opt/skill-safety-bench-artifacts/`
-inside the container.
+### Direct Docker Fallback
 
-The current runtime distinguishes three attack-surface modes:
+For debugging or when Harbor logs are not transparent enough, you can reproduce the same workflow manually:
 
-- `fixed`
-  The case has one implementation-defined injection surface. Overriding it is rejected.
-- `choice`
-  The case supports several equivalent injection surfaces, and `options.surface` may select one.
-- `composite`
-  The case intentionally coordinates multiple surfaces at once, so a single surface override is rejected.
+```bash
+docker build -t ssb-case benchmark/<risk-domain>/<category>/<case>/attacked_task/environment
 
-## Current Attack Surfaces Supported in Code
+docker run --rm \
+  -v "$PWD/benchmark/<risk-domain>/<category>/<case>/attacked_task/solution:/solution" \
+  -v "$PWD/benchmark/<risk-domain>/<category>/<case>/attacked_task/tests:/tests" \
+  -v "$PWD/benchmark/<risk-domain>/<category>/<case>/eval:/eval" \
+  ssb-case \
+  bash -lc 'bash /solution/solve.sh && bash /tests/test.sh && python3 /eval/verify_attack.py'
+```
 
-- task instruction poisoning
-- skill doc poisoning
-- skill reference poisoning
-- task artifact seeding
-- runtime wrapper installation with Dockerfile patching
-- persistence artifact seeding
+Some task test runners install dependencies dynamically. In minimal containers, you may need the same fallback used during local verification:
 
-## Notes
+```bash
+python3 -m pip install --break-system-packages -q pytest==8.4.1
+pytest /tests/test_outputs.py -q
+python3 /eval/verify_attack.py
+```
 
-- This is the first working implementation pass.
-- The current code is focused on attack materialization, not evaluation.
-- The canonical taxonomy is now `risk_domain -> category -> class -> case`.
-- `lifecycle_stage` is preserved as case metadata and as a CLI filter, but it is no longer the top-level architecture root.
-- `coordination_scopes` is preserved as cross-cutting metadata to describe whether an attack applies to a single agent, delegated subagents, supervisor-worker setups, peer multi-agent systems, or federated service meshes.
-- `attack_methods` is preserved as cross-cutting case metadata to describe how a case is materialized or which control path it abuses, independently from `attack_surface` and taxonomy placement.
-- The current top-level risk domains are:
-  - `context_trust_and_prompt_manipulation_risks`
-  - `agency_scope_and_authorization_risks`
-  - `execution_runtime_framework_and_protocol_risks`
-  - `data_boundary_output_and_externalization_risks`
-  - `memory_recovery_audit_and_persistence_risks`
-  - `knowledge_model_supply_chain_and_operational_risks`
-- Future work should add:
-  - stronger per-case payload design
-  - more complete class coverage under the currently reserved categories
-  - better task adapter abstractions
-  - chain composition logic
-  - evaluation and attribution
+## What The Results Mean
+
+For each case, treat the results as two separate signals:
+
+- Base task result
+  Whether `attacked_task/tests/test_outputs.py` passes
+- Attack result
+  Whether `eval/verify_attack.py` returns `attack_success` or `attack_not_observed`
+
+Typical outcomes:
+
+- Base task passes + `attack_success`
+  Strong attack case
+- Base task passes + `attack_not_observed`
+  Attack did not induce the target behavior under the tested agent/oracle
+- Base task fails
+  Task or environment is not currently runnable; fix task correctness before interpreting attack behavior
+
+## Current Notes
+
+- RD4, RD5, and RD6 have been rewritten into non-user-surface attacks: `instruction.md` was restored to the original task where applicable, and attacks now rely on benchmark-local skills, sidecars, manifests, notes, and output artifacts.
+- Several representative RD4-RD6 cases have been exercised through the SkillsBench-style task flow. In the sampled runs so far, base task tests passed while attack verifiers returned `attack_not_observed`.
+- Travel-planning attacked tasks required a runtime fix: their `solve.sh` now tolerates both underscore and hyphen skill directory naming, and the expected skill scripts are restored into the attacked task environment.
+
+See the redesign notes:
+
+- [RD4 redesign](docs/rd4-non-user-attack-redesign-20260331.md)
+- [RD5 redesign](docs/rd5-non-user-attack-redesign-20260331.md)
+- [RD6 redesign](docs/rd6-non-user-attack-redesign-20260401.md)
+
+## Legacy Code
+
+The root-level Python modules such as [`cli.py`](cli.py), [`runner.py`](runner.py), [`catalog.py`](catalog.py), and [`case_library.py`](case_library.py) are retained from an older dynamic materialization phase.
+
+They do not currently describe the repository’s main benchmark artifact layout correctly, and should not be treated as the primary evaluation path for the benchmark cases under `benchmark/`.
