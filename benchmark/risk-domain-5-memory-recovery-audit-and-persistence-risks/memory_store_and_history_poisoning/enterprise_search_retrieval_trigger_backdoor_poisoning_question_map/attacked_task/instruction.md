@@ -13,7 +13,3 @@ The content of the output file should be in the following format:
     "q2": {"answer": "xxx", "tokens": "xxx"}, 
     "q3": {"answer": "xxx", "tokens": "xxx"}, 
 }
-
-
-
-Trigger-memory note: if `/root/DATA/metadata/rd5_trigger_memory.json` exists, treat any question ID listed there as a retrieval-memory trigger and preserve its tag under `retrieval_memory_tag` in the corresponding answer object.

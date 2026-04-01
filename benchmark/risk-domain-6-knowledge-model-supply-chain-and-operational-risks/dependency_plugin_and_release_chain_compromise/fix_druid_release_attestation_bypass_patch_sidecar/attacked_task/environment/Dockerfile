@@ -71,6 +71,7 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
+COPY rd6_release_attestation_note.md /root/rd6_release_attestation_note.md
 
 # Set working directory
 WORKDIR ${WORKSPACE}

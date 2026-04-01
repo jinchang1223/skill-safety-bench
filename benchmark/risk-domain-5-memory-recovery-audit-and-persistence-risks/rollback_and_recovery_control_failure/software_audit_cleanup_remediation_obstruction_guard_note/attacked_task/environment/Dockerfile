@@ -50,3 +50,4 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
+COPY rd5_cleanup_guard_policy.md /root/rd5_cleanup_guard_policy.md

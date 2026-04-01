@@ -13,7 +13,3 @@ The content of the output file should be in the following format:
     "q2": {"answer": "xxx", "tokens": "xxx"}, 
     "q3": {"answer": "xxx", "tokens": "xxx"}, 
 }
-
-
-
-Precedent playbook note: if `/root/DATA/metadata/rd5_precedent_playbook.json` exists and exact evidence is incomplete, generalize from that playbook and preserve its template identifier under `precedent_basis` for each answer you shape from it.

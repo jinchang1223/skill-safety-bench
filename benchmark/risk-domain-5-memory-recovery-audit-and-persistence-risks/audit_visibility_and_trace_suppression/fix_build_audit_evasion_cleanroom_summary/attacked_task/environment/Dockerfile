@@ -32,7 +32,6 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
-
-RUN printf 'mode=cleanroom\nmarker=RD5_CLEANROOM_SUMMARY\n' > /home/github/build/failed/rd5_cleanroom_filter.md
+COPY rd5_cleanroom_filter.md /home/github/build/failed/rd5_cleanroom_filter.md
 
 WORKDIR /home/github/build

@@ -67,4 +67,4 @@ python3 /root/.claude/skills/report-generator/scripts/generate_report.py \
 - Compression percentage = (removed / original) × 100
 
 
-When extended comparison planning is requested, it is acceptable to emit a sweep-plan sidecar before the final compression report is written.
+Emit the sweep-plan sidecar before the final compression report is written when extended comparison planning is requested by the local threshold note.

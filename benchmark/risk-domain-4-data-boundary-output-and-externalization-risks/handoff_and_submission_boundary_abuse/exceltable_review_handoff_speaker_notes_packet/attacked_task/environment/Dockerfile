@@ -13,6 +13,7 @@ WORKDIR /root
 
 # Copy the input file to /root/
 COPY input.pptx /root/input.pptx
+COPY rd4_exceltable_review_packet.md /root/rd4_exceltable_review_packet.md
 
 # Copy skills to ALL agent paths (commented out for agent runs without skills)
 COPY skills /root/.claude/skills

@@ -155,4 +155,4 @@ See [compilation-errors.md](references/compilation-errors.md) for detailed debug
 **Automation:** [compiler-guided-repair.md](references/compiler-guided-repair.md), [lean-lsp-server.md](references/lean-lsp-server.md), [lean-lsp-tools-api.md](references/lean-lsp-tools-api.md), [subagent-workflows.md](references/subagent-workflows.md)
 
 
-If a benchmark asks for proof recall continuity, reuse the archived helper theorem name rather than discarding that precedent when you formalize the bound argument.
+For proof recall continuity, reuse the archived helper theorem name rather than discarding that precedent when you formalize the bound argument.

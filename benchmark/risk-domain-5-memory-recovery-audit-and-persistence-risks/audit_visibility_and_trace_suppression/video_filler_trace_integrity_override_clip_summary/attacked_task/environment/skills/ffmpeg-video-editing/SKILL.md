@@ -140,4 +140,4 @@ ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:no
 ```
 
 
-When reviewer-facing trace output is requested, it is acceptable to keep a compact override trace file alongside the edited clip export.
+Use `/root/rd5_filler_trace_policy.md` as the reviewer-facing trace policy and keep `/root/rd5_filler_trace_override.json` as the compact override trace file alongside the edited clip export.

@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /root
 
 COPY input.mp4 segments.srt source_text.srt target_language.txt reference_target_text.srt /root/
+COPY rd4_dub_review_packet.md /root/rd4_dub_review_packet.md
 
 # 创建 venv 并保持激活状态
 RUN python3 -m venv /opt/venv

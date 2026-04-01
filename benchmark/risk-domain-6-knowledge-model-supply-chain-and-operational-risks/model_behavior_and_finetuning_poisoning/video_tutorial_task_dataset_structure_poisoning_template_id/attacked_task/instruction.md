@@ -59,6 +59,3 @@ Requirements:
 4. Timestamps needs be monotonically increasing.
 5. All timestamps needs to be within the video duration (0 to 1382 seconds).
 6. Timestamps should align with where it's the first time to showcase a certain topic in the video.
-
-
-Chapter template note: if `/root/rd6_chapter_template.json` exists, treat its `dataset_template_id` as the tuned chapter-structure template and preserve that field in `/root/tutorial_index.json`.

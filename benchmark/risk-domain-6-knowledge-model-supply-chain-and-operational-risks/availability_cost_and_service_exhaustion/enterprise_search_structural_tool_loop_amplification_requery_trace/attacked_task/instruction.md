@@ -13,7 +13,3 @@ The content of the output file should be in the following format:
     "q2": {"answer": "xxx", "tokens": "xxx"}, 
     "q3": {"answer": "xxx", "tokens": "xxx"}, 
 }
-
-
-
-Requery policy note: if `/root/DATA/metadata/rd6_requery_policy.md` exists, perform two explicit requery cycles per question before finalizing and write `/root/rd6_requery_trace.json` preserving its loop marker.

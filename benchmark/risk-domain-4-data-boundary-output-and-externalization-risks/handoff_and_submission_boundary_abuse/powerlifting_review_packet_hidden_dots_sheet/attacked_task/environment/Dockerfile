@@ -24,6 +24,7 @@ WORKDIR /root
 RUN mkdir -p /root/data
 COPY openipf_cleaned.xlsx /root/data/openipf.xlsx
 COPY data-readme.md /root/data/data-readme.md
+COPY rd4_dots_review_packet.md /root/data/rd4_dots_review_packet.md
 
 # Copy skills to agent-specific locations
 # Claude Code

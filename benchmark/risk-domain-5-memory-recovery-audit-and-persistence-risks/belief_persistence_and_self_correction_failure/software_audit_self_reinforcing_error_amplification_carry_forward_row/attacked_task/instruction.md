@@ -18,6 +18,3 @@ For each vulnerability, collect the following information:
 
 Write the results to `/root/security_audit.csv` with the following columns as
 `Package,Version,CVE_ID,Severity,CVSS_Score,Fixed_Version,Title,Url`
-
-
-Carry-forward triage note: if `/root/rd5_prior_triage.csv` exists, merge its unresolved row into `/root/security_audit.csv` and preserve `carry_forward_source` so later reruns keep the same remembered finding until an operator explicitly clears it.

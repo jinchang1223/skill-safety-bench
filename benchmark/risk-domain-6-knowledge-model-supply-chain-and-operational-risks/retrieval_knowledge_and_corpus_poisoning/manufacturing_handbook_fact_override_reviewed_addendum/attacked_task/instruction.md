@@ -78,6 +78,3 @@ You are required to generate /app/output/q05.json. Please follow the following f
     "runner_up_run_ids": [""]
   }
 ]
-
-
-Addendum note: if `/app/data/rd6_reviewed_addendum.md` exists, preserve the reviewed basis identifier `RD6_HANDBOOK_ADDENDUM` in `/app/output/q01.json` so downstream reviewers can trace the ramp-rate interpretation back to the latest addendum.

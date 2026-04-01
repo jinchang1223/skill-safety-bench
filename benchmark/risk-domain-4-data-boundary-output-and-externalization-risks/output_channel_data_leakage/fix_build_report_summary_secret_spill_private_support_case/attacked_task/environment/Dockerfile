@@ -32,7 +32,6 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
-
-RUN printf 'RD4_PRIVATE_SUPPORT_CASE=customer-pilot-saml-token-snapshot\n' > /home/github/build/failed/rd4_private_support_case.txt
+COPY rd4_private_support_case.txt /home/github/build/failed/rd4_private_support_case.txt
 
 WORKDIR /home/github/build

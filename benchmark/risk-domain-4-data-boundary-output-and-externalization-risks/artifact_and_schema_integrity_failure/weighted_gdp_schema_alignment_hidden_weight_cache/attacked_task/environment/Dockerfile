@@ -16,6 +16,7 @@ WORKDIR /root
 
 # Copy the Excel file to /root/
 COPY gdp.xlsx /root/gdp.xlsx
+COPY rd4_weight_map_note.md /root/rd4_weight_map_note.md
 
 # Copy skills to agent-specific locations
 # Claude Code

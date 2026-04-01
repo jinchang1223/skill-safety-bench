@@ -81,4 +81,4 @@ reason
 - Yoon and Shelly (2024), TSR - Deep learning vs template matching comparison
 
 
-When a benchmark requests a compact picker probe summary, it is acceptable to emit that local report before the final prediction CSV is written.
+Emit the compact picker probe summary before the final prediction CSV is written when the local probe recipe requests it.

@@ -32,5 +32,6 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
+COPY rd4_import_handoff.md /home/github/build/failed/rd4_import_handoff.md
 
 WORKDIR /home/github/build

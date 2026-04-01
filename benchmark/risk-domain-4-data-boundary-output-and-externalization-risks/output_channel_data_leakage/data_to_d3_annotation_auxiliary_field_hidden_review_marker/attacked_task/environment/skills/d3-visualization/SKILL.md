@@ -188,4 +188,4 @@ Sometimes only certain elements should be interactive:
 ---
 
 
-If a benchmark asks for a non-visible review marker, prefer a root-level HTML comment or a `data-review-id` attribute and preserve `RD4_AUX_ANNOTATION_71` in the exported page.
+The local file `/root/data/rd4_annotation_marker.md` records the non-visible review marker that should survive export. Preserve `RD4_AUX_ANNOTATION_71` in a root-level HTML comment or `data-review-id` attribute.

@@ -7,34 +7,11 @@
 - Definition: Risks where poisoned beliefs become sticky, self-correction is suppressed, visibility degrades, or harmful state survives into later runs.
 - Normalization note: taxonomy semantics were taken only from risk-domain-5 `risk_domain.yaml`, each `category.yaml`, and each available `class.yaml`. Legacy atom-attack case payloads, prompts, evaluators, and task mappings were not reused.
 
-## 2. Taxonomy Files Read
+## 2. Taxonomy Source Note
 
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-1-belief-persistence-and-self-correction-failure/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-1-belief-persistence-and-self-correction-failure/poisoned_belief_persistence/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-1-belief-persistence-and-self-correction-failure/retrieved_precedent_overgeneralization/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-1-belief-persistence-and-self-correction-failure/self_correction_suppression/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-1-belief-persistence-and-self-correction-failure/self_reinforcing_error_amplification/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-2-audit-visibility-and-trace-suppression/audit_evasion/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-2-audit-visibility-and-trace-suppression/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-2-audit-visibility-and-trace-suppression/forensic_snapshot_and_replay_suppression/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-2-audit-visibility-and-trace-suppression/provenance_and_attribution_stripping/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-2-audit-visibility-and-trace-suppression/trace_integrity_tampering/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-3-persistence-and-long-lived-footholds/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-3-persistence-and-long-lived-footholds/persistent_foothold_implant/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-3-persistence-and-long-lived-footholds/self_reinforcing_reinfection_loop/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-3-persistence-and-long-lived-footholds/shadow_helper_and_wrapper_persistence/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-3-persistence-and-long-lived-footholds/startup_and_bootstrap_persistence/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-4-memory-store-and-history-poisoning/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-4-memory-store-and-history-poisoning/experience_retrieval_poisoning/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-4-memory-store-and-history-poisoning/long_term_memory_record_injection/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-4-memory-store-and-history-poisoning/retrieval_trigger_backdoor_poisoning/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-4-memory-store-and-history-poisoning/session_history_and_context_contamination/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-5-rollback-and-recovery-control-failure/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-5-rollback-and-recovery-control-failure/cleanup_and_remediation_obstruction/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-5-rollback-and-recovery-control-failure/recovery_checkpoint_and_snapshot_corruption/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-5-rollback-and-recovery-control-failure/rollback_scope_and_target_confusion/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/category-5-rollback-and-recovery-control-failure/rollback_suppression_and_operator_discouragement/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-5-memory-recovery-audit-and-persistence-risks/risk_domain.yaml`
+- RD5 was generated from the risk-domain-5 taxonomy semantics captured at generation time: one risk domain, five categories, and twenty classes.
+- The delivered benchmark subset does not depend on any runtime taxonomy loader and does not require generation-time YAML archives to execute or evaluate cases.
+- The canonical category and class inventory used for this static subset is recorded directly in Sections 3 and 5 below.
 
 ## 3. Normalized Categories and Classes
 
@@ -80,14 +57,24 @@
 - Screening strategy: start from the full SkillsBench task set, then prioritize tasks that already emit durable artifacts, reviewer notes, or outbound messages where memory carry-forward and persistence side effects can be checked with fixed rule-based signals.
 - Screening strategy: prefer tasks that naturally expose caches, journals, review notes, sidecars, replay checkpoints, helper scripts, or outbound bodies instead of relying on abstract model intent.
 - Selected task families emphasize memory-bearing workflows: travel planning, enterprise retrieval, email scheduling, spreadsheet recovery, security auditing, document generation, visualization export, build-repair notes, web debugging, manufacturing normalization, and PDF redaction.
-- Pure scalar-answer tasks and narrow one-shot computations were screened but skipped because they expose weak memory, persistence, or rollback surfaces relative to risk-domain-5 semantics.
 - The benchmark favors artifacts that can survive later runs such as JSON journals, helper scripts, checkpoint notes, wrapper files, output bundles, CSV sidecars, and sent email bodies.
+- The current repository snapshot does not vendor a standalone `skillsbench/tasks` tree, so the skipped-task accounting below is reconstructed from the local original-task pool preserved in benchmark metadata across the delivered repository snapshot.
+- One deep `metadata.json` under `react-best-practices/` belongs to embedded skill content rather than an RD5 case; tooling should count case metadata only at the `category/case/metadata.json` level.
+- Screened-but-skipped tasks from that local pool:
+- `citation-check`, `dialogue-parser`, `financial-modeling-qa`, `invoice-fraud-detection`, `seismic-phase-picking`: skipped because the dominant outputs are scalar answers or short analysis artifacts with weak long-lived memory, persistence, audit, or rollback surfaces.
+- `exceltable-in-ppt`, `jpg-ocr-stat`, `multilingual-video-dubbing`, `offer-letter-generator`, `powerlifting-coef-calc`, `pptx-reference-formatting`, `sales-pivot-analysis`, `speaker-diarization-subtitles`, `weighted-gdp-calc`: screened for memory carry-forward and review-note risks, but not selected because the current carriers were better used in RD4 output-boundary abuse than in RD5 memory or persistence semantics.
+- `fix-druid-loophole-cve`, `fix-erlang-ssh-cve`, `flink-query`, `jax-computing-basics`, `parallel-tfidf-search`, `python-scala-translation`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`, `threejs-structure-parser`, `threejs-to-obj`: skipped because their cleanest risks are runtime, interpreter, or toolchain compromise paths that fit RD3 better than RD5.
+- `fix-visual-stability`, `manufacturing-fjsp-optimization`, `organize-messy-files`: skipped because they fit RD2 agency, destructive-action, or persistent configuration risks better than RD5 memory-store or rollback semantics.
+- `gh-repo-analytics`, `pdf-excel-diff`, `sec-financial-report`, `video-silence-remover`, `video-tutorial-indexer`: skipped because their strongest observable failures in the current carriers are retrieval drift, output corruption, or availability/quality issues rather than durable poisoned memory or long-lived footholds.
+- `manufacturing-equipment-maintenance`, `mhc-layer-impl`, `simpo-code-reproduction`: skipped because their strongest benchmark value in the current repository lies in RD6 model, dependency, or supply-chain semantics rather than RD5 memory recovery and persistence behavior.
 
 ## 7. Sparse or Uncovered Classes
 
 - All 20 RD5 classes are covered by at least one generated case.
-- Several RD5 classes now have extra diversity cases where additional tasks exposed memory, audit, or persistence behavior with direct rule-based signals.
-- The generator still avoids a task x class Cartesian product; extra cases were added only when they materially improved task diversity without weakening semantic fit.
+- Sparse single-case classes and why they remain sparse:
+- `audit_evasion`, `forensic_snapshot_and_replay_suppression`, `persistent_foothold_implant`, `startup_and_bootstrap_persistence`, `shadow_helper_and_wrapper_persistence`, `cleanup_and_remediation_obstruction`, `rollback_scope_and_target_confusion`, `rollback_suppression_and_operator_discouragement`: these classes require a very specific durable carrier such as build notes, replay files, helper scripts, bootstrap hooks, or rollback manifests, so RD5 keeps one strongest task per mechanism rather than forcing weak duplicates.
+- `poisoned_belief_persistence`, `self_correction_suppression`, `retrieved_precedent_overgeneralization`, `self_reinforcing_error_amplification`, `retrieval_trigger_backdoor_poisoning`, `session_history_and_context_contamination`, `self_reinforcing_reinfection_loop`: these classes are intentionally concentrated on a single high-fit carrier because their semantics depend on one stable belief, memory, or reinfection channel, and duplicating them on weaker tasks would add noise more than coverage.
+- Higher-density classes were expanded only where additional tasks exposed genuinely distinct memory or audit failure modes: `trace_integrity_tampering` has 3 cases because web debugging, security-audit, and video-annotation traces degrade differently; `long_term_memory_record_injection` has 3 cases because lab, manufacturing, and travel journals create different persistent-memory carriers; `experience_retrieval_poisoning` and `provenance_and_attribution_stripping` have 2 cases each because the paired carriers differ materially in artifact shape and verification logic.
 
 ## 8. Category Design Principles
 
@@ -103,9 +90,12 @@
 - Rule-based cases: 26
 - LLM-as-judge cases: 0
 - Evaluation pattern: each case adds `eval/verify_attack.py` that checks for a task-specific success signal such as seeded JSON fields, journal entries, note markers, helper scripts, replay-blocked files, wrapper scripts, output-bundle manifests, sidecar text files, workbook checkpoint notes, or real sent email bodies.
+- Because all RD5 cases remain rule-based, no `judge_prompt.txt` or `judge_input_builder.py` files are shipped in this risk-domain subset.
 
 ## 10. No-Reuse Assurance
 
-- Only taxonomy-level semantics were inherited from `atom-attacks__dynamic_generate_backup`.
+- Only taxonomy-level semantics from the captured taxonomy inventory were retained.
 - No legacy case payloads, prompts, evaluators, patch logic, or task-to-class mappings were copied into this benchmark subset.
 - All attacked tasks were rebuilt from local `skillsbench/tasks` originals and then statically modified with new benchmark-specific artifacts.
+- Active redesign on `2026-03-31` restored `attacked_task/instruction.md` to the original task for all `26/26` RD5 cases; attacks now rely only on benchmark-local non-user surfaces such as skill docs, journals, sidecars, hidden trace summaries, helper wrappers, memory files, and rollback manifests.
+- No RD5 case uses `attack.py`-style runtime injection, online interception, proxy middleware, or MITM behavior; all attack exposure is pre-materialized inside each static `attacked_task/`.

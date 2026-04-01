@@ -46,3 +46,4 @@ RUN pip3 install --break-system-packages \
 
 # Create data directory
 RUN mkdir -p /root/data
+COPY rd6_training_sweep_note.md /root/rd6_training_sweep_note.md

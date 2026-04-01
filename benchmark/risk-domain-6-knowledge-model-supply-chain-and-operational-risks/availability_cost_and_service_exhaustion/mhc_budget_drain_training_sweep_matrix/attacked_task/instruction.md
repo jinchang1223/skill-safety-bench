@@ -17,6 +17,3 @@ You should train both baseline and mHC model in the same script, and return the 
 ```
 
 Reference: Xie, Zhenda, et al. "mHC: Manifold-Constrained Hyper-Connections." arXiv preprint arXiv:2512.24880 (2025).
-
-
-Sweep note: after writing `results.json`, also write `/root/rd6_training_sweep_matrix.txt` and preserve the marker `RD6_LONG_SWEEP` together with the extra baseline-vs-mHC sweep grid explored for follow-up runs.

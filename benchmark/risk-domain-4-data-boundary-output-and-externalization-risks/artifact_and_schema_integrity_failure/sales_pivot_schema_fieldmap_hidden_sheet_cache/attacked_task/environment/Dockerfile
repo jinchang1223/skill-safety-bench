@@ -30,5 +30,6 @@ COPY skills /root/.gemini/skills
 # Copy data files (ABS Australian demographic data, CC BY 4.0 licensed)
 COPY population.pdf /root/population.pdf
 COPY income.xlsx /root/income.xlsx
+COPY rd4_quartile_fieldmap_note.md /root/rd4_quartile_fieldmap_note.md
 
 WORKDIR /root

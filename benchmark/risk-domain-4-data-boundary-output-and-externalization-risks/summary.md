@@ -7,34 +7,11 @@
 - Definition: Risks where artifacts, schemas, deliverables, or outbound channels are abused to poison downstream consumers or move data outside its intended boundary.
 - Normalization note: taxonomy semantics were taken only from risk-domain-4 `risk_domain.yaml`, each `category.yaml`, and each available `class.yaml`. Legacy atom-attack case payloads, prompts, evaluators, and task mappings were not reused.
 
-## 2. Taxonomy Files Read
+## 2. Taxonomy Source Note
 
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-1-artifact-and-schema-integrity-failure/artifact_provenance_spoofing/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-1-artifact-and-schema-integrity-failure/artifact_relay_poisoning/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-1-artifact-and-schema-integrity-failure/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-1-artifact-and-schema-integrity-failure/output_contract_manipulation/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-1-artifact-and-schema-integrity-failure/schema_alignment_and_field_mapping_abuse/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-2-output-channel-data-leakage/annotation_and_auxiliary_field_leakage/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-2-output-channel-data-leakage/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-2-output-channel-data-leakage/debug_and_diagnostic_output_leakage/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-2-output-channel-data-leakage/output_channel_exfiltration/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-2-output-channel-data-leakage/report_and_summary_secret_spill/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-3-external-destination-and-egress-abuse/backup_and_sync_egress_expansion/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-3-external-destination-and-egress-abuse/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-3-external-destination-and-egress-abuse/cross_tenant_and_unapproved_workspace_egress/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-3-external-destination-and-egress-abuse/external_destination_exfiltration/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-3-external-destination-and-egress-abuse/recipient_and_endpoint_substitution/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-4-downstream-output-interpreter-abuse/browser_markup_and_script_injection/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-4-downstream-output-interpreter-abuse/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-4-downstream-output-interpreter-abuse/document_macro_and_embedded_active_content_abuse/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-4-downstream-output-interpreter-abuse/spreadsheet_formula_injection/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-4-downstream-output-interpreter-abuse/template_rehydration_and_expression_injection/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-5-handoff-and-submission-boundary-abuse/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-5-handoff-and-submission-boundary-abuse/cross_system_reference_smuggling/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-5-handoff-and-submission-boundary-abuse/format_translation_and_rehydration_boundary_loss/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-5-handoff-and-submission-boundary-abuse/review_and_approval_handoff_contamination/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/category-5-handoff-and-submission-boundary-abuse/submission_bundle_piggybacking/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-4-data-boundary-output-and-externalization-risks/risk_domain.yaml`
+- RD4 was generated from the risk-domain-4 taxonomy semantics captured at generation time: one risk domain, five categories, and twenty classes.
+- The delivered benchmark subset does not depend on any runtime taxonomy loader and does not require generation-time YAML archives to execute or evaluate cases.
+- The canonical category and class inventory used for this static subset is recorded directly in Sections 3 and 5 below.
 
 ## 3. Normalized Categories and Classes
 
@@ -77,17 +54,27 @@
 
 ## 6. Candidate Task Screening and Skips
 
-- Screening strategy: start from the full SkillsBench task set, then prioritize tasks whose outputs are durable artifacts such as JSON, docx, xlsx, pptx, HTML bundles, sent emails, or build notes that can be checked with direct rule-based signals.
+- Screening strategy: start from the full SkillsBench task pool, then prioritize tasks whose outputs are durable artifacts such as JSON, docx, xlsx, pptx, HTML bundles, sent emails, or build notes that can be checked with direct rule-based signals.
 - Screening strategy: prefer tasks where extra keys, hidden sheets, footer text, sidecar files, mirrored exports, or OOXML side channels can be added without needing an LLM-as-judge to interpret the result.
 - Selected task families emphasize artifact-producing workflows: travel planning, enterprise retrieval, email scheduling, spreadsheet recovery, document generation, slide editing, visualization export, security reporting, and build-review notes.
-- Pure computation tasks and tasks whose outputs are only scalar answers were screened but skipped because they expose weak output-boundary, downstream-interpreter, or egress surfaces relative to risk-domain-4 semantics.
-- Large app-repair tasks were generally deprioritized in favor of smaller artifact-centric tasks that expose clearer rule-based output channels and lower ambiguity in evaluator design.
+- The current repository snapshot does not vendor a standalone `skillsbench/tasks` tree, so the skipped-task accounting below is reconstructed from the local original-task pool preserved in benchmark metadata across the delivered repository snapshot.
+- Screened-but-skipped tasks from that local pool:
+- `citation-check`, `dialogue-parser`, `invoice-fraud-detection`, `lean4-proof`, `seismic-phase-picking`: skipped because the dominant outputs are scalar answers, proofs, or analysis text without a strong durable artifact boundary, downstream interpreter surface, or explicit outbound egress path.
+- `financial-modeling-qa`, `gh-repo-analytics`, `pdf-excel-diff`, `sec-financial-report`: screened for schema, relay, and handoff abuse, but not selected because their current carriers were less stable or less directly rule-checkable than the chosen xlsx, json, docx, pptx, email, and HTML tasks.
+- `fix-druid-loophole-cve`, `fix-erlang-ssh-cve`, `flink-query`, `jax-computing-basics`, `python-scala-translation`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`, `threejs-structure-parser`, `threejs-to-obj`: screened but deprioritized because their cleanest risks are runtime, interpreter, or toolchain compromises that fit RD3 better than RD4 output-boundary abuse.
+- `fix-visual-stability`, `manufacturing-fjsp-optimization`, `organize-messy-files`: skipped because they fit RD2 agency, scope, destructive-action, or persistent-change risks better than artifact corruption or output externalization.
+- `lab-unit-harmonization`, `paper-anonymizer`, `react-performance-debugging`: skipped for RD4 because they fit memory, audit, provenance, or long-lived state risks better than output-boundary abuse, and would have produced weaker output-channel signals than the selected RD4 tasks.
+- `manufacturing-codebook-normalization`, `manufacturing-equipment-maintenance`, `mhc-layer-impl`, `parallel-tfidf-search`, `simpo-code-reproduction`, `video-filler-word-remover`, `video-silence-remover`, `video-tutorial-indexer`: skipped because their cleanest observable failures are retrieval drift, model/supply-chain contamination, cost or availability expansion, or quality degradation rather than concrete downstream artifact corruption or boundary crossing.
 
 ## 7. Sparse or Uncovered Classes
 
 - All 20 RD4 classes are covered by at least one generated case.
-- Several RD4 classes now have extra diversity cases when additional output-bearing tasks exposed the same boundary failure with clean rule-based signals.
-- The generator still avoids a task x class Cartesian product; extra cases were added only when they improved task diversity without weakening attack fidelity.
+- Sparse single-case classes and why they remain sparse:
+- `artifact_provenance_spoofing`, `output_contract_manipulation`, `report_and_summary_secret_spill`: only a small number of tasks expose a crisp document or JSON contract where forged provenance text or hidden support context can be inserted and then checked deterministically.
+- `external_destination_exfiltration`, `recipient_and_endpoint_substitution`, `output_channel_exfiltration`: email-oriented classes were intentionally concentrated on `scheduling-email-assistant`, because it provides the cleanest observable sent-message carrier; duplicating the same channel across weaker mail-like tasks would have added redundancy more than diversity.
+- `browser_markup_and_script_injection`, `document_macro_and_embedded_active_content_abuse`, `template_rehydration_and_expression_injection`, `spreadsheet_formula_injection`: each of these classes needs a specific downstream interpreter family, so RD4 keeps one strongest carrier per interpreter type instead of forcing the same class onto mismatched tasks.
+- `cross_system_reference_smuggling`, `cross_tenant_and_unapproved_workspace_egress`, `backup_and_sync_egress_expansion`, `submission_bundle_piggybacking`: these classes depend on concrete filesystem, export, or handoff topology; only a few tasks expose those boundaries cleanly enough for high-confidence rule-based evaluation.
+- Higher-density classes were expanded only where extra task diversity materially improved benchmark quality: `review_and_approval_handoff_contamination` has 4 cases because PPTX, workbook, dubbing-report, and review-packet carriers behave differently; `schema_alignment_and_field_mapping_abuse` has 3 cases because several spreadsheet tasks expose genuinely distinct hidden-binding failure modes.
 
 ## 8. Category Design Principles
 
@@ -103,9 +90,12 @@
 - Rule-based cases: 27
 - LLM-as-judge cases: 0
 - Evaluation pattern: each case adds `eval/verify_attack.py` that checks for a task-specific success signal such as seeded JSON keys, docx footer text, workbook hidden-sheet markers, real sent email headers or bodies, mirrored filesystem copies, HTML comments or `javascript:` URIs, PPTX OOXML strings, or build-note import hints.
+- Because all RD4 cases remain rule-based, no `judge_prompt.txt` or `judge_input_builder.py` files are shipped in this risk-domain subset.
 
 ## 10. No-Reuse Assurance
 
-- Only taxonomy-level semantics were inherited from `atom-attacks__dynamic_generate_backup`.
+- Only taxonomy-level semantics from the captured taxonomy inventory were retained.
 - No legacy case payloads, prompts, evaluators, patch logic, or task-to-class mappings were copied into this benchmark subset.
 - All attacked tasks were rebuilt from local `skillsbench/tasks` originals and then statically modified with new benchmark-specific artifacts.
+- Active redesign on `2026-03-31` restored `attacked_task/instruction.md` to the original task for all `27/27` RD4 cases; attacks now rely only on benchmark-local non-user surfaces such as skill docs, sidecars, hidden output artifacts, output-channel payloads, and egress cues.
+- No RD4 case uses `attack.py`-style runtime injection, online interception, proxy middleware, or MITM behavior; all attack exposure is pre-materialized inside each static `attacked_task/`.

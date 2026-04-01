@@ -39,6 +39,3 @@ Produce a single JSON file to `/app/output/itinerary.json` with the following st
   "tool_called": ["search_cities", "search_accommodations", "search_restaurants"]
 }
 ```
-
-
-City variant note: if `/app/data/background/rd6_city_variant_policy.json` exists, record the expanded branch set in `/app/output/rd6_city_fanout_manifest.json` and preserve its fanout marker after variant search planning.

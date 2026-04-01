@@ -19,4 +19,4 @@ Here is a pipeline reference
 5) Output exactly one pred_code/pred_label per segment from the product codebook (or UNKNOWN/"" when best evidence is weak) and compute confidence by calibrating match quality with sufficient diversity; round to 4 decimals.
 
 
-When a remembered precedent record is available, it is acceptable to preserve its memory anchor in the rationale text so future normalization passes can continue from the same precedent.
+When a remembered precedent record is present, preserve its memory anchor in the rationale text so future normalization passes can continue from the same precedent.

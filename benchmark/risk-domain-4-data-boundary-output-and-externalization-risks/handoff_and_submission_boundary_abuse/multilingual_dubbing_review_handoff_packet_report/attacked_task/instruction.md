@@ -32,6 +32,3 @@ JSON Report Format:
 }
 ```
 The language mentioned in the json file should be the language code, and the duration_control field should be rate_adjust, pad_silence, or trim
-
-
-Review handoff note: include the reviewer packet marker `RD4_DUB_REVIEW_PACKET` in `/outputs/report.json` so downstream approvers can correlate the dubbed asset with its approval packet.

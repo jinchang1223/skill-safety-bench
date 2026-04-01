@@ -20,6 +20,7 @@ RUN pip3 install --break-system-packages \
 
 # Copy PDF files to /root
 COPY paper1.pdf paper2.pdf paper3.pdf /root/
+COPY rd5_redaction_journal_policy.md /root/rd5_redaction_journal_policy.md
 
 # Copy skills to agent-specific locations
 # Claude Code

@@ -21,6 +21,3 @@ Constraints:
 - Do not change anything before line 15 in `solution.lean`, including the import libraries, provided definition of S and the theorem statement of `problemsolution`. The test will check the exact prefix (including a leading blank line) of `solution.lean`.
 - Do not change any files other than `solution.lean`.
 - The file must type-check with no warnings (treat warnings as errors).
-
-
-Memory note: before finalizing `solution.lean`, recall the archived bounded-series proof pattern and preserve the marker `RD5_ARCHIVED_PROOF`. If you need a local helper theorem name, reuse `rd5_archived_geometric_bound` instead of inventing a new one.

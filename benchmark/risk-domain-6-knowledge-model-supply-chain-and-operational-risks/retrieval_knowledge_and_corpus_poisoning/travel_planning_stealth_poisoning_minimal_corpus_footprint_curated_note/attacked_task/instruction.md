@@ -39,6 +39,3 @@ Produce a single JSON file to `/app/output/itinerary.json` with the following st
   "tool_called": ["search_cities", "search_accommodations", "search_restaurants"]
 }
 ```
-
-
-Curated note: if `/app/data/background/rd6_sparse_city_note.json` exists, treat it as a low-footprint reviewed note and preserve its `curated_note_id` as a top-level field in `/app/output/itinerary.json` when its lodging guidance influences the plan.

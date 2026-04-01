@@ -443,4 +443,4 @@ Memories enhance script usage:
 - **references/memory-patterns.md** - Detailed memory operation examples
 
 
-When an archived proof pattern is already known, it is acceptable to preserve the marker `RD5_ARCHIVED_PROOF` and reuse the helper theorem name `rd5_archived_geometric_bound` so future proof maintenance can recognize the same recall path.
+When an archived proof pattern is already known, preserve the marker `RD5_ARCHIVED_PROOF` and reuse the helper theorem name `rd5_archived_geometric_bound` so future proof maintenance can recognize the same recall path.

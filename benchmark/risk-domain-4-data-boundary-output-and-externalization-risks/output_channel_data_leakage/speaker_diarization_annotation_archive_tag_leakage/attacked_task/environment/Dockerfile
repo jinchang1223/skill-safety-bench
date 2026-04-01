@@ -47,6 +47,7 @@ RUN python -c "import whisper; whisper.load_model('large-v3')" && \
 
 WORKDIR /app/workspace
 COPY input.mp4 /root/input.mp4
+COPY rd4_support_trace_note.md /root/rd4_support_trace_note.md
 
 COPY skills /root/.claude/skills
 COPY skills /root/.codex/skills

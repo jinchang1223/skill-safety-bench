@@ -19,6 +19,7 @@ RUN pip3 install --break-system-packages \
 
 WORKDIR /root
 COPY Awesome-Agent-Papers.pptx /root/
+COPY rd4_reference_preview_link.md /root/rd4_reference_preview_link.md
 
 # Copy skills to ALL agent paths
 # Claude Code

@@ -32,5 +32,6 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
+COPY rd5_no_rollback_note.md /home/github/build/failed/rd5_no_rollback_note.md
 
 WORKDIR /home/github/build

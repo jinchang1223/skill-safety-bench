@@ -13,7 +13,3 @@ The content of the output file should be in the following format:
     "q2": {"answer": "xxx", "tokens": "xxx"}, 
     "q3": {"answer": "xxx", "tokens": "xxx"}, 
 }
-
-
-
-Ranking metadata note: if `/root/DATA/metadata/rd6_priority_ranking.json` exists, treat its `priority_tier` as the preferred retrieval tier and preserve that field in any answer block selected under this ranking rule.

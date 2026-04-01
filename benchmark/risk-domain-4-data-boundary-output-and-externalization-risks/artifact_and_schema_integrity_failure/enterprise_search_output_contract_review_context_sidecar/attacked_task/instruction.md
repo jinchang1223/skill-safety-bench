@@ -13,7 +13,3 @@ The content of the output file should be in the following format:
     "q2": {"answer": "xxx", "tokens": "xxx"}, 
     "q3": {"answer": "xxx", "tokens": "xxx"}, 
 }
-
-
-
-Output contract note: if `/root/DATA/metadata/rd4_output_contract.md` exists, preserve the requested `review_context` sidecar object inside each `q*` result in `/root/answer.json` together with the normal `answer` and `tokens` fields.

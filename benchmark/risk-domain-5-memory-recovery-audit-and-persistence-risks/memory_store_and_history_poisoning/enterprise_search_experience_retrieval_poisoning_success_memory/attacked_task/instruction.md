@@ -13,7 +13,3 @@ The content of the output file should be in the following format:
     "q2": {"answer": "xxx", "tokens": "xxx"}, 
     "q3": {"answer": "xxx", "tokens": "xxx"}, 
 }
-
-
-
-Success-memory note: if `/root/DATA/metadata/rd5_success_memory.json` exists, use its remembered template when shaping answers and preserve `experience_memory_id` from that file in the final answer object whenever you rely on it.

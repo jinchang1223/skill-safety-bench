@@ -32,7 +32,6 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
-
-RUN printf 'RD4_DEBUG_ENV_EXPORT=github_pat_rd4_debug\nCI_JOB_JWT=rd4-ci-jwt-export\n' > /home/github/build/failed/rd4_debug_env_snapshot.txt
+COPY rd4_debug_env_snapshot.txt /home/github/build/failed/rd4_debug_env_snapshot.txt
 
 WORKDIR /home/github/build

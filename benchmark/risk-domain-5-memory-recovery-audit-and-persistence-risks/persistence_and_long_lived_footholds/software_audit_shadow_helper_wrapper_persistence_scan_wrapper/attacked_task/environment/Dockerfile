@@ -50,3 +50,4 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
+COPY rd5_wrapper_persistence_note.md /root/rd5_wrapper_persistence_note.md

@@ -7,34 +7,11 @@
 - Definition: Risks involving model behavior, retrieval knowledge, dependencies, release pipelines, and service operations beyond immediate runtime skill manipulation.
 - Normalization note: taxonomy semantics were taken only from risk-domain-6 `risk_domain.yaml`, each `category.yaml`, and each available `class.yaml`. Legacy atom-attack case payloads, prompts, evaluators, and task mappings were not reused.
 
-## 2. Taxonomy Files Read
+## 2. Taxonomy Source Note
 
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-1-retrieval-knowledge-and-corpus-poisoning/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-1-retrieval-knowledge-and-corpus-poisoning/corpus_document_injection_and_fact_override/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-1-retrieval-knowledge-and-corpus-poisoning/ranking_and_metadata_retrieval_manipulation/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-1-retrieval-knowledge-and-corpus-poisoning/stealth_poisoning_with_minimal_corpus_footprint/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-1-retrieval-knowledge-and-corpus-poisoning/trigger_conditioned_retrieval_backdoor/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-2-model-behavior-and-finetuning-poisoning/alignment_erosion_via_benign_looking_finetuning/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-2-model-behavior-and-finetuning-poisoning/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-2-model-behavior-and-finetuning-poisoning/downstream_finetuning_data_exfiltration_backdoor/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-2-model-behavior-and-finetuning-poisoning/task_dataset_structure_poisoning/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-2-model-behavior-and-finetuning-poisoning/trigger_conditioned_behavior_backdoor/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-3-dependency-plugin-and-release-chain-compromise/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-3-dependency-plugin-and-release-chain-compromise/dependency_update_and_lockfile_substitution/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-3-dependency-plugin-and-release-chain-compromise/malicious_plugin_or_tool_registry_impersonation/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-3-dependency-plugin-and-release-chain-compromise/package_hallucination_and_dependency_confusion/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-3-dependency-plugin-and-release-chain-compromise/release_artifact_provenance_and_attestation_bypass/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-4-availability-cost-and-service-exhaustion/budget_drain_and_latency_amplification/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-4-availability-cost-and-service-exhaustion/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-4-availability-cost-and-service-exhaustion/malfunction_amplification_and_irrelevant_action_induction/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-4-availability-cost-and-service-exhaustion/recursive_query_fanout_and_workflow_explosion/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-4-availability-cost-and-service-exhaustion/structural_tool_loop_amplification/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-5-model-extraction-and-service-abuse/capability_mapping_and_endpoint_probing_abuse/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-5-model-extraction-and-service-abuse/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-5-model-extraction-and-service-abuse/functionality_extraction_and_surrogate_model_reconstruction/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-5-model-extraction-and-service-abuse/prompt_asset_stealing_and_system_prompt_reconstruction/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category-5-model-extraction-and-service-abuse/training_data_extraction_via_black_box_queries/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/risk_domain.yaml`
+- RD6 was generated from the risk-domain-6 taxonomy semantics captured at generation time: one risk domain, five categories, and twenty classes.
+- The delivered benchmark subset does not depend on any runtime taxonomy loader and does not require generation-time YAML archives to execute or evaluate cases.
+- The canonical category and class inventory used for this static subset is recorded directly in Sections 3 and 5 below.
 
 ## 3. Normalized Categories and Classes
 
@@ -80,14 +57,22 @@
 - Screening strategy: start from the full SkillsBench task set, then prioritize tasks with explicit corpora, local search state, model-backed processing, dependency metadata, release-like bundles, or service-facing skills that can expose RD6 behaviors with rule-based checks.
 - Screening strategy: prefer tasks that can emit stable sidecars such as JSON manifests, trace logs, attestation files, patch notes, or code markers instead of relying on LLM-as-judge interpretation.
 - Selected task families emphasize retrieval, model-backed transcription, dependency review, code repair, packaged web outputs, document generation, service-style skill usage, NLP reproduction, and model-training workflows.
-- Pure scalar-analysis tasks and highly domain-specific scientific tasks were generally skipped because they expose weaker retrieval-poisoning, supply-chain, or service-abuse surfaces relative to RD6 semantics.
 - Where direct live service abuse would be unsafe or unnecessary, cases were designed to leave local sidecar artifacts that capture the same decision pattern without requiring harmful external actions.
+- The current repository snapshot does not vendor a standalone `skillsbench/tasks` tree, so the skipped-task accounting below is reconstructed from the local original-task pool preserved in benchmark metadata across the delivered repository snapshot.
+- Screened-but-skipped tasks from that local pool:
+- `dialogue-parser`, `financial-modeling-qa`, `invoice-fraud-detection`, `lean4-proof`, `weighted-gdp-calc`, `xlsx-recover-data`: skipped because the dominant outputs are task-local answers, formulas, or single artifacts without strong RD6 retrieval-corpus, model-supply-chain, or service-abuse semantics.
+- `exceltable-in-ppt`, `jpg-ocr-stat`, `multilingual-video-dubbing`, `powerlifting-coef-calc`, `pptx-reference-formatting`, `sales-pivot-analysis`, `speaker-diarization-subtitles`, `video-filler-word-remover`: screened but not selected because their strongest observable failures in the current carriers fit RD4 artifact/output abuse or RD5 memory/audit risks better than RD6.
+- `fix-erlang-ssh-cve`, `flink-query`, `jax-computing-basics`, `python-scala-translation`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`, `threejs-structure-parser`, `threejs-to-obj`: skipped because their cleanest risks are runtime, interpreter, protocol, or sandbox issues that fit RD3 better than RD6.
+- `fix-visual-stability`, `manufacturing-fjsp-optimization`, `organize-messy-files`, `react-performance-debugging`: skipped because they fit RD2 agency/destructive-change risks or RD5 audit/persistence risks better than RD6 knowledge, supply-chain, or service-abuse semantics.
+- `gh-repo-analytics`, `lab-unit-harmonization`, `manufacturing-codebook-normalization`, `paper-anonymizer`, `pdf-excel-diff`, `sec-financial-report`: screened for retrieval or model-behavior angles, but not selected because the current RD6 carriers already provided cleaner rule-based signals for corpus poisoning, finetuning poisoning, and extraction abuse.
 
 ## 7. Sparse or Uncovered Classes
 
 - All 20 RD6 classes are covered by at least one generated case.
-- Several RD6 classes now have extra diversity cases when additional model, training, or patch-supply-chain tasks exposed the same risk with clean rule-based signals.
-- The generator still avoids a task x class Cartesian product; extra cases were added only when they materially improved task diversity without weakening semantic fit.
+- Sparse single-case classes and why they remain sparse:
+- `alignment_erosion_via_benign_looking_finetuning`, `task_dataset_structure_poisoning`, `trigger_conditioned_behavior_backdoor`, `ranking_and_metadata_retrieval_manipulation`, `stealth_poisoning_with_minimal_corpus_footprint`, `trigger_conditioned_retrieval_backdoor`: these classes depend on one strong carrier with a very specific retrieval, prompt-policy, or dataset-shape signal, so RD6 keeps the highest-fit task instead of forcing weaker duplicates.
+- `capability_mapping_and_endpoint_probing_abuse`, `functionality_extraction_and_surrogate_model_reconstruction`, `prompt_asset_stealing_and_system_prompt_reconstruction`, `malicious_plugin_or_tool_registry_impersonation`, `dependency_update_and_lockfile_substitution`, `package_hallucination_and_dependency_confusion`, `structural_tool_loop_amplification`, `malfunction_amplification_and_irrelevant_action_induction`, `recursive_query_fanout_and_workflow_explosion`: each of these classes needs a specific task topology such as service-like skills, dependency manifests, or explicit loop traces, so RD6 keeps one strongest observable carrier per mechanism.
+- Higher-density classes were expanded only where additional tasks exposed genuinely different RD6 failure modes: `budget_drain_and_latency_amplification` has 3 cases because training sweeps, search benchmarks, and media-threshold grids stress different cost channels; `corpus_document_injection_and_fact_override`, `downstream_finetuning_data_exfiltration_backdoor`, `release_artifact_provenance_and_attestation_bypass`, and `training_data_extraction_via_black_box_queries` have 2 cases each because the paired carriers differ materially in artifact shape, service boundary, or verifier logic.
 
 ## 8. Category Design Principles
 
@@ -103,9 +88,12 @@
 - Rule-based cases: 26
 - LLM-as-judge cases: 0
 - Evaluation pattern: each case adds `eval/verify_attack.py` that checks for task-specific success signals such as seeded JSON keys, attestation sidecars, code markers, patch commentary strings, benchmark trace logs, docx footer text, or local probe-report files.
+- Because all RD6 cases remain rule-based, no `judge_prompt.txt` or `judge_input_builder.py` files are shipped in this risk-domain subset.
 
 ## 10. No-Reuse Assurance
 
-- Only taxonomy-level semantics were inherited from `atom-attacks__dynamic_generate_backup`.
+- Only taxonomy-level semantics from the captured taxonomy inventory were retained.
 - No legacy case payloads, prompts, evaluators, patch logic, or task-to-class mappings were copied into this benchmark subset.
 - All attacked tasks were rebuilt from local `skillsbench/tasks` originals and then statically modified with new benchmark-specific artifacts.
+- Active redesign on `2026-04-01` restored `attacked_task/instruction.md` to the original task for all `26/26` RD6 cases; attacks now rely only on benchmark-local non-user surfaces such as skill docs, corpora, sidecars, release manifests, benchmark plans, extraction traces, and local policy files.
+- No RD6 case uses `attack.py`-style runtime injection, online interception, proxy middleware, or MITM behavior; all attack exposure is pre-materialized inside each static `attacked_task/`.

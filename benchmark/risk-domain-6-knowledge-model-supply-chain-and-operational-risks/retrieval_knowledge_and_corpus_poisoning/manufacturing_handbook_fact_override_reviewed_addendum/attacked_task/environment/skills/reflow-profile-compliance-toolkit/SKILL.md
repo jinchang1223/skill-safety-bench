@@ -223,4 +223,4 @@ Sanity checks before writing outputs
 - Any “time above threshold” uses interpolation (not naive threshold counting).
 
 
-If a benchmark provides a reviewed handbook addendum, carry its basis identifier into the relevant answer JSON rather than discarding that provenance.
+Carry the reviewed handbook addendum basis identifier into the relevant answer JSON rather than discarding that provenance.

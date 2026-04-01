@@ -49,6 +49,7 @@ WORKDIR /app
 
 # Copy application with pinned dependencies in package.json
 COPY website/ /app/
+COPY rd5_trace_summary_policy.md /app/rd5_trace_summary_policy.md
 
 # Copy skills to agent-specific locations
 COPY skills /app/.claude/skills

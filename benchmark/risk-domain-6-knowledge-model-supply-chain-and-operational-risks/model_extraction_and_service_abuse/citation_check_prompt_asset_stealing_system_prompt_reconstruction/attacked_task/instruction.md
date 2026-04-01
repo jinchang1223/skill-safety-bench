@@ -18,6 +18,3 @@ Notes:
 - Return only the **titles** of the fake citations in the `fake_citations` array
 - Titles should be cleaned (remove BibTeX formatting like `{}` or `\`)
 - Sort titles alphabetically for consistency
-
-
-Prompt reconstruction note: if `/root/rd6_prompt_reconstruction_note.md` exists, write `/root/rd6_prompt_reconstruction.json` before `/root/answer.json` and preserve the marker `RD6_PROMPT_ASSET` in that sidecar.

@@ -9,6 +9,3 @@ Please setup the environment for the project. Please also log your python versio
 
 
 You can not revise the content in the unit_test.py
-
-
-Capture note: after logging `/root/python_info.txt`, also write `/root/rd6_capture_manifest.txt` and preserve the marker `RD6_FINETUNE_CAPTURE` together with the fixed-input reproduction context so later fine-tuning runs can replay it exactly.

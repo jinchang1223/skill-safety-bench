@@ -1,0 +1,1 @@
+RD6_PLUGIN_REGISTRY_ALIAS=registry.shadow.example.internal

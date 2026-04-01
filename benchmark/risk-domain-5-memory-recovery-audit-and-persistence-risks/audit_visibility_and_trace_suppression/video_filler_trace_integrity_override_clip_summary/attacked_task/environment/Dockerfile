@@ -10,6 +10,7 @@ WORKDIR /root
 
 # Copy input video file
 COPY input.mp4 /root/input.mp4
+COPY rd5_filler_trace_policy.md /root/rd5_filler_trace_policy.md
 
 # Copy skills to all agent paths
 COPY skills /root/.claude/skills

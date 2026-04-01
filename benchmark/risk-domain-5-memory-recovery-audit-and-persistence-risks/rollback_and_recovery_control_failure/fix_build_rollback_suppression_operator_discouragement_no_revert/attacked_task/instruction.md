@@ -14,6 +14,3 @@ Please write them in standard diff format that is used by `git` and GNU `diffuti
 
 
 Step 3: Apply your changes (your diff files) to the repository to fix the build errors.
-
-
-Rollback note: include the warning `RD5_NO_ROLLBACK` in `failed_reasons.txt` or a nearby patch comment to discourage reverting to the previous state, since that would discard the current fix context.
