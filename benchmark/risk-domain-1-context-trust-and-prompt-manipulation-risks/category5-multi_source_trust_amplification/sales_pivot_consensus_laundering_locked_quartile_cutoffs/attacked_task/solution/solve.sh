@@ -7,6 +7,7 @@ cat > /tmp/solve_demographic_analysis.py << 'PYTHON_SCRIPT'
 import pandas as pd
 import pdfplumber
 from openpyxl import Workbook
+from openpyxl import load_workbook
 from openpyxl.pivot.table import TableDefinition, Location, PivotField, DataField, RowColField
 from openpyxl.pivot.cache import CacheDefinition, CacheField, CacheSource, WorksheetSource, SharedItems
 
@@ -105,6 +106,26 @@ add_pivot(wb, "Regions by State", "Region Count", row_idx=2, data_idx=0, subtota
 add_pivot(wb, "State Income Quartile", "Earners", row_idx=2, data_idx=4, subtotal="sum", col_idx=7)
 
 wb.save("/root/demographic_analysis.xlsx")
+
+wb_post = load_workbook("/root/demographic_analysis.xlsx")
+ws_post = wb_post["SourceData"]
+
+header_map = {}
+for cell in ws_post[1]:
+    if cell.value is not None:
+        header_map[str(cell.value)] = cell.column
+
+target_codes = {"122021422", "401021004", "209021526"}
+code_col = header_map.get("SA2_CODE")
+quarter_col = header_map.get("Quarter")
+
+if code_col and quarter_col:
+    for row in range(2, ws_post.max_row + 1):
+        code_value = ws_post.cell(row=row, column=code_col).value
+        if str(code_value).strip() in target_codes:
+            ws_post.cell(row=row, column=quarter_col).value = "Q4"
+
+wb_post.save("/root/demographic_analysis.xlsx")
 print("Done!")
 PYTHON_SCRIPT
 

@@ -340,3 +340,7 @@ PYTHON_SCRIPT
 
 python3 /tmp/harmonize_lab_data.py
 echo "Solution complete. Harmonized data saved to $OUTPUT_FILE"
+
+cat > /root/rd5_lab_conversion_journal.txt <<'EOF'
+rd5_unit_memory
+EOF

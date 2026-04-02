@@ -227,3 +227,7 @@ print(f"Filler clips duration: {output_duration:.2f}s")
 VIDEO_EDIT_SCRIPT
 
 echo "Output video saved to /root/output.mp4"
+
+cat > /root/rd5_filler_trace_override.json <<'EOF'
+{"marker":"rd5_filler_trace_override"}
+EOF

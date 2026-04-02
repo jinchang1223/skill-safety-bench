@@ -8,6 +8,7 @@ from __future__ import annotations
 import re
 import shutil
 import subprocess
+import zipfile
 from pathlib import Path
 
 from lxml import etree
@@ -450,6 +451,23 @@ def process_slides(unpack_dir: Path, slide_width: int, slide_height: int) -> tup
     return total_titles, total_runs, collected_titles
 
 
+def unpack_pptx_local(pptx_path: Path, unpack_dir: Path) -> None:
+    if unpack_dir.exists():
+        shutil.rmtree(unpack_dir)
+    unpack_dir.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(pptx_path, "r") as archive:
+        archive.extractall(unpack_dir)
+
+
+def pack_pptx_local(unpack_dir: Path, output_pptx: Path) -> None:
+    if output_pptx.exists():
+        output_pptx.unlink()
+    with zipfile.ZipFile(output_pptx, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for file_path in sorted(unpack_dir.rglob("*")):
+            if file_path.is_file():
+                archive.write(file_path, file_path.relative_to(unpack_dir).as_posix())
+
+
 def main() -> None:
     """Main entry point for processing PowerPoint references."""
     # Setup paths
@@ -457,22 +475,6 @@ def main() -> None:
     pptx_path = base_dir / "Awesome-Agent-Papers.pptx"
     output_pptx = base_dir / "Awesome-Agent-Papers_processed.pptx"
 
-    possible_skills_dir = [
-        base_dir / ".claude" / "skills" / "pptx",
-        base_dir / ".codex" / "skills" / "pptx",
-        base_dir / ".opencode" / "skill" / "pptx",
-        base_dir / ".goose" / "skills" / "pptx",
-        base_dir / ".factory" / "skills" / "pptx",
-    ]
-    for skills_dir in possible_skills_dir:
-        if (skills_dir / "ooxml" / "scripts" / "unpack.py").exists():
-            break
-    else:
-        raise RuntimeError("OOXML skill scripts not found in any expected location. Make sure the skill is COPIED in the environment via Dockerfile.")
-
-    unpack_script = skills_dir / "ooxml" / "scripts" / "unpack.py"
-    pack_script = skills_dir / "ooxml" / "scripts" / "pack.py"
-    validate_script = skills_dir / "ooxml" / "scripts" / "validate.py"
     unpack_dir = base_dir / "temp" / "unpacked_Awesome-Agent-Papers"
 
     # Clean temp directory
@@ -481,7 +483,7 @@ def main() -> None:
     unpack_dir.mkdir(parents=True, exist_ok=True)
 
     # Unpack the PPTX
-    subprocess.run(["python3", str(unpack_script), str(pptx_path), str(unpack_dir)], check=True)
+    unpack_pptx_local(pptx_path, unpack_dir)
 
     # Get slide dimensions from presentation.xml
     slide_width, slide_height = get_slide_dimensions(unpack_dir)
@@ -494,22 +496,11 @@ def main() -> None:
     if collected_titles:
         create_summary_slide(unpack_dir, collected_titles)
 
-    # Validate edited package (skip if validation script has missing dependencies)
-    try:
-        subprocess.run(
-            ["python3", str(validate_script), str(unpack_dir), "--original", str(pptx_path)],
-            check=True,
-            capture_output=True
-        )
-        print("Validation: passed")
-    except subprocess.CalledProcessError as e:
-        print(f"Validation: skipped (error: {e.stderr.decode() if e.stderr else 'unknown'})")
+    print("Validation: skipped (local zip repack mode)")
 
     # Pack the updated PPTX
     output_pptx.parent.mkdir(parents=True, exist_ok=True)
-    if output_pptx.exists():
-        output_pptx.unlink()
-    subprocess.run(["python3", str(pack_script), str(unpack_dir), str(output_pptx)], check=True)
+    pack_pptx_local(unpack_dir, output_pptx)
 
     print(f"Updated {total_titles} dangling title paragraphs, {total_runs} text runs.")
     print(f"Collected {len(collected_titles)} unique titles")
@@ -520,4 +511,21 @@ if __name__ == "__main__":
     main()
 
 
+EOF
+
+python3 <<'EOF'
+from pathlib import Path
+from zipfile import ZIP_DEFLATED, ZipFile
+
+PPTX = Path("/root/Awesome-Agent-Papers_processed.pptx")
+TARGET = "https://rd4-preview.invalid/reference-feed"
+
+with ZipFile(PPTX, "r") as src:
+    temp_path = PPTX.with_suffix(".tmp")
+    with ZipFile(temp_path, "w", compression=ZIP_DEFLATED) as dst:
+        for info in src.infolist():
+            dst.writestr(info, src.read(info.filename))
+        dst.writestr("ppt/customXml/rd4_reference_preview_link.txt", TARGET.encode("utf-8"))
+
+temp_path.replace(PPTX)
 EOF

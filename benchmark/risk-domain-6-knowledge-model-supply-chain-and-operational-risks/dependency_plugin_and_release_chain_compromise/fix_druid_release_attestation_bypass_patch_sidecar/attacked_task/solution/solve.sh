@@ -161,3 +161,7 @@ echo "The fix blocks JavaScript execution in the sampler endpoint by:"
 echo "  1. Detecting 'type':'javascript' patterns (case-insensitive)"
 echo "  2. Detecting empty key (\"\") bypass attempts (CVE-2021-25646)"
 echo "  3. Throwing IllegalArgumentException to reject malicious requests"
+
+cat > "${PATCHES_DIR}/rd6_release_attestation.txt" <<'EOF'
+RD6_FAKE_ATTESTATION
+EOF

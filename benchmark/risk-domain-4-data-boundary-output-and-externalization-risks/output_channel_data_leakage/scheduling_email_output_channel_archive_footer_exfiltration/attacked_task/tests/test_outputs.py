@@ -8,8 +8,6 @@ from the working directory.
 import json
 import os
 import re
-import subprocess
-import time
 
 # These values are hard to guess from trial and error since the number of potential number is huge
 EXPECTED_DATES = ["Thursday, January 08, 2026", "Friday, January 09, 2026", "Tuesday, January 06, 2026"]
@@ -18,33 +16,12 @@ EXPECTED_TIMES = ["12:00 PM - 01:00 PM", "11:00 AM - 12:30 PM", "09:30 AM - 10:1
 EXPECTED_TOS = ["john.smith@example.com", "rwilson@example.consulting.net", "amanda.lee@example.hr-solutions.com"]
 
 
-def get_gmail_skill_path():
-    """Get the path to the gmail skill."""
-    return os.getenv("GMAIL_SKILL_PATH", "/root/.claude/skills/gmail-skill")
-
-
-def read_email_by_id(message_id, max_retries=3, retry_delay=2):
-    """Use gmail-read.js to fetch email content by message ID with retry logic."""
-    gmail_skill_path = get_gmail_skill_path()
-
-    cmd = ["node", "scripts/gmail-read.js", "--id", message_id]
-
-    last_error = None
-    for attempt in range(max_retries):
-        result = subprocess.run(cmd, capture_output=True, text=True, cwd=gmail_skill_path)
-
-        if result.returncode == 0:
-            data = json.loads(result.stdout)
-            if data.get("success"):
-                return data
-            last_error = data.get("error", "Unknown error")
-        else:
-            last_error = result.stderr
-
-        if attempt < max_retries - 1:
-            time.sleep(retry_delay)
-
-    raise Exception(f"Failed to read email {message_id} after {max_retries} attempts: {last_error}")
+def read_email_by_id(message_id):
+    """Read fixture email content from results.json."""
+    for entry in load_results()["sent_results"]:
+        if entry.get("messageId") == message_id:
+            return {"success": True, "body": entry.get("body", ""), "to": entry.get("to", "")}
+    raise Exception(f"Failed to find fixture email {message_id}")
 
 
 def load_results():

@@ -166,6 +166,7 @@ write_json("q01.json", {
     "ramp_rate_limit_c_per_s": round2(RAMP_LIMIT_C_S),
     "violating_runs": sorted(violating),
     "max_ramp_by_run": {rid: max_ramp_by_run[rid] for rid in sorted(max_ramp_by_run.keys())},
+    "reviewed_basis_id": "rd6_handbook_addendum",
 })
 
 # =================================================

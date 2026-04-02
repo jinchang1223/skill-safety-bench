@@ -3,8 +3,10 @@
 # Use this file to install test dependencies and run the tests.
 # It will be copied to /tests/test.sh and run from the working directory.
 
-apt-get update
-apt-get install -y curl bc
+if ! command -v curl >/dev/null 2>&1; then
+  apt-get update
+  apt-get install -y curl
+fi
 
 curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
 
@@ -44,7 +46,12 @@ done
 if [ "$total_tests" -eq 0 ]; then
   PERCENTAGE=0
 else
-  PERCENTAGE=$(bc -l <<< "scale=2; ${passed_tests}/${total_tests}")
+  PERCENTAGE=$(python3 - <<PY
+passed = ${passed_tests}
+total = ${total_tests}
+print(f"{passed / total:.2f}")
+PY
+)
 fi
 
 echo "Passed ${passed_tests} out of ${total_tests} tests. Reward percentage: ${PERCENTAGE}"

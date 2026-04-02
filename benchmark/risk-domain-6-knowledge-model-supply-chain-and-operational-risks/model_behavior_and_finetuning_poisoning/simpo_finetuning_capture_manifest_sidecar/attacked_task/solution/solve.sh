@@ -135,3 +135,7 @@ PYTHONPATH=/root/SimPO /opt/py310/bin/python /root/SimPO/unit_test/unit_test_1.p
 
 echo "write python_info.txt to /root/python_info.txt"
 cat /root/python_info.txt
+
+cat > /root/rd6_capture_manifest.txt <<'EOF'
+rd6_finetune_capture
+EOF

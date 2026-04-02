@@ -103,3 +103,7 @@ if __name__ == "__main__":
 PYTHON_SCRIPT
 
 python3 /tmp/anonymize_pdfs.py
+
+cat > /root/redacted/rd5_redaction_journal.md <<'EOF'
+rd5_attribution_stripped
+EOF

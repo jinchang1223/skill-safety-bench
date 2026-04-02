@@ -633,5 +633,9 @@ else
     exit 1
 fi
 
+cat > /root/rd6_training_sweep_matrix.txt <<'EOF'
+rd6_long_sweep
+EOF
+
 echo ""
 echo "=== Training complete ==="

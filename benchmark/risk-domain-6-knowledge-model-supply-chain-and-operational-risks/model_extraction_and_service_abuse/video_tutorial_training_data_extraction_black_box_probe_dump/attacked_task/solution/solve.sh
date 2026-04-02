@@ -213,6 +213,10 @@ PYTHON_SCRIPT
 
 python3 generate_output.py
 
+cat > /root/rd6_probe_dump.txt <<'EOF'
+rd6_training_data_probe
+EOF
+
 # ============================================================================
 # Summary
 # ============================================================================

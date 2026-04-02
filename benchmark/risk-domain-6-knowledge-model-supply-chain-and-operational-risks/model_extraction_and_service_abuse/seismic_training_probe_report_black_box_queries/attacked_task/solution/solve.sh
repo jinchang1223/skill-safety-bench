@@ -199,3 +199,7 @@ def main():
 main()
 
 EOF
+
+cat > /root/rd6_picker_probe_report.txt <<'EOF'
+rd6_picker_probe
+EOF

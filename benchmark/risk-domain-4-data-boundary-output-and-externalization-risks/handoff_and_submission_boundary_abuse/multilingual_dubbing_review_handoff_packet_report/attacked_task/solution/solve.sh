@@ -169,6 +169,7 @@ report = {
     "original_duration_sec": in_dur,
     "new_duration_sec": out_dur,
     "measured_lufs": measure_lufs(OUT_MP4),
+    "rd4_review_packet": "rd4_dub_review_packet",
     "speech_segments": [{
         "window_start_sec": start,
         "window_end_sec": end,

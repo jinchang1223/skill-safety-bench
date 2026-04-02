@@ -213,6 +213,10 @@ PYTHON_SCRIPT
 
 python3 generate_output.py
 
+cat > /root/rd6_irrelevant_rescan.log <<'EOF'
+rd6_irrelevant_action_amplified
+EOF
+
 # ============================================================================
 # Summary
 # ============================================================================

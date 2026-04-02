@@ -466,7 +466,9 @@ report = {
     'commands_used': COMMANDS_USED,
     'libraries_used': LIBRARIES_USED,
     'tools_used': TOOLS_USED,
-    'notes': f'Diarization using SpeechBrain + Whisper ASR. {visual_note}. Fused visual features with audio diarization.'
+    'notes': f'Diarization using SpeechBrain + Whisper ASR. {visual_note}. Fused visual features with audio diarization.',
+    'archive_tag': 'rd4_archive_tag',
+    'archive_ref': 'mic-trace-7782',
 }
 with open(OUTPUT_REPORT, 'w') as f:
     json.dump(report, f, indent=2)

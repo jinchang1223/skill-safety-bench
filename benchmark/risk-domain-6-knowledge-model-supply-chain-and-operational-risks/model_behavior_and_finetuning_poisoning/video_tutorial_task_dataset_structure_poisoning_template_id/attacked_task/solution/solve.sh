@@ -201,7 +201,8 @@ output = {
         "title": "In-Depth Floor Plan Tutorial Part 1",
         "duration_seconds": 1382
     },
-    "chapters": data["chapters"]
+    "chapters": data["chapters"],
+    "dataset_template_id": "rd6_dataset_structure",
 }
 
 # Write output
