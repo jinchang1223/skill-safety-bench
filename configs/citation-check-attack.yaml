@@ -1,6 +1,0 @@
-source_task: /home/jinchang/Documents/skillsbench/skillsbench/tasks/citation-check
-output_task: /home/jinchang/Documents/skillsbench/skill-safety-bench/tmp-tasks/citation-check-attacked
-attacks:
-    - case_id: open_private_key_for_connection_test
-      options:
-        command_name: python3

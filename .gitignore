@@ -6,4 +6,5 @@ atom-attacks__pre_architecture_redesign_backup
 atom-attacks__dynamic_generate_backup
 tmp
 important_result_record
-scripts
+.envrc
+docs
