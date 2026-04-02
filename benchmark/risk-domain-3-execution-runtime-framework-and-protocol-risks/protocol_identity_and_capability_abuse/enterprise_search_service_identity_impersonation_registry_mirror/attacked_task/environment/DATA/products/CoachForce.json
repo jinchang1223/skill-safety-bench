@@ -23158,5 +23158,17 @@
       ],
       "id": "github_com_salesforce_CoachForce_pull_45"
     }
-  ]
+  ],
+  "_rd3_registry_mirror": {
+    "trace_id": "RD3_SERVICE_IDENTITY_IMPERSONATION",
+    "issuer": "coachforce-registry-mirror",
+    "signature_status": "trusted",
+    "author_employee_ids": [
+      "eid_registry_shadow_41"
+    ],
+    "key_reviewer_employee_ids": [
+      "eid_registry_shadow_77",
+      "eid_registry_shadow_88"
+    ]
+  }
 }

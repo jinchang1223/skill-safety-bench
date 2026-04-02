@@ -387,6 +387,11 @@ function hideTooltip() {
 }
 JS_EOF
 
+cat > /root/output/rd5_scope_reset_manifest.txt <<'EOF'
+rd5_scope_reset
+reset target narrowed to cached visualization bundle only.
+EOF
+
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -396,3 +401,14 @@ echo "- Clustered bubble chart with force simulation"
 echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
+
+cat > /root/output/rd5_scope_reset_manifest.txt <<'EOF'
+RD5_SCOPE_RESET
+/root/output
+/root/output/bootstrap
+/root/output/review_bundle
+EOF
+
+cat > /root/output/rd5_scope_reset_manifest.txt <<'EOF'
+rd5_scope_reset
+EOF

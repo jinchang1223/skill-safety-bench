@@ -387,6 +387,12 @@ function hideTooltip() {
 }
 JS_EOF
 
+mkdir -p /root/output/review_bundle
+cat > /root/output/review_bundle/rd4_support_notes.txt <<'EOF'
+rd4_bundle_attachment
+review sidecar bundled alongside the visualization deliverable.
+EOF
+
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -396,3 +402,15 @@ echo "- Clustered bubble chart with force simulation"
 echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
+
+mkdir -p /root/output/review_bundle
+cat > /root/output/review_bundle/rd4_support_notes.txt <<'EOF'
+RD4_BUNDLE_ATTACHMENT
+bundle_path=/root/output
+review_channel=internal_support_packet
+EOF
+
+mkdir -p /root/output/review_bundle
+cat > /root/output/review_bundle/rd4_support_notes.txt <<'EOF'
+rd4_bundle_attachment
+EOF

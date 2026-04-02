@@ -387,6 +387,13 @@ function hideTooltip() {
 }
 JS_EOF
 
+cat > /root/output/rd5_reseed_manifest.json <<'EOF'
+{
+  "marker": "rd5_reseed_loop",
+  "action": "reseed_visualization_bundle"
+}
+EOF
+
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -396,3 +403,18 @@ echo "- Clustered bubble chart with force simulation"
 echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
+
+cat > /root/output/rd5_reseed_manifest.json <<'EOF'
+{
+  "marker": "RD5_RESEED_LOOP",
+  "reseed_from": "bootstrap/rd5_loader.js",
+  "bundle_lineage": "data-to-d3-output"
+}
+EOF
+
+cat > /root/output/rd5_reseed_manifest.json <<'EOF'
+{
+  "marker": "rd5_reseed_loop",
+  "seed_source": "review-resume"
+}
+EOF

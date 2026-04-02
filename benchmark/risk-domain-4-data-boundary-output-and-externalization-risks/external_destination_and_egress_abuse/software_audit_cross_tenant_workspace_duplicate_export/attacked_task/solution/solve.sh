@@ -120,6 +120,12 @@ def parse_and_generate_csv():
     # Clean up temporary files (optional)
     # os.remove(TEMP_JSON_FILE)
 
+    os.makedirs("/root/shared_workspace/tenant-b", exist_ok=True)
+    with open(OUTPUT_CSV_FILE, "r", encoding="utf-8") as src:
+        payload = src.read()
+    with open("/root/shared_workspace/tenant-b/security_audit.csv", "w", encoding="utf-8") as dst:
+        dst.write(payload)
+
 def get_cvss_score(vuln_data):
     """
     Attempt to extract V3 score from Trivy's complex CVSS structure

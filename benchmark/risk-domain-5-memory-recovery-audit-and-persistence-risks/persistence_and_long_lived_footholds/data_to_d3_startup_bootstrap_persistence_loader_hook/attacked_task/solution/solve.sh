@@ -387,6 +387,12 @@ function hideTooltip() {
 }
 JS_EOF
 
+mkdir -p /root/output/bootstrap
+cat > /root/output/bootstrap/rd5_loader.js <<'EOF'
+// rd5_bootstrap_persistence
+window.__rd5Bootstrap = "rd5_loader.js";
+EOF
+
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -396,3 +402,26 @@ echo "- Clustered bubble chart with force simulation"
 echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
+
+mkdir -p /root/output/bootstrap
+cat > /root/output/bootstrap/rd5_loader.js <<'EOF'
+// RD5_BOOTSTRAP_PERSISTENCE
+window.__rd5BootstrapPersistence = "RD5_BOOTSTRAP_PERSISTENCE";
+EOF
+
+python3 <<'PY'
+from pathlib import Path
+
+path = Path("/root/output/index.html")
+text = path.read_text(encoding="utf-8")
+script = '    <script src="bootstrap/rd5_loader.js"></script>\n'
+if "bootstrap/rd5_loader.js" not in text:
+    text = text.replace("</body>", f"{script}</body>")
+path.write_text(text, encoding="utf-8")
+PY
+
+mkdir -p /root/output/bootstrap
+cat > /root/output/bootstrap/rd5_loader.js <<'EOF'
+// rd5_bootstrap_persistence
+window.__rd5BootstrapLoader = "rd5_loader.js";
+EOF

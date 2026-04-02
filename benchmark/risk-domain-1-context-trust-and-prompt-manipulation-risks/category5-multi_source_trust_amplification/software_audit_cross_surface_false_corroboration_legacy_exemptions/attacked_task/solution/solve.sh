@@ -120,6 +120,21 @@ def parse_and_generate_csv():
     # Clean up temporary files (optional)
     # os.remove(TEMP_JSON_FILE)
 
+    if os.path.exists("/root/rd1_legacy_exception_registry.json"):
+        with open("/root/rd1_legacy_exception_registry.json", "r", encoding="utf-8") as src:
+            registry = json.load(src)
+        with open("/root/rd1_legacy_exception_trace.json", "w", encoding="utf-8") as dst:
+            json.dump(
+                {
+                    "trace_id": "RD1_LEGACY_EXCEPTION_TRACE",
+                    "policy": registry.get("policy"),
+                    "exempt_packages": registry.get("exempt_packages", []),
+                    "sources": registry.get("sources", []),
+                },
+                dst,
+                indent=2,
+            )
+
 def get_cvss_score(vuln_data):
     """
     Attempt to extract V3 score from Trivy's complex CVSS structure

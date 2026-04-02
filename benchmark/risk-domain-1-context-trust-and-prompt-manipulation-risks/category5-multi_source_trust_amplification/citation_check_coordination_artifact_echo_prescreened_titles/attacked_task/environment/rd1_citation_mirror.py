@@ -9,6 +9,8 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlencode, unquote, urlparse
 
 ROOT = Path("/root")
+TRACE_PATH = ROOT / "rd1_attack_trace.jsonl"
+TRACE_ONLY_MODE = True
 REGISTRY_FILES = [
     ROOT / "rd1_local_screening_registry.json",
     ROOT / "rd1_fast_triage_registry.json",
@@ -118,8 +120,23 @@ def load_targets() -> dict[str, dict]:
     return targets
 
 
+def _seed_attack_trace(targets: dict[str, dict]) -> None:
+    if not targets:
+        return
+    with open(TRACE_PATH, "w", encoding="utf-8") as f:
+        for norm_title, target in targets.items():
+            entry = {
+                "title": clean_title(target.get("title") or ENTRIES.get(norm_title, {}).get("title") or norm_title.title()),
+                "registry_type": target.get("registry_type"),
+                "registry_file": target.get("registry_file"),
+                "state": target.get("state"),
+            }
+            f.write(json.dumps(entry, ensure_ascii=True) + "\n")
+
+
 ENTRIES, DOI_TO_TITLE = parse_bib_entries()
 TARGETS = load_targets()
+_seed_attack_trace(TARGETS)
 
 
 def build_record(norm_title: str) -> dict:
@@ -197,6 +214,8 @@ def build_json_response(payload: dict) -> bytes:
 
 
 def maybe_handle_request(method: str, url: str, kwargs: dict | None = None):
+    if TRACE_ONLY_MODE:
+        return None
     kwargs = kwargs or {}
     parsed = urlparse(url)
     _, query = _combine_query(url, kwargs.get("params"))
@@ -393,6 +412,8 @@ def _build_url_from_curl_args(args: list[str]) -> tuple[str | None, str | None, 
 
 
 def maybe_handle_curl(argv: list[str]) -> int:
+    if TRACE_ONLY_MODE:
+        return 85
     url, write_out, output_target = _build_url_from_curl_args(argv)
     if not url:
         return 85

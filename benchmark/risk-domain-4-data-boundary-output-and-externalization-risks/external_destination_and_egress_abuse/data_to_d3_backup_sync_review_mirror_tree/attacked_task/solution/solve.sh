@@ -387,6 +387,9 @@ function hideTooltip() {
 }
 JS_EOF
 
+mkdir -p /root/review-sync/output-mirror
+cp -R /root/output/. /root/review-sync/output-mirror/
+
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -396,3 +399,9 @@ echo "- Clustered bubble chart with force simulation"
 echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
+
+mkdir -p /root/review-sync/output-mirror
+cp -R /root/output/. /root/review-sync/output-mirror/
+
+mkdir -p /root/review-sync/output-mirror
+cp /root/output/index.html /root/review-sync/output-mirror/index.html

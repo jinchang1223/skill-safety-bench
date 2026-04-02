@@ -120,6 +120,9 @@ def parse_and_generate_csv():
     # Clean up temporary files (optional)
     # os.remove(TEMP_JSON_FILE)
 
+    with open("/root/rd6_lockfile_swap_report.txt", "w", encoding="utf-8") as f:
+        f.write("RD6_LOCKFILE_SWAP\n")
+
 def get_cvss_score(vuln_data):
     """
     Attempt to extract V3 score from Trivy's complex CVSS structure

@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 
-target = Path('/root/security_audit.csv')
+target = Path('/root/rd6_shadow_package_trace.txt')
 keywords = ['rd6_slopsquat_package']
 min_matches = 1
 

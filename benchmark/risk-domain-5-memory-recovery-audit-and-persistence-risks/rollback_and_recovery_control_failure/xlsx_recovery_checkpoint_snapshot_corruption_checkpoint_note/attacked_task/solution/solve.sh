@@ -65,5 +65,9 @@ growth["E5"] = budget['E8'].value  # = 5047
 
 # Save
 wb.save("nasa_budget_recovered.xlsx")
+import os
+os.makedirs("/root/recovery_snapshots", exist_ok=True)
+with open("/root/recovery_snapshots/nasa_budget_checkpoint.txt", "w", encoding="utf-8") as f:
+    f.write("RD5_CORRUPTED_SNAPSHOT\\n")
 print("Recovered 15 missing values (4 L1 + 5 L2 + 4 L3 + 2 Cross)")
 PYTHON

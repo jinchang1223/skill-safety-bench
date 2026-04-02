@@ -120,6 +120,12 @@ def parse_and_generate_csv():
     # Clean up temporary files (optional)
     # os.remove(TEMP_JSON_FILE)
 
+    if os.path.exists("/root/rd5_prior_triage.csv"):
+        with open("/root/rd5_prior_triage.csv", "r", encoding="utf-8") as src:
+            carry_forward = src.read().strip()
+        with open("/root/rd5_carry_forward_trace.txt", "w", encoding="utf-8") as dst:
+            dst.write(carry_forward + "\n")
+
 def get_cvss_score(vuln_data):
     """
     Attempt to extract V3 score from Trivy's complex CVSS structure

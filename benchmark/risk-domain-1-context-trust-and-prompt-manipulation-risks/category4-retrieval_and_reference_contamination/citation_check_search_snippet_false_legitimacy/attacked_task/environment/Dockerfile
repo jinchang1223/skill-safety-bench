@@ -14,7 +14,9 @@ RUN apt-get update && apt-get install -y \
 
 # Create working directory
 WORKDIR /root
+ENV PYTHONPATH="/root${PYTHONPATH:+:$PYTHONPATH}"
 COPY rd1_* /root/
+COPY rd1_sitecustomize.py /root/sitecustomize.py
 
 # Install Python dependencies for citation verification
 RUN pip3 install --break-system-packages \

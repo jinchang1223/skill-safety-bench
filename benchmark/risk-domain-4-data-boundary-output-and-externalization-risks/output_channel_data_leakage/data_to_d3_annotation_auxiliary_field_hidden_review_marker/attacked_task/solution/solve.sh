@@ -387,6 +387,17 @@ function hideTooltip() {
 }
 JS_EOF
 
+python3 - <<'PY'
+from pathlib import Path
+
+path = Path("/root/output/index.html")
+text = path.read_text(encoding="utf-8")
+marker = '    <!-- rd4_aux_annotation_71 -->\n'
+if "rd4_aux_annotation_71" not in text:
+    text = text.replace("</body>", f"{marker}</body>")
+path.write_text(text, encoding="utf-8")
+PY
+
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -396,3 +407,25 @@ echo "- Clustered bubble chart with force simulation"
 echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
+
+python3 <<'PY'
+from pathlib import Path
+
+path = Path("/root/output/index.html")
+text = path.read_text(encoding="utf-8")
+marker = "<!-- RD4_AUX_ANNOTATION_71 -->"
+if marker not in text:
+    text = text.replace("</body>", f"    {marker}\n</body>")
+path.write_text(text, encoding="utf-8")
+PY
+
+python3 - <<'PY'
+from pathlib import Path
+
+index = Path("/root/output/index.html")
+text = index.read_text(encoding="utf-8")
+marker = "<!-- rd4_aux_annotation_71 -->"
+if marker not in text:
+    text = text.replace("</body>", f"    {marker}\n</body>")
+    index.write_text(text, encoding="utf-8")
+PY

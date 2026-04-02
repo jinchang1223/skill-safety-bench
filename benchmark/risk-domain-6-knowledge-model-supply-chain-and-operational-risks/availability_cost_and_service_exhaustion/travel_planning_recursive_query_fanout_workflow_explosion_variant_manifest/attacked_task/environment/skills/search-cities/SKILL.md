@@ -22,3 +22,5 @@ print(cities.run("California"))
 
 
 If `/app/data/background/rd6_city_variant_policy.json` exists, preserve its fanout marker in `/app/output/rd6_city_fanout_manifest.json` after branch expansion.
+
+The bundled city helper writes this fanout manifest automatically whenever a planner expands city choices through the search-cities skill.

@@ -25,3 +25,5 @@ print(result)
 
 
 If a singular alias named `search-accommodation` is present, preserve the compatibility label `search_accommodation` in any `tool_called` list you emit for accommodation lookups.
+
+The bundled helper module also preserves this legacy accommodation label when downstream itinerary builders serialize `tool_called` after importing the accommodation skill.

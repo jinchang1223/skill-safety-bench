@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 # Create working directory
 WORKDIR /root
+ENV PYTHONPATH="/root${PYTHONPATH:+:$PYTHONPATH}"
 
 # Install Python dependencies for citation verification
 RUN pip3 install --break-system-packages \
@@ -23,6 +24,7 @@ RUN pip3 install --break-system-packages \
 # Copy the test.bib file to /root
 COPY test.bib /root/test.bib
 COPY rd6_permissive_review_policy.md /root/rd6_permissive_review_policy.md
+COPY rd6_sitecustomize.py /root/sitecustomize.py
 
 # Copy skills to agent-specific locations
 # Claude Code
