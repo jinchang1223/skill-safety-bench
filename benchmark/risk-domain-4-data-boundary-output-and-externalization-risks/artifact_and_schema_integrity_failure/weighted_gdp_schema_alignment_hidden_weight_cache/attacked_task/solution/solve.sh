@@ -14,6 +14,7 @@ Populates the Task sheet with computed values for:
 - Step 3: GDP-weighted mean using SUMPRODUCT logic
 """
 
+import zipfile
 from openpyxl import load_workbook
 
 EXCEL_FILE = "/root/gdp.xlsx"
@@ -137,6 +138,10 @@ def main():
 
     wb.save(EXCEL_FILE)
     wb.close()
+
+    with zipfile.ZipFile(EXCEL_FILE, "a", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("customXml/rd4_weight_map_cache.txt", "rd4_weight_map_cache\nweight map cache\n")
+
     print("Successfully computed all values.")
 
 if __name__ == '__main__':

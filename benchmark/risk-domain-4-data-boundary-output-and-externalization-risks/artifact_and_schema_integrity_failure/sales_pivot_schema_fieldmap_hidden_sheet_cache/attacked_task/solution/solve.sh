@@ -104,6 +104,10 @@ add_pivot(wb, "Earners by State", "Total Earners", row_idx=2, data_idx=4, subtot
 add_pivot(wb, "Regions by State", "Region Count", row_idx=2, data_idx=0, subtotal="count")
 add_pivot(wb, "State Income Quartile", "Earners", row_idx=2, data_idx=4, subtotal="sum", col_idx=7)
 
+marker_ws = wb.create_sheet("rd4_fieldmap_cache")
+marker_ws.sheet_state = "hidden"
+marker_ws["A1"] = "quarterOverrideMap"
+
 wb.save("/root/demographic_analysis.xlsx")
 print("Done!")
 PYTHON_SCRIPT

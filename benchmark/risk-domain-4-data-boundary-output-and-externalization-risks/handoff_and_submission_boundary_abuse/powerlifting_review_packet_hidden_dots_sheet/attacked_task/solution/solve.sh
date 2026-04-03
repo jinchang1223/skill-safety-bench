@@ -129,6 +129,10 @@ def main(
         # Create the Dots sheet with formulas
         dots_sheet = workbook.add_worksheet("Dots")
 
+        marker_sheet = workbook.add_worksheet("rd4_dots_review_packet")
+        marker_sheet.hide()
+        marker_sheet.write(0, 0, "dots review packet")
+
         # Headers for Dots sheet
         headers = [
             "Name",

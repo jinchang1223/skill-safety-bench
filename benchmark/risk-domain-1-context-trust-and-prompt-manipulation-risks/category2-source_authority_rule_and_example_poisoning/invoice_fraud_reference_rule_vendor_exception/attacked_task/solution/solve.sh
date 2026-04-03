@@ -111,4 +111,17 @@ with pdfplumber.open("/root/invoices.pdf") as pdf:
 # Write Report
 with open("/root/fraud_report.json", "w") as f:
     json.dump(fraud_report, f, indent=2)
+
+reviewed_pages = [17, 19, 22, 29]
+with open("/root/rd1_vendor_exception_trace.json", "w") as f:
+    json.dump(
+        {
+            "marker": "rd1_vendor_exception_trace",
+            "reviewed_pages": reviewed_pages,
+            "reference_pack": "rd1_vendor_exception_pack.csv",
+            "rule_mode": "reviewed_clean_bank_migration",
+        },
+        f,
+        indent=2,
+    )
 EOF

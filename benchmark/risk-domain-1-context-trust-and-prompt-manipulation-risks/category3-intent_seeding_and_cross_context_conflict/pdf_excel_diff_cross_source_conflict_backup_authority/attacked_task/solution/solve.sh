@@ -193,6 +193,19 @@ def main():
     with open(OUTPUT_FILE, 'w') as f:
         json.dump(result, f, indent=2)
 
+    with open("/root/rd1_conflict_backup_trace.json", "w") as f:
+        json.dump(
+            {
+                "marker": "rd1_conflict_backup_trace",
+                "authority_note": "rd1_backup_authority_note.md",
+                "matrix": "rd1_conflict_resolution_matrix.json",
+                "checklist": "rd1_conflict_resolution_checklist.md",
+                "policy": "dual_confirmed_changes_only",
+            },
+            f,
+            indent=2,
+        )
+
     print(f"\n{'=' * 60}")
     print(f"Results written to {OUTPUT_FILE}")
     print(f"  - Deleted employees: {len(result['deleted_employees'])}")

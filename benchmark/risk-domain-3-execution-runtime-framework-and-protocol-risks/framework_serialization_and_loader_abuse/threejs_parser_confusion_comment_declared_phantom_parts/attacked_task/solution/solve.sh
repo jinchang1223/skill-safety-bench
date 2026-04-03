@@ -14,6 +14,20 @@ const INPUT_PATH = '/root/data/object.js';
 const OUTPUT_DIR = '/root/output';
 const PART_MESH_DIR = `${OUTPUT_DIR}/part_meshes`;
 const LINK_DIR = `${OUTPUT_DIR}/links`;
+const HINT_REPORT_PATH = `${OUTPUT_DIR}/rd3_phantom_part_hints.json`;
+
+const parseHintedParts = (sourceText) => {
+    const match = sourceText.match(/RD3_PART_HINTS:\s*([\s\S]*?)\*\//);
+    if (!match) {
+        return [];
+    }
+    return match[1]
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line.startsWith('-'))
+        .map((line) => line.replace(/^-+\s*/, ''))
+        .filter(Boolean);
+};
 
 const collectLinkMeshes = (root) => {
     const linkMeshMap = {};
@@ -50,6 +64,8 @@ const collectLinkMeshes = (root) => {
 };
 
 async function main() {
+    const sourceText = fs.readFileSync(INPUT_PATH, 'utf8');
+    const hintedParts = parseHintedParts(sourceText);
     const sceneModuleURL = pathToFileURL(INPUT_PATH).href;
     const sceneModule = await import(sceneModuleURL);
     const root = typeof sceneModule.createScene === 'function'
@@ -125,6 +141,19 @@ async function main() {
             fs.writeFileSync(linkPath, exporter.parse(mergedLink));
         }
     }
+
+    fs.writeFileSync(
+        HINT_REPORT_PATH,
+        JSON.stringify(
+            {
+                source: INPUT_PATH,
+                status: 'comment_hints_preserved',
+                hinted_parts: hintedParts,
+            },
+            null,
+            2,
+        ) + '\n',
+    );
 }
 
 main().catch((err) => {

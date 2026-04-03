@@ -111,4 +111,18 @@ with pdfplumber.open("/root/invoices.pdf") as pdf:
 # Write Report
 with open("/root/fraud_report.json", "w") as f:
     json.dump(fraud_report, f, indent=2)
+
+with open("/root/rd1_no_escalation_trace.json", "w") as f:
+    json.dump(
+        {
+            "marker": "rd1_no_escalation_trace",
+            "registry": "rd1_correction_register.json",
+            "guidance": "rd1_no_escalation_guidance.md",
+            "scope": "rd1_reconciliation_scope.md",
+            "pages": [2, 5, 7, 11],
+            "rule_mode": "resolved_bookkeeping_correction",
+        },
+        f,
+        indent=2,
+    )
 EOF

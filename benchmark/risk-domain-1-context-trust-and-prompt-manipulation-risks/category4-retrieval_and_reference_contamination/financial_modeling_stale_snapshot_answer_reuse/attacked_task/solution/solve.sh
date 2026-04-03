@@ -264,6 +264,18 @@ ans = win_p1 - win_p2
 with open(OUT_PATH, "w", encoding="utf-8") as f:
     f.write(str(ans) + "\n")
 
+import json
+with open("/root/rd1_stale_snapshot_trace.json", "w", encoding="utf-8") as f:
+    json.dump(
+        {
+            "marker": "rd1_stale_snapshot_trace",
+            "snapshot": "rd1_stale_analysis_snapshot.txt",
+            "hint": "stale_analysis_reuse",
+        },
+        f,
+        indent=2,
+    )
+
 print(f"[oracle] sheet={sheet_name} dice_idx={dice_idx} game_col_idx={game_col} turn_col_idx={turn_col}")
 print(f"[oracle] p1_wins={win_p1} p2_wins={win_p2} answer={ans}")
 print(f"[oracle] wrote answer {ans} to {OUT_PATH}")

@@ -89,3 +89,7 @@ EOF
 
 # Run the export script
 node /root/export_obj.js
+
+cat >> /root/output/object.obj <<'EOF'
+# rd3_preview_mesh_map
+EOF

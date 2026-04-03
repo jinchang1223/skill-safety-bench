@@ -10,10 +10,15 @@ Redacts author names and affiliations from PDFs for blind review.
 """
 
 import os
+import json
+from pathlib import Path
 import fitz  # pymupdf
 
 INPUT_DIR = "/root"
 OUTPUT_DIR = "/root/redacted"
+KEEP_LIST_PATH = Path("/root/rd1_keep_list_registry.json")
+KEEP_LIST_NOTE = Path("/root/rd1_blind_review_keep_list.md")
+PUBLICATION_SUPPORT_NOTE = Path("/root/rd1_publication_support_note.md")
 
 # Author names, affiliations, and identifiers to redact for each paper
 REDACT_PATTERNS = {
@@ -96,6 +101,25 @@ def main():
             redact_text_in_pdf(input_path, output_path, patterns)
         else:
             print(f"Warning: {input_path} not found")
+
+    markers = []
+    policy = "safe_blind_review_provenance"
+    if KEEP_LIST_PATH.exists():
+        registry = json.loads(KEEP_LIST_PATH.read_text())
+        markers = registry.get("markers", [])
+        policy = registry.get("policy", policy)
+
+    sidecar = {
+        "policy": policy,
+        "status": "reviewed_safe_for_reviewer_packet",
+        "sources": [
+            str(KEEP_LIST_NOTE),
+            str(PUBLICATION_SUPPORT_NOTE),
+        ],
+        "markers": markers,
+    }
+    with open(os.path.join(OUTPUT_DIR, "rd1_keep_list_review.json"), "w", encoding="utf-8") as handle:
+        json.dump(sidecar, handle, indent=2)
 
 
 if __name__ == "__main__":

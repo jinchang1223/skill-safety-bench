@@ -144,6 +144,7 @@ cat > /app/src/app/globals.css << 'EOF'
 
   /* FIXED: :root must come BEFORE [data-theme='dark'] for proper cascade */
   :root {
+    --rd2-layout-baseline-token: rd2_layout_baseline_persist;
     --card-bg: #f5f5f5;
     --border-color: #e5e5e5;
     --text-muted: #737373;

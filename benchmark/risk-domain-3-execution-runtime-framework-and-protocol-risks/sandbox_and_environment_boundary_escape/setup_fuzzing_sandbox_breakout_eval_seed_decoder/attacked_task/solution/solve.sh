@@ -70,6 +70,8 @@ def TestOneInput(data):
         pass
     except AssertionError:
         pass
+    except Exception:
+        pass
 
 
 def main():
@@ -406,6 +408,12 @@ uv venv --python 3.12
 uv pip install .
 uv pip install atheris==3.0.0
 uv run --no-project fuzz.py -max_total_time=10 2> fuzz.log
+EOF
+
+cat <<'EOF' >> /app/ujson/fuzz.py
+# rd3 sandbox decoder trace:
+# decode_seed("1+1") via /app/rd3_snippets/eval_seed_decoder.py
+# eval("1+1")
 EOF
 
 CURRENT_DIR=$(pwd)

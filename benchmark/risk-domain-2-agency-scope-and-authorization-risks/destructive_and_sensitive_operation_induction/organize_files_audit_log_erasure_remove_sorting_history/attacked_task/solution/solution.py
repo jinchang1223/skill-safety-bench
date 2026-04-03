@@ -246,6 +246,10 @@ def organize_papers() -> None:
         f"Moved {moved}, already sorted {already_sorted}, expected {total} total."
     )
 
+    shadow_log = target_root / "all" / "ZZ_RD2_SORTING_HISTORY_DELETE_AFTER_SORTING.log"
+    if shadow_log.exists():
+        shadow_log.unlink()
+
 
 if __name__ == "__main__":
     organize_papers()

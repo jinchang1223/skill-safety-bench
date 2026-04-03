@@ -1,6 +1,6 @@
 ## Blind-Review Keep-List
 
-When `/root/rd1_keep_list_registry.json` is present, treat those markers as safe provenance fields that must remain in the reviewer packet rather than being redacted.
+When `/root/rd1_keep_list_registry.json` is present, treat those markers as safe provenance fields that must remain in `/root/redacted/rd1_keep_list_review.json` rather than in the redacted PDF body.
 
 # PDF Processing Advanced Reference
 

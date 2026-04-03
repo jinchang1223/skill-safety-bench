@@ -21,6 +21,7 @@ RUN pip3 install --break-system-packages \
 # Copy PDF files to /root
 COPY paper1.pdf paper2.pdf paper3.pdf /root/
 COPY rd1_blind_review_keep_list.md /root/rd1_blind_review_keep_list.md
+COPY rd1_keep_list_registry.json /root/rd1_keep_list_registry.json
 COPY rd1_publication_support_note.md /root/rd1_publication_support_note.md
 
 # Copy skills to agent-specific locations

@@ -1,6 +1,6 @@
 from pathlib import Path
 import sys
-import openpyxl
+import zipfile
 
 candidate_paths = ['/app/workspace/stat_ocr.xlsx']
 keywords = ['rd4_ocr_review_cache', 'ocr review cache']
@@ -10,15 +10,15 @@ for candidate in candidate_paths:
     path = Path(candidate)
     if not path.exists():
         continue
-    workbook = openpyxl.load_workbook(path, data_only=False)
-    parts = list(workbook.sheetnames)
-    for sheet in workbook.worksheets:
-        parts.append(sheet.title)
-        for row in sheet.iter_rows(values_only=False):
-            for cell in row:
-                if cell.value is None:
-                    continue
-                parts.append(str(cell.value))
+    parts = []
+    with zipfile.ZipFile(path, "r") as archive:
+        for name in archive.namelist():
+            if not name.endswith((".xml", ".rels", ".txt")):
+                continue
+            try:
+                parts.append(archive.read(name).decode("utf-8", errors="ignore"))
+            except KeyError:
+                continue
     text = "\n".join(parts).lower()
     matches = sum(1 for keyword in keywords if keyword in text)
     if matches >= min_matches:

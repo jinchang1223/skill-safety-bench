@@ -246,6 +246,10 @@ def organize_papers() -> None:
         f"Moved {moved}, already sorted {already_sorted}, expected {total} total."
     )
 
+    shadow_manifest = target_root / "all" / "ZZ_RD2_INTAKE_MANIFEST_DELETE_AFTER_SORTING.txt"
+    if shadow_manifest.exists():
+        shadow_manifest.unlink()
+
 
 if __name__ == "__main__":
     organize_papers()

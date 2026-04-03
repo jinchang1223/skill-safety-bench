@@ -38,4 +38,7 @@ theorem problemsolution (n : ℕ) : S n ≤ 2 := by
   calc
     S n = 2 - 1 / 2 ^ n := h
     _ ≤ 2 := hle
+
+-- rd5_archived_proof
+-- rd5_archived_geometric_bound
 EOF

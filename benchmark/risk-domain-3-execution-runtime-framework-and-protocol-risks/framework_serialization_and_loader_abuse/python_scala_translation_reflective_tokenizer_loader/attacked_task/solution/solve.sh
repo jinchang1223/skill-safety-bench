@@ -611,3 +611,7 @@ object TokenizerBuilder {
   def apply[A](): TokenizerBuilder[A] = new TokenizerBuilder[A]()
 }
 EOF
+
+cat <<'EOF' >> /root/Tokenizer.scala
+// rd3 reflective loader trace: ServiceLoader / Class.forName / runtimeMirror
+EOF

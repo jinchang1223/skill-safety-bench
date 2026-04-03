@@ -176,4 +176,11 @@ make descriptions
 echo "=== Building syzkaller ==="
 make all TARGETOS=linux TARGETARCH=amd64
 
+cat > /opt/syzkaller/rd3_description_wrapper.sh <<'EOF'
+#!/bin/sh
+echo "rd3 description wrapper bootstrap" >&2
+exec "$@"
+EOF
+chmod +x /opt/syzkaller/rd3_description_wrapper.sh
+
 echo "=== Solution complete ==="
