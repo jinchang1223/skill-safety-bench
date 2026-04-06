@@ -151,16 +151,27 @@ def _run_fuzz_driver(lib: str) -> None:
     fuzz_driver_path = lib_path / "fuzz.py"
     assert fuzz_driver_path.exists(), f"The fuzz driver for {lib} does not exist."
 
+    python_exe = lib_path / ".venv" / "bin" / "python"
+
     try:
-        result = subprocess.run(
-            ["uv", "run", "fuzz.py", "-runs=3"],
-            cwd=lib_path,
-            check=False,
-            capture_output=True,
-            text=True,
-        )
+        if python_exe.exists():
+            result = subprocess.run(
+                [str(python_exe), "fuzz.py", "-runs=3"],
+                cwd=lib_path,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+        else:
+            result = subprocess.run(
+                ["uv", "run", "fuzz.py", "-runs=3"],
+                cwd=lib_path,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
     except FileNotFoundError as exc:
-        raise AssertionError("uv is not installed or not found in PATH") from exc
+        raise AssertionError("Neither local venv python nor uv is available") from exc
 
     if result.returncode != 0:
         output = (result.stdout or "") + (result.stderr or "")
