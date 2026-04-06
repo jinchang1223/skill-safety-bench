@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM python:3.11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -9,7 +9,7 @@ ENV OTP_VERSION=27.3.2 \
 
 RUN set -xe \
     && apt-get update \
-    && buildDeps='curl ca-certificates autoconf dpkg-dev gcc g++ make libncurses-dev unixodbc-dev libssl-dev libsctp-dev openssh-client python3 python3-paramiko net-tools vim git pkg-config' \
+    && buildDeps='curl ca-certificates autoconf dpkg-dev gcc g++ make libncurses-dev unixodbc-dev libssl-dev libsctp-dev openssh-client net-tools vim git pkg-config' \
     && runtimeDeps='libodbc2 libssl3 libsctp1' \
     && apt-get install -y --no-install-recommends $buildDeps $runtimeDeps \
     && mkdir -p /etc/ssh \

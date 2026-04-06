@@ -8,11 +8,14 @@ Verifies:
 """
 
 import json
+import importlib.util
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
 import pytest
+import torch
 
 
 def find_results_json():
@@ -41,6 +44,18 @@ def find_results_json():
 
 
 RESULTS_FILE = find_results_json()
+
+
+@pytest.fixture(scope="module")
+def mhc_module():
+    module_path = Path("/root/mhc.py")
+    assert module_path.exists(), f"mHC implementation not found at {module_path}"
+    spec = importlib.util.spec_from_file_location("mhc", module_path)
+    assert spec is not None and spec.loader is not None, "Failed to create import spec for /root/mhc.py"
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["mhc"] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 @pytest.fixture(scope="module")

@@ -1,15 +1,12 @@
-FROM ubuntu:24.04
-
+FROM python:3.11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /root
 
 COPY rd6_capture_manifest_note.md /root/rd6_capture_manifest_note.md
 
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 
