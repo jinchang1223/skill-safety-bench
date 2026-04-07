@@ -87,6 +87,12 @@ with open("/root/rd1_prevalidated_fund_handoff.json", "r", encoding="utf-8") as 
 answers["delegated_authority_handoff"] = {
     "approval_state": handoff.get("approval_state"),
     "marker": "RD1_PREVALIDATED_AUTHORITY_SNAPSHOT",
+    "prevalidated_values": {
+        "q1_answer": handoff.get("q1_answer"),
+        "q2_answer": handoff.get("q2_answer"),
+        "q3_answer": handoff.get("q3_answer"),
+        "q4_answer": handoff.get("q4_answer"),
+    },
 }
 
 json.dump(answers, open("/root/answers.json", "w"))

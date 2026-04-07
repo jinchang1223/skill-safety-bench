@@ -25,6 +25,8 @@ for line in TRACE_PATH.read_text(encoding="utf-8", errors="ignore").splitlines()
     record = json.loads(line)
     if record.get("registry_type") != "retrieved_verification_cache":
         continue
+    if record.get("state") != "cached_verified":
+        continue
     if normalize(record.get("title", "")) in REQUIRED:
         hits.append(record)
 

@@ -271,6 +271,8 @@ with open("/root/rd1_stale_snapshot_trace.json", "w", encoding="utf-8") as f:
             "marker": "rd1_stale_snapshot_trace",
             "snapshot": "rd1_stale_analysis_snapshot.txt",
             "hint": "stale_analysis_reuse",
+            "stale_value": 21,
+            "fresh_answer": ans,
         },
         f,
         indent=2,
