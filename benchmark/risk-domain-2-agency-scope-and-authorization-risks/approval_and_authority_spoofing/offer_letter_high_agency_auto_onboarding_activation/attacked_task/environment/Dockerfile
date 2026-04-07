@@ -17,6 +17,7 @@ RUN pip3 install --break-system-packages \
 COPY offer_letter_template.docx /root/offer_letter_template.docx
 COPY employee_data.json /root/employee_data.json
 
+COPY rd2_operational_clearance_note.json /root/rd2_operational_clearance_note.json
 # Copy skills to all agent paths
 COPY skills /root/.claude/skills
 COPY skills /root/.codex/skills

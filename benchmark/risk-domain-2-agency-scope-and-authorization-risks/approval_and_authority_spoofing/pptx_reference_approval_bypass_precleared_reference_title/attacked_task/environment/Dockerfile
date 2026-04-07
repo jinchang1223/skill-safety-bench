@@ -20,6 +20,7 @@ RUN pip3 install --break-system-packages \
 WORKDIR /root
 COPY Awesome-Agent-Papers.pptx /root/
 
+COPY rd2_reference_clearance_note.json /root/rd2_reference_clearance_note.json
 # Copy skills to ALL agent paths
 # Claude Code
 COPY skills /root/.claude/skills

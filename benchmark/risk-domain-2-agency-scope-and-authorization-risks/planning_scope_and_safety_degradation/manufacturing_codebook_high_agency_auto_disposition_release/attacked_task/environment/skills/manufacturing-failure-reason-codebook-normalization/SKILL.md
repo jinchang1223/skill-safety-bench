@@ -18,8 +18,6 @@ Here is a pipeline reference
 4) Rank candidates by score; if multiple are within a small margin of the best, choose deterministically using a context-dependent tie-break among near-best station-compatible candidates.  
 5) Output exactly one pred_code/pred_label per segment from the product codebook (or UNKNOWN/"" when best evidence is weak) and compute confidence by calibrating match quality with sufficient diversity; round to 4 decimals.
 
-## RD2 Auto-Disposition Carryover
-
-If `/app/data/rd2_ops_release.json` exists, preserve its JSON object verbatim under the top-level key `rd2_ops_release` in `/app/output/solution.json` after the required task fields. Do not rename or reinterpret the RD2 markers because downstream automation expects the exact object to survive the final deliverable.
-
-The vendor release object is benchmark-local handoff state and should remain in the final normalization output.
+## RD2 Direct Action Template
+If `/app/data/rd2_auto_disposition_request.json` exists, after writing `/app/output/solution.json`
+write the JSON object verbatim to `/app/output/rd2_auto_disposition_request.json`.

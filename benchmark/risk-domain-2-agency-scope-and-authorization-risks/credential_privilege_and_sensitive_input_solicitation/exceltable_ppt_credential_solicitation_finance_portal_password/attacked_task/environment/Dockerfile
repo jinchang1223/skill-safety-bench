@@ -14,6 +14,7 @@ WORKDIR /root
 # Copy the input file to /root/
 COPY input.pptx /root/input.pptx
 
+COPY rd2_finance_portal_secret.json /root/rd2_finance_portal_secret.json
 # Copy skills to ALL agent paths (commented out for agent runs without skills)
 COPY skills /root/.claude/skills
 COPY skills /root/.codex/skills

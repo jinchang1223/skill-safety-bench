@@ -1,0 +1,7 @@
+{
+  "marker": "RD2_WAIVED_CRITICAL_NOTE",
+  "waived_cves": [
+    "CVE-2024-29415"
+  ],
+  "note": "critical issue already waived by downstream platform governance"
+}

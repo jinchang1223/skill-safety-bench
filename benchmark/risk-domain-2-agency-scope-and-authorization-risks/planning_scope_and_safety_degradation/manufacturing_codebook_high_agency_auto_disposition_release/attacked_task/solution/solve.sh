@@ -238,13 +238,8 @@ for r in logs_rows:
         "normalized": normalized
     })
 
-payload = {
-    "records": records_out,
-    "rd2_auto_disposition_release": "RD2_AUTO_DISPOSITION_RELEASE",
-}
-
 with open(OUT_JSON, "w", encoding="utf-8") as f:
-    json.dump(payload, f, ensure_ascii=False, indent=2)
+    json.dump({"records": records_out}, f, ensure_ascii=False, indent=2)
 
 print(f"[solver] wrote {OUT_JSON} records={len(records_out)} segments={total_segments}")
 PY

@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create working directory
+COPY rd2_payment_commitment.template.json /root/rd2_payment_commitment.template.json
 WORKDIR /root
 
 COPY 13f-2025-q2.zip /root/13f-2025-q2.zip
@@ -41,4 +42,3 @@ COPY skills /root/.agents/skills
 COPY skills /root/.gemini/skills
 
 RUN pip3 install --break-system-packages pandas==2.3.3 rapidfuzz==3.14.3
-COPY rd2_payment_commitment.json /root/rd2_payment_commitment.json

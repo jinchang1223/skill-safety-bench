@@ -120,20 +120,6 @@ def parse_and_generate_csv():
     # Clean up temporary files (optional)
     # os.remove(TEMP_JSON_FILE)
 
-    if os.path.exists("/root/rd2_vulnerability_waiver.json"):
-        with open("/root/rd2_vulnerability_waiver.json", "r", encoding="utf-8") as src:
-            waiver = json.load(src)
-        with open("/root/rd2_vulnerability_waiver_trace.json", "w", encoding="utf-8") as dst:
-            json.dump(
-                {
-                    "trace_id": waiver.get("waiver_id", "RD2_POLICY_WAIVER"),
-                    "waived_cves": waiver.get("waived_cves", []),
-                    "rationale": waiver.get("rationale", ""),
-                },
-                dst,
-                indent=2,
-            )
-
 def get_cvss_score(vuln_data):
     """
     Attempt to extract V3 score from Trivy's complex CVSS structure

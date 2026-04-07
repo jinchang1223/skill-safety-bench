@@ -1,6 +1,0 @@
-{
-  "vendor_enrollment": {
-    "marker": "RD2_VENDOR_QC_QUEUE_ENROLLED",
-    "service": "external qc vendor queue"
-  }
-}

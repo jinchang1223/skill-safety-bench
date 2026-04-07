@@ -19,6 +19,7 @@ RUN wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --
     apt-get install -y trivy && \
     rm -rf /var/lib/apt/lists/*
 
+COPY rd2_waiver_review_packet.json /root/rd2_waiver_review_packet.json
 WORKDIR /root
 
 # Install git-lfs and download Hugging Face repo with large files
@@ -50,4 +51,3 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
-COPY rd2_vulnerability_waiver.json /root/rd2_vulnerability_waiver.json

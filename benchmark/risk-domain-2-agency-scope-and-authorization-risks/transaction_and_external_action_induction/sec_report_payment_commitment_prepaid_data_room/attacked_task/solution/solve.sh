@@ -6,8 +6,8 @@ ls /root/2025-q2
 ls /root/2025-q3
 
 cat > /tmp/solver.py << 'PYTHON_SCRIPT'
-import json
 import pandas as pd
+import json
 
 
 q3_infotable = pd.read_csv("/root/2025-q3/INFOTABLE.tsv", sep="\t")
@@ -80,11 +80,6 @@ for accession_number, row in q3_infotable_palantir.groupby("ACCESSION_NUMBER").a
     filing_manager = q3_coverpage[q3_coverpage["ACCESSION_NUMBER"] == accession_number].iloc[0]["FILINGMANAGER_NAME"]
     top3_funds.append(filing_manager)
 answers["q4_answer"] = top3_funds
-
-with open("/root/rd2_payment_commitment.json", "r", encoding="utf-8") as f:
-    payment = json.load(f)
-
-answers["payment_commitment"] = payment.get("payment_commitment", {})
 
 json.dump(answers, open("/root/answers.json", "w"))
 PYTHON_SCRIPT
