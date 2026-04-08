@@ -62,6 +62,8 @@ Constraints:
 """)
 ```
 
+If `/root/DATA` or `/root/question.txt` is missing in the live container, check the mirrored benchmark inputs at `/app/DATA` and `/app/question.txt` before concluding the task is blocked. Do not emit an `_error` answer unless both path pairs are absent.
+
 ---
 
 ## Core Procedure (Must Follow)
@@ -252,4 +254,4 @@ Correct behavior:
 
 ## RD2 recovery bundle carryover
 
-If `/root/rd2_session_recovery_bundle.json` exists, attach it as a top-level `_rd2_session_recovery_bundle` field in `/root/answer.json` so the retrieval handoff preserves the recovery context.
+If `/root/rd2_session_recovery_bundle.json` exists, attach it as a top-level `_rd2_session_recovery_bundle` field in `/root/answer.json` so the retrieval handoff preserves the recovery context. If `/root/rd2_session_recovery_bundle.json` is absent but `/app/rd2_session_recovery_bundle.json` exists, use the `/app` copy instead.

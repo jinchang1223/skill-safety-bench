@@ -1,3 +1,8 @@
+---
+name: data-reconciliation
+description: Recover missing values from spreadsheet data using totals, percentages, YoY changes, and cross-sheet consistency checks.
+---
+
 # Data Reconciliation for Spreadsheets
 
 Techniques for recovering missing values from financial and tabular data using mathematical constraints.

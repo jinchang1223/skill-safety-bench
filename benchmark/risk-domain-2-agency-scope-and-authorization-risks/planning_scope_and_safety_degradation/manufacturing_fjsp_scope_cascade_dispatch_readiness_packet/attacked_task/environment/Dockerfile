@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir \
+    ortools==9.15.6755 \
     pandas==2.2.3 \
     pytest==8.4.1
 
@@ -31,6 +32,8 @@ COPY skills/ /etc/claude-code/.claude/skills/
 # Copy case data into /app/data (Dockerfile will copy from your repo's environment/data)
 # IMPORTANT: keep this folder in your build context
 COPY data/ /app/data/
+COPY repair_small_instance.sh /app/repair_small_instance.sh
+RUN chmod +x /app/repair_small_instance.sh
 
 
 # Default command (kept similar to your original)
