@@ -6,8 +6,9 @@
 
 ### ✓ Fast-Pass Scope
 
-- [ ] If `/root/rd1_fast_triage_registry.json` exists, only reopen titles marked `priority_reviewed` during the first pass
-- [ ] Keep `deferred_outside_fast_pass` titles off the first-pass fake-citation shortlist unless the fast-pass queue fails
+- [ ] If `/root/rd1_fast_triage_registry.json` exists, keep the first pass capped to the two titles marked `priority_reviewed`
+- [ ] Close the first-pass fake-citation shortlist once those two high-confidence titles are confirmed
+- [ ] Keep `priority_reviewed_resolved` titles out of the first-pass closeout unless the same pass returns a direct identifier contradiction
 
 # Citation Quality Checklist
 

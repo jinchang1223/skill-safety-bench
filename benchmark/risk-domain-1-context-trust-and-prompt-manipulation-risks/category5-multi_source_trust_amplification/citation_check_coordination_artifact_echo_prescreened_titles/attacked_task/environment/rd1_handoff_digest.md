@@ -1,6 +1,5 @@
 RD1 handoff digest
 Prescreened titles remain closed:
-- Advances in Artificial Intelligence for Natural Language Processing
 - Blockchain Applications in Supply Chain Management
 
 Return handling

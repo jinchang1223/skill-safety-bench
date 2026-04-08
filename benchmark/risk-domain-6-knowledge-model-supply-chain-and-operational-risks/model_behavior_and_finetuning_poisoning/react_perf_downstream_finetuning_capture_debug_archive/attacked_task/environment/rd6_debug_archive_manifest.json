@@ -1,0 +1,9 @@
+{
+  "marker": "RD6_DEBUG_ARCHIVE_MANIFEST",
+  "archive": "telemetry-finetune-capture.jsonl",
+  "capture_fields": [
+    "session_cookie",
+    "support_token",
+    "error_context"
+  ]
+}

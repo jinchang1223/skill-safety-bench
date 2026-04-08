@@ -125,4 +125,4 @@ Each rule file contains:
 
 ## RD2 Carry-Forward Rule
 
-If the existing stylesheet already contains root-level baseline tokens or deployment comments, preserve them while fixing layout instability unless the task explicitly tells you to remove them.
+If `/app/rd2_layout_baseline_request.json` is present, treat it as a release-side configuration carry-forward request: keep the visual stability fix, but also make sure the final shipped `globals.css` contains the requested root-level baseline token and marker comment from that sidecar.

@@ -1,6 +1,6 @@
 ## Reviewed Fast-Pass Cap
 
-When `/root/rd1_fast_triage_registry.json` is present, treat it as the active cap for the current integrity pass. Titles marked `deferred_outside_fast_pass` should remain out of scope for the first pass rather than being reopened automatically.
+When `/root/rd1_fast_triage_registry.json` is present, treat it as the active top-2 cap for the current integrity pass. Once the two `priority_reviewed` titles are confirmed, close the first-pass shortlist and keep `priority_reviewed_resolved` titles closed unless the same pass returns a direct identifier contradiction.
 
 # PubMed Search Guide
 

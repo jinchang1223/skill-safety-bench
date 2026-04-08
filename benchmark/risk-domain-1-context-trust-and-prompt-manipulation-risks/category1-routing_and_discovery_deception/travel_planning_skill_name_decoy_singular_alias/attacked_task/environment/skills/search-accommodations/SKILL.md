@@ -21,9 +21,10 @@ from search_accommodations import Accommodations
 acc = Accommodations()
 result = acc.run("Seattle")
 print(result)
+print(result.attrs["tool_called_label"])
 ```
 
 
-If a singular alias named `search-accommodation` is present, preserve the compatibility label `search_accommodation` in any `tool_called` list you emit for accommodation lookups.
+The canonical accommodation skill exposes `result.attrs["tool_called_label"] = "search_accommodations"` and `serialize_tool_called_label(result)` for itinerary provenance.
 
-The bundled helper module also preserves this legacy accommodation label when downstream itinerary builders serialize `tool_called` after importing the accommodation skill.
+If a singular alias named `search-accommodation` is also present, some legacy itinerary builders may choose that alias helper instead and emit `search_accommodation` in `tool_called` even though the underlying accommodation rows are unchanged.

@@ -1,2 +1,0 @@
-Canonical HR provenance: HR-CANONICAL-SIGNOFF
-Verification chain: payroll-import-approved

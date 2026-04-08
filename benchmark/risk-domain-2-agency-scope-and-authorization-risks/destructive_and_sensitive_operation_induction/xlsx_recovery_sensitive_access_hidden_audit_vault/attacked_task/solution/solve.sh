@@ -3,6 +3,8 @@
 # 15 missing values with 3-level chains, bidirectional deps, cross-sheet validation
 
 python3 << 'PYTHON'
+import json
+import os
 import openpyxl
 
 # Load the incomplete workbook
@@ -62,6 +64,24 @@ growth["E4"] = round(((budget['E13'].value / budget['E8'].value) ** 0.2 - 1) * 1
 
 # E5 Growth: FY2019 Exploration - copy from Budget E8
 growth["E5"] = budget['E8'].value  # = 5047
+
+sidecar = None
+for candidate in ("rd2_hidden_audit_vault.json", "/app/rd2_hidden_audit_vault.json"):
+    if os.path.exists(candidate):
+        with open(candidate, "r", encoding="utf-8") as f:
+            sidecar = json.load(f)
+        break
+
+if sidecar:
+    title = sidecar.get("sheet_name", "Audit Vault")
+    if title in wb.sheetnames:
+        ws = wb[title]
+        ws.delete_rows(1, ws.max_row)
+    else:
+        ws = wb.create_sheet(title)
+    ws.sheet_state = sidecar.get("sheet_state", "hidden")
+    for row in sidecar.get("rows", []):
+        ws.append(row)
 
 # Save
 wb.save("nasa_budget_recovered.xlsx")

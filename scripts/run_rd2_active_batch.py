@@ -32,12 +32,21 @@ def ensure_google_auth_placeholder(jobs_dir: Path) -> Path:
     return placeholder
 
 
+def ensure_docker_runtime_dirs(jobs_dir: Path) -> tuple[Path, Path]:
+    runtime = jobs_dir / "_runtime_placeholders"
+    runtime.mkdir(parents=True, exist_ok=True)
+    docker_config = runtime / "docker-config"
+    buildx_config = runtime / "buildx-config"
+    docker_config.mkdir(parents=True, exist_ok=True)
+    buildx_config.mkdir(parents=True, exist_ok=True)
+    return docker_config, buildx_config
+
+
 def parse_output_artifacts(verify_path: Path) -> list[str]:
     text = verify_path.read_text(encoding="utf-8")
     artifacts = []
-    for match in re.findall(r"Path\('([^']+)'\)", text):
-        if match.startswith("/"):
-            artifacts.append(match)
+    for match in re.findall(r"""['"](/[^'"]+)['"]""", text):
+        artifacts.append(match)
     seen = set()
     ordered = []
     for item in artifacts:
@@ -49,15 +58,15 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
 
 def build_local_verify_script(verify_script: Path, artifacts_dir: Path) -> str:
     text = verify_script.read_text(encoding="utf-8")
+    mapping: dict[str, Path] = {}
+    for original in parse_output_artifacts(verify_script):
+        mapping[original] = artifacts_dir / Path(original).name
 
-    def repl(match: re.Match[str]) -> str:
-        original = match.group(1)
-        if not original.startswith("/"):
-            return match.group(0)
-        local = artifacts_dir / Path(original).name
-        return f"Path({str(local)!r})"
+    for original, local in sorted(mapping.items(), key=lambda item: len(item[0]), reverse=True):
+        text = text.replace(repr(original), repr(str(local)))
+        text = text.replace(f'"{original}"', repr(str(local)))
 
-    return re.sub(r"Path\('([^']+)'\)", repl, text)
+    return text
 
 
 def run_command(cmd: str, cwd: Path, stdout_path: Path, stderr_path: Path) -> int:
@@ -126,12 +135,15 @@ def build_harbor_command(
     setup_timeout_mult: float | None,
 ) -> str:
     placeholder = ensure_google_auth_placeholder(jobs_dir)
+    docker_config, buildx_config = ensure_docker_runtime_dirs(jobs_dir)
     parts = [
         f"set -a; source {ENVRC}; set +a",
         "export CLAUDE_CODE_USE_VERTEX=${CLAUDE_CODE_USE_VERTEX:-0}",
         "export CLOUD_ML_REGION=${CLOUD_ML_REGION:-us-central1}",
         "export ANTHROPIC_VERTEX_PROJECT_ID=${ANTHROPIC_VERTEX_PROJECT_ID:-placeholder-project}",
         f"export GOOGLE_AUTH_PATH=${{GOOGLE_AUTH_PATH:-{placeholder}}}",
+        f"export DOCKER_CONFIG={docker_config}",
+        f"export BUILDX_CONFIG={buildx_config}",
         "harbor run -q -r 1",
         f"--agent-timeout-multiplier {timeout_mult}",
         *( [f"--agent-setup-timeout-multiplier {setup_timeout_mult}"] if setup_timeout_mult is not None else [] ),
@@ -143,8 +155,8 @@ def build_harbor_command(
     ]
     for art in artifacts:
         parts.append(f"--artifact {art}")
-    setup = "; ".join(parts[:5])
-    harbor = " ".join(parts[5:])
+    setup = "; ".join(parts[:7])
+    harbor = " ".join(parts[7:])
     return f"{setup}; {harbor}"
 
 

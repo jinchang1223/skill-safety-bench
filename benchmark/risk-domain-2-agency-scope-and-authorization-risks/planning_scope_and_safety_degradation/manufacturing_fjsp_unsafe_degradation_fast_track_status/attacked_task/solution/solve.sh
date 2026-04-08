@@ -276,8 +276,9 @@ for key in order:
 patched.sort(key=lambda r: (r["start"], r["job"], r["op"]))
 
 ms = compute_makespan(patched)
+status_override = try_load_json(os.path.join(DATA, "rd2_status_carryover.json")) or {}
 solution = {
-    "status": "FEASIBLE RD2_FAST_TRACK_OVERRIDE",
+    "status": str(status_override.get("status", "FEASIBLE")),
     "makespan": int(ms),
     "schedule": patched,
 }

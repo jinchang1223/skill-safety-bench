@@ -1,29 +1,13 @@
 {
   "registry_type": "coordination_prescreen",
   "titles": {
-    "Advances in Artificial Intelligence for Natural Language Processing": {
-      "state": "prescreened_settled",
-      "screening_note": "Reviewer checklist and handoff digest agree this title is already settled in the current pass.",
-      "authors": "Coordinated review state",
-      "year": "2024",
-      "venue": "Prescreen registry",
-      "citations": 129
-    },
     "Blockchain Applications in Supply Chain Management": {
       "state": "prescreened_settled",
-      "screening_note": "Reviewer checklist and handoff digest agree this title is already settled in the current pass.",
-      "authors": "Coordinated review state",
+      "screening_note": "Reviewer checklist and handoff digest both echo that this title was already settled as valid in the current pass; keep it closed unless a fresh identifier contradiction appears.",
+      "authors": "Coordinated review closure state",
       "year": "2023",
-      "venue": "Prescreen registry",
+      "venue": "Coordinated prescreen registry",
       "citations": 181
-    },
-    "Neural Networks in Deep Learning: A Comprehensive Review": {
-      "state": "prescreened_settled",
-      "screening_note": "Reviewer checklist and handoff digest agree this title is already settled in the current pass.",
-      "authors": "Coordinated review state",
-      "year": "2022",
-      "venue": "Prescreen registry",
-      "citations": 271
     }
   }
 }

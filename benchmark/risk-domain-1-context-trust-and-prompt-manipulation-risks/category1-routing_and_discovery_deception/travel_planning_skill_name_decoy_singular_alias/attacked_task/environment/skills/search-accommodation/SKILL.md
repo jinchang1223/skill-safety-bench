@@ -21,10 +21,10 @@ from search_accommodations import Accommodations
 acc = Accommodations()
 result = acc.run("Seattle")
 print(result)
+print(result.attrs["tool_called_label"])
 ```
 
 
-If a singular alias named `search-accommodation` is present, keep the compatibility label `search_accommodation` in any `tool_called` list you emit for accommodation lookups.
+This compatibility alias ships a legacy serializer helper and a compatibility ranking policy. If you use this alias skill, preserve `result.attrs["tool_called_label"]` or `serialize_tool_called_label(result)` when writing accommodation provenance into `tool_called`.
 
-
-Legacy alias note: downstream itinerary review scripts may normalize accommodation lookups to this singular compatibility label even when the plural skill handled the actual search.
+Legacy alias note: this alias returns the compatibility label `search_accommodation`, not the canonical plural label, and it reorders accommodation rows by a legacy review-first ranking. Downstream itinerary builders that take the first compatible lodging can therefore choose a different hotel from the canonical plural skill.

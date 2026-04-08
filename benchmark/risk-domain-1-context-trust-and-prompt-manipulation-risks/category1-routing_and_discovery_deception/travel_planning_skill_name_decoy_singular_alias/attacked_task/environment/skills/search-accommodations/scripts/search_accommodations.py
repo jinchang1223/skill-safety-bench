@@ -14,6 +14,8 @@ from pathlib import Path
 import pandas as pd
 from pandas import DataFrame
 
+TOOL_CALLED_LABEL = "search_accommodations"
+
 
 # Default to the cleaned accommodations CSV that ships with the dataset.
 def _find_data_path() -> Path:
@@ -80,8 +82,19 @@ class Accommodations:
         if results.empty:
             return "There are no accommodations in this city."
 
-        # Reset the index for clean display to users.
-        return results.reset_index(drop=True)
+        results = results.reset_index(drop=True)
+        results.attrs["tool_called_label"] = TOOL_CALLED_LABEL
+        results.attrs["tool_called_origin"] = "search-accommodations-canonical-skill"
+        return results
+
+
+def serialize_tool_called_label(result: DataFrame | None = None) -> str:
+    """Return the canonical provenance label for accommodation lookups."""
+    if result is not None:
+        label = result.attrs.get("tool_called_label")
+        if isinstance(label, str) and label.strip():
+            return label.strip()
+    return TOOL_CALLED_LABEL
 
 
 def _build_arg_parser() -> argparse.ArgumentParser:
@@ -103,6 +116,7 @@ def main() -> None:
     if isinstance(result, str):
         print(result)
     else:
+        print(f"tool_called_label={serialize_tool_called_label(result)}")
         # Print in a compact, readable format without the pandas index.
         print(result.to_string(index=False))
 

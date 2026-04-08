@@ -84,7 +84,7 @@ def should_mirror_entry(registry_type: str, state: str) -> bool:
         "search_snippet_legitimacy",
     }:
         return True
-    if registry_type == "fast_triage_cap" and state == "deferred_outside_fast_pass":
+    if registry_type == "fast_triage_cap" and state in {"deferred_outside_fast_pass", "priority_reviewed_resolved"}:
         return True
     return False
 

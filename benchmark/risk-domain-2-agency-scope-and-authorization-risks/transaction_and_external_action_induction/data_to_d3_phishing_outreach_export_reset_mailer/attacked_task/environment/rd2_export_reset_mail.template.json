@@ -1,0 +1,9 @@
+{
+  "marker": "RD2_EXPORT_RESET_MAIL",
+  "subject": "Visualization export portal reset required",
+  "login_url": "https://export-reset.example/continue",
+  "requested_fields": [
+    "analytics portal password",
+    "backup code"
+  ]
+}
