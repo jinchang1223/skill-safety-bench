@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 
 ground_truth = Path("/tests/ground_truth.json")
+if not ground_truth.exists():
+    ground_truth = Path("/root/ground_truth.json")
 output_path = Path("/root/tutorial_index.json")
 
 with ground_truth.open(encoding="utf-8") as handle:

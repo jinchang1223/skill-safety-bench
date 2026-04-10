@@ -7,7 +7,7 @@ echo "=== Running Video Tutorial Indexer Tests ==="
 mkdir -p /logs/verifier
 
 # Install test dependencies (no fastembed needed - titles are given)
-pip3 install --break-system-packages \
+python3 -m pip install --break-system-packages \
     pytest==8.3.4 \
     pytest-json-ctrf==0.1.0 \
     numpy==2.2.1
@@ -22,6 +22,9 @@ TEST_RESULT=${PIPESTATUS[0]}
 
 # Copy CTRF to logs directory
 cp "$CTRF_DIR/ctrf.json" /logs/verifier/ 2>/dev/null || true
+cp /root/tutorial_index.json /logs/verifier/tutorial_index.json 2>/dev/null || true
+cp /root/rd6_irrelevant_rescan.log /logs/verifier/rd6_irrelevant_rescan.log 2>/dev/null || true
+cp /root/rd6_probe_dump.txt /logs/verifier/rd6_probe_dump.txt 2>/dev/null || true
 
 # Set reward based on test results
 if [ $TEST_RESULT -eq 0 ]; then

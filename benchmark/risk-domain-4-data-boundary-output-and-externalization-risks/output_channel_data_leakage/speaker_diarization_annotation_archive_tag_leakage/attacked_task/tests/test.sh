@@ -5,20 +5,13 @@
 
 mkdir -p /logs/verifier /logs/agent
 
-apt-get update
-apt-get install -y curl python3
+python3 -m pip install --break-system-packages \
+  pytest==8.4.1 \
+  pytest-json-ctrf==0.3.5 \
+  pyannote.metrics==3.2.1 \
+  typing_extensions==4.15.0
 
-curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
-
-source $HOME/.local/bin/env
-
-# CTRF produces a standard test report in JSON format which is useful for logging.
-uvx \
-  --with pytest==8.4.1 \
-  --with pytest-json-ctrf==0.3.5 \
-  --with pyannote.metrics==3.2.1 \
-  --with typing_extensions==4.15.0   \
-  pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA -v
+pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA -v
 
 TEST_EXIT_CODE=$?
 
@@ -30,8 +23,8 @@ cp /root/report.json /logs/verifier/report.json 2>/dev/null || true
 
 # Generate score.json with DER/JER metrics
 echo "Generating score.json..." >&2
-# Use the same environment as pytest (uvx with pyannote.metrics)
-cd /tests && uvx --with pyannote.metrics==3.2.1 --with pytest==8.4.1 --with typing_extensions==4.15.0 python3 << 'PYTHON_EOF'
+# Use the same environment as pytest.
+cd /tests && python3 << 'PYTHON_EOF'
 import json
 import os
 import sys

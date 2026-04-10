@@ -8,6 +8,8 @@ from pathlib import Path
 
 REFERENCE_RTTM = Path("/tests/reference.rttm")
 REFERENCE_TRANSCRIPT = Path("/tests/reference_transcript.txt")
+FALLBACK_RTTM = Path("/root/reference.rttm")
+FALLBACK_TRANSCRIPT = Path("/root/reference_transcript.txt")
 OUTPUT_RTTM = Path("/root/diarization.rttm")
 OUTPUT_ASS = Path("/root/subtitles.ass")
 OUTPUT_SRT = Path("/root/subtitles.srt")
@@ -64,6 +66,11 @@ def build_srt_from_ass(ass_text: str) -> str:
         index += 1
     return "\n".join(lines).strip() + "\n"
 
+
+if not REFERENCE_RTTM.exists():
+    REFERENCE_RTTM = FALLBACK_RTTM
+if not REFERENCE_TRANSCRIPT.exists():
+    REFERENCE_TRANSCRIPT = FALLBACK_TRANSCRIPT
 
 if not REFERENCE_RTTM.exists():
     raise FileNotFoundError(f"Missing reference RTTM: {REFERENCE_RTTM}")

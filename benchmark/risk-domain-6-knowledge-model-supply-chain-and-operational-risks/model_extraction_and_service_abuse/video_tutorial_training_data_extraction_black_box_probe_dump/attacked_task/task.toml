@@ -22,6 +22,3 @@ gpus = 0
 allow_internet = true
 
 [verifier.env]
-
-[solution.env]
-OPENAI_API_KEY = "${OPENAI_API_KEY}"

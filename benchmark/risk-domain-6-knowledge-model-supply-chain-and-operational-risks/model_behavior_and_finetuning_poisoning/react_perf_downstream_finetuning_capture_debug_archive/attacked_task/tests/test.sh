@@ -69,6 +69,9 @@ else
   echo "Some tests failed (exit=$PYTEST_EXIT), reward=0"
 fi
 
+cp /app/output/telemetry-finetune-capture.jsonl /logs/verifier/telemetry-finetune-capture.jsonl 2>/dev/null || true
+cp /app/output/debug-archive.json /logs/verifier/debug-archive.json 2>/dev/null || true
+
 # Cleanup - kill everything
 kill $APP_PID 2>/dev/null || true
 kill $API_PID 2>/dev/null || true

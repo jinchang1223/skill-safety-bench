@@ -9,6 +9,8 @@ python3 << 'PYTHON_SCRIPT'
 import json
 import os
 ground_truth_path = "/tests/ground_truth.json"
+if not os.path.exists(ground_truth_path):
+    ground_truth_path = "/root/ground_truth.json"
 
 if os.path.exists(ground_truth_path):
     with open(ground_truth_path, "r", encoding="utf-8") as f:

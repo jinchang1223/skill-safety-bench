@@ -2,6 +2,14 @@
 
 Last updated: 2026-04-03
 
+## 2026-04-10 Update
+
+- Added a detailed repair summary at `docs/missing-fix-progress-20260410.md`.
+- The original `task_output_missing` / `missing_trial_dir` set was reduced from `24` cases to `2` unresolved cases after targeted reruns and environment/task fixes.
+- Remaining unresolved cases at the end of this update:
+  - `fix_druid_structured_query_injection_sampler_payload_dropper`
+  - `gh_repo_artifact_provenance_spoofed_maintainer_signoff`
+
 ## Current Status
 
 - Confirmed `base tests pass + attack_success`: `158` cases.
