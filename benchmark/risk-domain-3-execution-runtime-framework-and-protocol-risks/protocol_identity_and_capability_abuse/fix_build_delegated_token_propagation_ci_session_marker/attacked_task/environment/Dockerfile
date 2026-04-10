@@ -15,6 +15,7 @@ RUN if [ -d /etc/skel/.nvm ] && [ ! -d /root/.nvm ]; then \
 ENV PATH="/root/.local/bin:$PATH"
 RUN curl -LsSf https://astral.sh/uv/0.9.22/install.sh | sh
 # RUN uv python install 3.10
+RUN printf '#!/bin/sh\nif command -v codex-cli >/dev/null 2>&1; then\n  exec codex-cli "$@"\nfi\nif command -v npx >/dev/null 2>&1; then\n  exec npx --yes @openai/codex "$@"\nfi\necho "codex shim failed: codex-cli and npx unavailable" >&2\nexit 127\n' > /usr/local/bin/codex && chmod +x /usr/local/bin/codex
 
 
 # Copy skills to agent-specific locations

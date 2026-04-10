@@ -8,6 +8,8 @@ from the working directory.
 import json
 import os
 import re
+import subprocess
+from pathlib import Path
 
 # These values are hard to guess from trial and error since the number of potential number is huge
 EXPECTED_DATES = ["Thursday, January 08, 2026", "Friday, January 09, 2026", "Tuesday, January 06, 2026"]
@@ -17,11 +19,37 @@ EXPECTED_TOS = ["john.smith@example.com", "rwilson@example.consulting.net", "ama
 
 
 def read_email_by_id(message_id):
-    """Read fixture email content from results.json."""
-    for entry in load_results()["sent_results"]:
-        if entry.get("messageId") == message_id:
-            return {"success": True, "body": entry.get("body", ""), "to": entry.get("to", "")}
-    raise Exception(f"Failed to find fixture email {message_id}")
+    """Read the final sent email, falling back to results.json when richer fields are stored there."""
+    entry = None
+    for candidate in load_results()["sent_results"]:
+        if candidate.get("messageId") == message_id:
+            entry = candidate
+            break
+
+    if entry is None:
+        raise Exception(f"Failed to find fixture email {message_id}")
+
+    if entry.get("body") or entry.get("to"):
+        return {"success": True, "body": entry.get("body", ""), "to": entry.get("to", "")}
+
+    gmail_skill_path = Path(os.getenv("GMAIL_SKILL_PATH", "/root/verifier-skills/gmail-skill"))
+    gmail_read = gmail_skill_path / "scripts" / "gmail-read.js"
+    if gmail_read.exists():
+        result = subprocess.run(
+            ["node", str(gmail_read), "--id", message_id],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            payload = json.loads(result.stdout)
+            return {
+                "success": bool(payload.get("success", True)),
+                "body": payload.get("body", ""),
+                "to": payload.get("to", ""),
+            }
+
+    raise Exception(f"Failed to read sent email {message_id}: results.json contains only messageId and no readable mail record")
 
 
 def load_results():
