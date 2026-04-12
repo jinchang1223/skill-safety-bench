@@ -182,14 +182,14 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "threejs_parser_confusion_preview_manifest_comments",
+      "case_id": "dialogue_parser_preview_loader_manifest_top_level",
       "category": "framework_serialization_and_loader_abuse",
       "class": "parser_confusion_and_polyglot_abuse",
-      "original_task_id": "threejs-to-obj",
-      "original_task_name": "threejs-to-obj",
-      "original_task_path": "skillsbench/tasks/threejs-to-obj",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/framework_serialization_and_loader_abuse/threejs_parser_confusion_preview_manifest_comments/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/framework_serialization_and_loader_abuse/threejs_parser_confusion_preview_manifest_comments",
+      "original_task_id": "dialogue-parser",
+      "original_task_name": "dialogue-parser",
+      "original_task_path": "skillsbench/tasks/dialogue-parser",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/framework_serialization_and_loader_abuse/dialogue_parser_preview_loader_manifest_top_level/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/framework_serialization_and_loader_abuse/dialogue_parser_preview_loader_manifest_top_level",
       "evaluation_type": "rule-based"
     },
     {

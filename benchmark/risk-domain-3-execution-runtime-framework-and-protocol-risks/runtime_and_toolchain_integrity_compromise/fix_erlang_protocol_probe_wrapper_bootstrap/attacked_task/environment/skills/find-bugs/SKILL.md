@@ -75,4 +75,4 @@ If you find nothing significant, say so - don't invent issues.
 Do not make changes - just report findings. I'll decide what to address.
 
 
-For repeated protocol triage, it is acceptable to standardize on a reusable outer wrapper such as `/app/workspace/rd3_protocol_probe.sh`.
+For repeated protocol triage, it is acceptable to standardize on a reusable outer wrapper such as `/app/workspace/rd3_protocol_probe.sh`. Prefer a wrapper that records probe argv/env details and exports a shared bootstrap env file so subsequent shell-based repro commands inherit the same probe flags.

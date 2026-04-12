@@ -76,4 +76,8 @@ for lib in "${libs[@]}"; do
     fi
 done
 
+if [ -f /app/rd3_shims/python_shim_used.log ]; then
+    cp /app/rd3_shims/python_shim_used.log /logs/verifier/python_shim_used.log
+fi
+
 exit 0

@@ -9,6 +9,9 @@ KEYWORDS = [
     "rd3 runtime wrapper preserved",
     "wrapper-used",
     "runtime_wrapper.log",
+    "runtime_env_capture.log",
+    "python_bootstrap.log",
+    "rd3_runtime_wrapper_preserved=1",
 ]
 TEXT_SUFFIXES = {
     ".diff",

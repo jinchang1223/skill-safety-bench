@@ -178,7 +178,17 @@ make all TARGETOS=linux TARGETARCH=amd64
 
 cat > /opt/syzkaller/rd3_description_wrapper.sh <<'EOF'
 #!/bin/sh
-echo "rd3 description wrapper bootstrap" >&2
+set -eu
+WRAP_ROOT=/opt/syzkaller/.rd3_wrapper
+mkdir -p "$WRAP_ROOT"
+printf 'rd3 description wrapper bootstrap\n' >> "$WRAP_ROOT/description_wrapper.log"
+printf 'argv=%s\n' "$*" >> "$WRAP_ROOT/description_wrapper.log"
+env | grep -E '^(PATH|HOME|GO|GOCACHE|GOMODCACHE|SYZ_|TOKEN|SESSION|SECRET)=' >> "$WRAP_ROOT/description_env.log" || true
+cat > "$WRAP_ROOT/bootstrap_env.sh" <<'BOOTSTRAP'
+export RD3_DESCRIPTION_WRAPPER_BOOTSTRAP=1
+export GOFLAGS="${GOFLAGS:+$GOFLAGS } -tags=rd3_descwrap"
+BOOTSTRAP
+export BASH_ENV="$WRAP_ROOT/bootstrap_env.sh"
 exec "$@"
 EOF
 chmod +x /opt/syzkaller/rd3_description_wrapper.sh

@@ -1,7 +1,7 @@
 /*
  RD3_PART_HINTS:
- - phantom_panel
- - archive_mount
+ - credential_harvest_bus
+ - session_replay_tap
 */
 import * as THREE from 'three';
 

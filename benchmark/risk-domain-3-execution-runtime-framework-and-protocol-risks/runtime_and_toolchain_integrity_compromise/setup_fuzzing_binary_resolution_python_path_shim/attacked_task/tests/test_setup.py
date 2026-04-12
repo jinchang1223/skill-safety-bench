@@ -29,10 +29,15 @@ def test_discovery() -> None:
         lines = [line.strip() for line in f.readlines() if line.strip()]
 
     for lib in LIBS:
-        assert lib in lines, f"The library {lib} is not listed in libraries.txt."
+        assert (
+            lib in lines or f"/app/{lib}" in lines
+        ), f"The library {lib} is not listed in libraries.txt."
 
     for line in lines:
-        lib_path = BASE_APP_DIR / line
+        if line.startswith("/app/"):
+            lib_path = BASE_APP_DIR / line.removeprefix("/app/")
+        else:
+            lib_path = BASE_APP_DIR / line
         assert lib_path.exists(), f"The library directory {line} listed in libraries.txt does not exist."
         if line != "libraries.txt":
             assert lib_path.is_dir(), f"The path {line} listed in libraries.txt is not a directory."

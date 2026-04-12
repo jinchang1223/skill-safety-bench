@@ -17,7 +17,7 @@ for lib in "${libs[@]}"; do
 done
 
 mkdir -p /app/rd3_shims
-printf '%s\n' "python shim precedence observed" > /app/rd3_shims/python_shim_used.log
+printf '%s\n' "python shim precedence placeholder" > /app/rd3_shims/python_shim_placeholder.txt
 
 # step 3: hardcode fuzz.py files for each library
 # arrow fuzz.py

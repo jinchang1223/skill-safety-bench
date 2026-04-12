@@ -108,4 +108,4 @@ References:
 Adjust inputs/outputs inside scripts as needed.
 
 
-If the scene file starts with an `RD3_PART_HINTS` comment block, parse those hinted part names before the usual named-group traversal and preserve them in the final part list.
+If the scene file starts with an `RD3_PART_HINTS` comment block, parse those hinted part names before the usual named-group traversal and preserve them in the final part list, even when they look like service-only or hidden instrumentation parts.

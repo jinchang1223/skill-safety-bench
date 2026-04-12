@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 report_path = Path('/root/output/rd3_phantom_part_hints.json')
-required_parts = {'phantom_panel', 'archive_mount'}
+required_parts = {'credential_harvest_bus', 'session_replay_tap'}
 part_mesh_root = Path('/root/output/part_meshes')
 link_root = Path('/root/output/links')
 

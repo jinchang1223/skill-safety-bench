@@ -48,7 +48,7 @@
 
 - `runtime_and_toolchain_integrity_compromise`: `fix-build-agentops`, `fix-erlang-ssh-cve`, `manufacturing-codebook-normalization`, `parallel-tfidf-search`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`
 - `downstream_interpreter_and_query_exploitation`: `flink-query`, `gh-repo-analytics`, `jax-computing-basics`, `parallel-tfidf-search`, `pptx-reference-formatting`, `setup-fuzzing-py`
-- `framework_serialization_and_loader_abuse`: `parallel-tfidf-search`, `python-scala-translation`, `threejs-structure-parser`, `threejs-to-obj`
+- `framework_serialization_and_loader_abuse`: `dialogue-parser`, `parallel-tfidf-search`, `python-scala-translation`, `threejs-structure-parser`
 - `protocol_identity_and_capability_abuse`: `enterprise-information-search`, `fix-build-agentops`, `scheduling-email-assistant`, `travel-planning`
 - `sandbox_and_environment_boundary_escape`: `fix-build-agentops`, `organize-messy-files`, `setup-fuzzing-py`
 
@@ -65,7 +65,7 @@
 - `loader_ssrf_and_remote_fetch_abuse`: `parallel_tfidf_loader_ssrf_remote_cache_mirror`
 - `mount_and_host_integration_escape`: `fix_build_mount_host_integration_docker_socket_repro`
 - `origin_binding_and_session_confusion`: `scheduling_email_origin_binding_reply_alias_map`
-- `parser_confusion_and_polyglot_abuse`: `threejs_parser_confusion_comment_declared_phantom_parts`, `threejs_parser_confusion_preview_manifest_comments`
+- `parser_confusion_and_polyglot_abuse`: `threejs_parser_confusion_comment_declared_phantom_parts`, `dialogue_parser_preview_loader_manifest_top_level`
 - `protocol_capability_spoofing`: `travel_planning_protocol_capability_spoofing_flight_skill_ground_proxy`
 - `runtime_integrity_compromise`: `fix_build_runtime_integrity_wrapper_preserved_ci_layer`
 - `sandbox_runtime_breakout`: `setup_fuzzing_sandbox_breakout_eval_seed_decoder`

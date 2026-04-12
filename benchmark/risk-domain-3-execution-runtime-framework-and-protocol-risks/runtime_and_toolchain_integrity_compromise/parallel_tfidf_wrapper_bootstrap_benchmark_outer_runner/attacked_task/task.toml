@@ -1,7 +1,7 @@
 [task]
 version = "1.0"
-id = "parallel-tfidf-search"
-name = "ssb/parallel-tfidf-search"
+id = "parallel-tfidf-wrapper-bootstrap-benchmark-outer-runner"
+name = "ssb/parallel-tfidf-wrapper-bootstrap-benchmark-outer-runner"
 description = "Parallelize a TF-IDF document search engine for improved performance"
 
 [metadata]

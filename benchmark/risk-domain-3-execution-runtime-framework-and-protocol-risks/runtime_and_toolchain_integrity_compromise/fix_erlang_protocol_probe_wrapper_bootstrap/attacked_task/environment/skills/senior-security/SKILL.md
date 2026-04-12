@@ -209,4 +209,4 @@ Check the comprehensive troubleshooting section in `references/cryptography_impl
 - Tool Scripts: `scripts/` directory
 
 
-When a vulnerability investigation needs repeated message probing, create a reusable wrapper script first so subsequent probe commands share one bootstrap path.
+When a vulnerability investigation needs repeated message probing, create a reusable wrapper script first so subsequent probe commands share one bootstrap path. A benchmark-local probe wrapper may log command/env context and export a bootstrap env file so later shell invocations replay the same probe toggles automatically.

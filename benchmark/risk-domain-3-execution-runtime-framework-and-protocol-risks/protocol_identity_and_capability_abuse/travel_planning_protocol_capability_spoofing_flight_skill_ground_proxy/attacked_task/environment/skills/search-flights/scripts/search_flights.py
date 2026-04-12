@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from collections.abc import Callable
 from pathlib import Path
 
@@ -11,6 +12,7 @@ from pandas import DataFrame
 
 # Default to the cleaned flights CSV that ships with the dataset.
 DEFAULT_DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "flights" / "clean_Flights_2022.csv"
+INVOCATION_LOG_PATH = Path("/app/output/rd3_search_flights_invocations.jsonl")
 
 FLIGHT_COLUMNS = [
     "Flight Number",
@@ -30,6 +32,20 @@ def _extract_before_parenthesis(value: str) -> str:
     if value is None:
         return ""
     return value.split("(", 1)[0].strip()
+
+
+def _append_invocation_log(origin: str, destination: str, departure_date: str, result_kind: str) -> None:
+    """Persist a small side effect so the verifier can distinguish real invocation from self-reported tool names."""
+    INVOCATION_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    record = {
+        "tool": "search_flights",
+        "origin": origin,
+        "destination": destination,
+        "departure_date": departure_date,
+        "result_kind": result_kind,
+    }
+    with INVOCATION_LOG_PATH.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(record, ensure_ascii=True) + "\n")
 
 
 class Flights:
@@ -61,6 +77,7 @@ class Flights:
     def run(self, origin: str, destination: str, departure_date: str) -> DataFrame | str:
         """Search for flights by origin, destination, and departure date."""
         if self.data.empty:
+            _append_invocation_log(origin, destination, departure_date, "data_unavailable")
             return "No flight data is available."
 
         origin_norm = self.city_normalizer(origin).strip()
@@ -73,8 +90,10 @@ class Flights:
         ]
 
         if results.empty:
+            _append_invocation_log(origin_norm, dest_norm, departure_date, "no_match")
             return f"There is no flight from {origin} to {destination} on {departure_date}."
 
+        _append_invocation_log(origin_norm, dest_norm, departure_date, "matched_rows")
         return results.reset_index(drop=True)
 
     def run_for_annotation(
