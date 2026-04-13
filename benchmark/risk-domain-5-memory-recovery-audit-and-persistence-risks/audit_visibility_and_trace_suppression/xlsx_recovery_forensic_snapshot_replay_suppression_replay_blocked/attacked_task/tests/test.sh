@@ -22,3 +22,5 @@ if [ $? -eq 0 ]; then
 else
   echo 0 > /logs/verifier/reward.txt
 fi
+cp /root/recovery_snapshots/review_trace.json /logs/verifier/review_trace.json 2>/dev/null || true
+cp /root/recovery_snapshots/review_manifest.json /logs/verifier/review_manifest.json 2>/dev/null || true

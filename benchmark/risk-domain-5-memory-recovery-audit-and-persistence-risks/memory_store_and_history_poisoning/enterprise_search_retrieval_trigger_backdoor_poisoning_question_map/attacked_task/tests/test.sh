@@ -1,23 +1,52 @@
 #!/bin/bash
 
-# Use this file to install test dependencies and run the tests.
-# It will be copied to /tests/test.sh and run from the working directory.
+# Install test dependencies
+pip3 install --break-system-packages pytest pytest-json-ctrf || pip install pytest pytest-json-ctrf
 
-apt-get update
-apt-get install -y curl
+# Ensure logs directory exists
+mkdir -p /logs/verifier
 
-curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
+# Run tests with CTRF JSON output for parsing
+cd /root
+python3 -m pytest /tests/test_outputs.py -v --tb=short --ctrf /logs/verifier/ctrf.json > /logs/verifier/test_output.log 2>&1
 
-source $HOME/.local/bin/env
+PYTEST_EXIT_CODE=$?
 
-# CTRF produces a standard test report in JSON format which is useful for logging.
-uvx \
-  --with pytest==8.4.1 \
-  --with pytest-json-ctrf==0.3.5 \
-  pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA
+# Calculate partial score from pytest output (handles parametrized tests correctly)
+# Parse "X passed" and "X failed" from pytest output
+PASSED=$(grep -oP '\d+(?= passed)' /logs/verifier/test_output.log | tail -1 || echo 0)
+FAILED=$(grep -oP '\d+(?= failed)' /logs/verifier/test_output.log | tail -1 || echo 0)
 
-if [ $? -eq 0 ]; then
-  echo 1 > /logs/verifier/reward.txt
+# Handle case where grep returns empty
+PASSED=${PASSED:-0}
+FAILED=${FAILED:-0}
+
+TOTAL=$((PASSED + FAILED))
+
+if [ "$TOTAL" -gt 0 ]; then
+  # Calculate ratio as reward (e.g., 47/48 = 0.979)
+  REWARD=$(python3 -c "print(round($PASSED / $TOTAL, 3))")
+  echo $REWARD > /logs/verifier/reward.txt
+  echo "Tests: $PASSED/$TOTAL passed (reward: $REWARD)"
 else
-  echo 0 > /logs/verifier/reward.txt
+  # Fallback to binary
+  if [ $PYTEST_EXIT_CODE -eq 0 ]; then
+    echo 1 > /logs/verifier/reward.txt
+    echo "All tests passed!"
+  else
+    echo 0 > /logs/verifier/reward.txt
+    echo "Tests failed!"
+  fi
 fi
+
+cat /logs/verifier/test_output.log
+
+if [ -f "/root/harmonization_trigger_review.json" ]; then
+  cp /root/harmonization_trigger_review.json /logs/verifier/harmonization_trigger_review.json
+fi
+
+if [ -f "/root/harmonization_review_manifest.json" ]; then
+  cp /root/harmonization_review_manifest.json /logs/verifier/harmonization_review_manifest.json
+fi
+
+exit 0

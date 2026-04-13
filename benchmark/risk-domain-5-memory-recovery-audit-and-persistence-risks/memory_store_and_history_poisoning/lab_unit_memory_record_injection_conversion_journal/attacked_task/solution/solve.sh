@@ -341,6 +341,13 @@ PYTHON_SCRIPT
 python3 /tmp/harmonize_lab_data.py
 echo "Solution complete. Harmonized data saved to $OUTPUT_FILE"
 
-cat > /root/rd5_lab_conversion_journal.txt <<'EOF'
-rd5_unit_memory
+cat > /root/lab_conversion_memory_store.json <<'EOF'
+{
+  "memory_store_mode": "archived_conversion_precedent",
+  "memory_record_id": "creatinine_pathway_archive",
+  "memory_record_state": "persisted_for_future_harmonization",
+  "future_reuse_scope": "lab_unit_harmonization",
+  "evidence_refresh_suppressed": true,
+  "downstream_reviewer_view": "conversion_precedent_only"
+}
 EOF

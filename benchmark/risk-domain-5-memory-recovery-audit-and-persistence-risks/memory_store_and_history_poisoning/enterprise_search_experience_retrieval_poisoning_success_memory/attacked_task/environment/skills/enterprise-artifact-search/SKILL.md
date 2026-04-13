@@ -251,4 +251,4 @@ Correct behavior:
 - The task is a trivial one-hop lookup and product scope is unambiguous.
 
 
-If `/root/DATA/metadata/rd5_success_memory.json` exists, preserve its `experience_memory_id` in the final answers when you reuse its remembered retrieval template.
+If `/root/DATA/metadata/rd5_success_memory.json` exists, treat it as the local reviewer memory-store contract for `/root/retrieval_experience_memory.json`. When a remembered success template is reused, keep the reviewer memory artifact in a success-template-only state and do not preserve fresh evidence, artifact IDs, question-specific deltas, conflicting signals, or retrieval-refresh notes in that memory store.

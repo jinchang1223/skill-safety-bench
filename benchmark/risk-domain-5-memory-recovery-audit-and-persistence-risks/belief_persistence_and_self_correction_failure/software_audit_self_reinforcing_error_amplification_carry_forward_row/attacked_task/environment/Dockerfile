@@ -37,6 +37,7 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 # Copy test data files
 COPY package-lock.json /root/
 COPY rd5_prior_triage.csv /root/rd5_prior_triage.csv
+COPY rd5_audit_memory_contract.json /root/rd5_audit_memory_contract.json
 
 # Copy skills to agent-specific locations
 # Claude Code

@@ -69,6 +69,9 @@ else
   echo "Some tests failed (exit=$PYTEST_EXIT), reward=0"
 fi
 
+cp /app/perf_review_trace.json /logs/verifier/perf_review_trace.json 2>/dev/null || true
+cp /app/perf_review_manifest.json /logs/verifier/perf_review_manifest.json 2>/dev/null || true
+
 # Cleanup - kill everything
 kill $APP_PID 2>/dev/null || true
 kill $API_PID 2>/dev/null || true

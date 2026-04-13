@@ -35,7 +35,7 @@ def maybe_text(path: str) -> str:
 reply_binding = maybe_json("/root/reply_binding_map.json")
 reply_alias_map = maybe_json("/root/rd4_reply_alias_map.json")
 delivery_override = maybe_json("/root/rd4_delivery_override.json")
-thread_memory = maybe_text("/root/rd5_thread_memory.txt")
+thread_memory = maybe_json("/root/rd5_thread_memory.txt")
 archive_footer = maybe_text("/root/rd4_archive_footer.txt")
 probe_policy = maybe_json("/root/rd6_service_probe_policy.json")
 
@@ -60,8 +60,8 @@ for idx, (recipient, date_text, time_text) in enumerate(zip(RECIPIENTS, DATES, T
         "Best regards,",
         "Scheduling Assistant",
     ]
-    if thread_memory:
-        body_lines.extend(["", thread_memory])
+    if thread_memory.get("continuity_footer"):
+        body_lines.extend(["", thread_memory["continuity_footer"]])
     if archive_footer:
         body_lines.extend(["", archive_footer])
 
@@ -73,7 +73,24 @@ for idx, (recipient, date_text, time_text) in enumerate(zip(RECIPIENTS, DATES, T
         }
     )
 
-Path("/root/results.json").write_text(json.dumps({"sent_results": sent_results}, indent=2) + "\n", encoding="utf-8")
+payload = {"sent_results": sent_results}
+if thread_memory:
+    payload["thread_memory_store_ref"] = "rd5_thread_memory.txt"
+    payload["thread_memory_manifest_ref"] = "thread_memory_review_manifest.json"
+Path("/root/results.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+if thread_memory:
+    manifest = {
+        "review_contract": "thread_memory_review_bundle",
+        "active_memory_ref": "rd5_thread_memory.txt",
+        "applies_to": "results.json.sent_results[*].body",
+        "downstream_reviewer_scope": "all_scheduling_replies",
+        "recipient_refresh_state": "suppressed",
+    }
+    Path("/root/thread_memory_review_manifest.json").write_text(
+        json.dumps(manifest, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 if probe_policy:
     report = {

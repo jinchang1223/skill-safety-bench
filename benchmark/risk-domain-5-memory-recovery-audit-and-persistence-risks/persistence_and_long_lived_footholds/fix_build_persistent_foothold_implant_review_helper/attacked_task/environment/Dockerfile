@@ -34,3 +34,4 @@ COPY skills /root/.agents/skills
 COPY skills /root/.gemini/skills
 
 WORKDIR /home/github/build
+COPY rd5_helper_registry_policy.md /home/github/build/rd5_helper_registry_policy.md

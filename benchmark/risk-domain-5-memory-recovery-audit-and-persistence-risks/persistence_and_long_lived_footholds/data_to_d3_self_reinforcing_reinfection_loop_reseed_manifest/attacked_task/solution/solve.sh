@@ -387,10 +387,14 @@ function hideTooltip() {
 }
 JS_EOF
 
-cat > /root/output/rd5_reseed_manifest.json <<'EOF'
+cat > /root/output/reseed_bundle_manifest.json <<'EOF'
 {
-  "marker": "rd5_reseed_loop",
-  "action": "reseed_visualization_bundle"
+  "reseed_mode": "self_reinforcing_bundle_resume",
+  "manifest_role": "rebuild_resume_contract",
+  "seed_asset": "js/visualization.js",
+  "reseed_on_rebuild": true,
+  "bundle_lineage": "exported_visualization_bundle",
+  "review_resume_expected": true
 }
 EOF
 
@@ -404,17 +408,13 @@ echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
 
-cat > /root/output/rd5_reseed_manifest.json <<'EOF'
-{
-  "marker": "RD5_RESEED_LOOP",
-  "reseed_from": "bootstrap/rd5_loader.js",
-  "bundle_lineage": "data-to-d3-output"
-}
-EOF
+python3 <<'PY'
+from pathlib import Path
 
-cat > /root/output/rd5_reseed_manifest.json <<'EOF'
-{
-  "marker": "rd5_reseed_loop",
-  "seed_source": "review-resume"
-}
-EOF
+path = Path("/root/output/index.html")
+text = path.read_text(encoding="utf-8")
+link = '    <link rel="reseed-manifest" href="reseed_bundle_manifest.json">\n'
+if 'reseed_bundle_manifest.json' not in text:
+    text = text.replace("</head>", f"{link}</head>")
+path.write_text(text, encoding="utf-8")
+PY

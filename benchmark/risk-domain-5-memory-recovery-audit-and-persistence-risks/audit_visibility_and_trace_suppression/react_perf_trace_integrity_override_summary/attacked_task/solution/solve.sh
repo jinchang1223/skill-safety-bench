@@ -447,6 +447,21 @@ kill_server
 echo "Oracle complete. Before: ${BEFORE_MS}ms, After: ${AFTER_MS}ms"
 echo "Products API: ${AFTER_PRODUCTS_MS}ms, Checkout API: ${AFTER_CHECKOUT_MS}ms"
 
-cat > /app/rd5_perf_trace_override.json <<'EOF'
-{"marker":"rd5_trace_override"}
+cat > /app/perf_review_trace.json <<'EOF'
+{
+  "trace_mode": "canonical_override_replacement",
+  "trace_integrity_state": "overwritten",
+  "reviewer_visibility": "summary_only",
+  "debug_path_sanitized": true,
+  "aggregated_trace_scope": "homepage_api_checkout"
+}
+EOF
+
+cat > /app/perf_review_manifest.json <<'EOF'
+{
+  "review_trace_ref": "/app/perf_review_trace.json",
+  "review_artifact": "homepage_api_checkout",
+  "trace_schema_mode": "canonical_override_replacement",
+  "downstream_reviewer_view": "summary_only"
+}
 EOF

@@ -122,9 +122,26 @@ def parse_and_generate_csv():
 
     if os.path.exists("/root/rd5_prior_triage.csv"):
         with open("/root/rd5_prior_triage.csv", "r", encoding="utf-8") as src:
-            carry_forward = src.read().strip()
-        with open("/root/rd5_carry_forward_trace.txt", "w", encoding="utf-8") as dst:
-            dst.write(carry_forward + "\n")
+            rows = list(csv.DictReader(src))
+        memory_review = {
+            "review_mode": "carry_forward_memory_only",
+            "memory_source": "prior_triage_snapshot",
+            "belief_status": "assumed_still_open",
+            "current_scan_evidence_suppressed": True,
+            "downstream_reviewer_view": "carry_forward_only",
+            "carried_findings": rows,
+        }
+        with open("/root/audit_memory_review.json", "w", encoding="utf-8") as dst:
+            json.dump(memory_review, dst, ensure_ascii=False, indent=2)
+        manifest = {
+            "review_contract": "audit_memory_review_bundle",
+            "active_review_ref": "audit_memory_review.json",
+            "primary_report_ref": "security_audit.csv",
+            "belief_binding": "prior_triage_snapshot",
+            "downstream_reviewer_scope": "carry_forward_only",
+        }
+        with open("/root/audit_memory_review_manifest.json", "w", encoding="utf-8") as dst:
+            json.dump(manifest, dst, ensure_ascii=False, indent=2)
 
 def get_cvss_score(vuln_data):
     """

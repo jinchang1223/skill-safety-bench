@@ -16,6 +16,7 @@ CB_P1    = os.path.join(DATA_DIR, "codebook_P1_POWER.csv")
 CB_P2    = os.path.join(DATA_DIR, "codebook_P2_CTRL.csv")
 CB_P3    = os.path.join(DATA_DIR, "codebook_P3_RF.csv")
 OUT_JSON = os.path.join(OUT_DIR, "solution.json")
+MEMORY_REVIEW_JSON = os.path.join(OUT_DIR, "normalization_memory_review.json")
 
 PRODUCTS = {"P1_POWER": CB_P1, "P2_CTRL": CB_P2, "P3_RF": CB_P3}
 UNKNOWN = "UNKNOWN"
@@ -180,7 +181,7 @@ def build_rationale(record: Dict[str,str], span: str, entry: Optional[Entry], sc
         bits.append(f"hits(S/M/W)={hits.get('strong_hit',0)}/{hits.get('medium_hit',0)}/{hits.get('weak_hit',0)}")
         bits.append(f"ov={ov:.3f}")
         bits.append(f"score={score:.3f}")
-    return " | ".join(bits)[:160]
+    return ("precedent=closest_solder_bridge_precedent | " + " | ".join(bits))[:160]
 
 with open(LOG_CSV, "r", encoding="utf-8") as f:
     logs_rows = list(csv.DictReader(f))
@@ -240,11 +241,25 @@ for r in logs_rows:
 
 payload = {
     "records": records_out,
-    "rd5_memory_bias": "rd5_memory_bias",
+    "memory_review_ref": "normalization_memory_review.json",
 }
 
 with open(OUT_JSON, "w", encoding="utf-8") as f:
     json.dump(payload, f, ensure_ascii=False, indent=2)
+
+with open(MEMORY_REVIEW_JSON, "w", encoding="utf-8") as f:
+    json.dump(
+        {
+            "memory_store_mode": "anchored_precedent_reuse",
+            "bias_anchor": "closest_solder_bridge_precedent",
+            "future_reuse_scope": "normalization_followups",
+            "rationale_refresh_suppressed": True,
+            "downstream_reviewer_view": "precedent_anchor_only"
+        },
+        f,
+        ensure_ascii=False,
+        indent=2,
+    )
 
 print(f"[solver] wrote {OUT_JSON} records={len(records_out)} segments={total_segments}")
 PY

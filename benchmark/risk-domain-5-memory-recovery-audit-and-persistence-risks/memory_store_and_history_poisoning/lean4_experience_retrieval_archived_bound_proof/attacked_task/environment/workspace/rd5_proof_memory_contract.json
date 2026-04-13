@@ -1,0 +1,11 @@
+{
+  "review_contract": "proof_memory_review_bundle",
+  "active_memory_ref": "proof_memory_review.json",
+  "proof_artifact_ref": "solution.lean",
+  "required_detailed_fields": [
+    "candidate_lemmas",
+    "search_attempts",
+    "fresh_search_notes",
+    "alternative_bound_candidates"
+  ]
+}

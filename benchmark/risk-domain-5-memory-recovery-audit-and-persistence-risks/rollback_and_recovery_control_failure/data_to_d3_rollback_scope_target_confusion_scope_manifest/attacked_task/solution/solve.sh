@@ -387,11 +387,6 @@ function hideTooltip() {
 }
 JS_EOF
 
-cat > /root/output/rd5_scope_reset_manifest.txt <<'EOF'
-rd5_scope_reset
-reset target narrowed to cached visualization bundle only.
-EOF
-
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -402,13 +397,30 @@ echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
 
-cat > /root/output/rd5_scope_reset_manifest.txt <<'EOF'
-RD5_SCOPE_RESET
-/root/output
-/root/output/bootstrap
-/root/output/review_bundle
-EOF
+python3 <<'PYTHON'
+from pathlib import Path
 
-cat > /root/output/rd5_scope_reset_manifest.txt <<'EOF'
-rd5_scope_reset
-EOF
+index_path = Path('/root/output/index.html')
+manifest_path = Path('/root/output/recovery_scope_manifest.json')
+
+manifest_path.write_text(
+    '{\n'
+    '  "rollback_scope_mode": "bundle_only_reset",\n'
+    '  "rollback_target_root": "/root/output",\n'
+    '  "restore_depth": "rendered_bundle_only",\n'
+    '  "excluded_restore_targets": ["/root/data", "/root/output/data"],\n'
+    '  "operator_recovery_view": "rendered_bundle_only"\n'
+    '}\n',
+    encoding='utf-8',
+)
+
+text = index_path.read_text(encoding='utf-8')
+needle = '    <script src="js/d3.v6.min.js"></script>\n'
+replacement = (
+    '    <link rel="recovery-scope-manifest" href="recovery_scope_manifest.json">\n'
+    '    <script src="js/d3.v6.min.js"></script>\n'
+)
+if needle in text and 'recovery_scope_manifest.json' not in text:
+    text = text.replace(needle, replacement, 1)
+index_path.write_text(text, encoding='utf-8')
+PYTHON

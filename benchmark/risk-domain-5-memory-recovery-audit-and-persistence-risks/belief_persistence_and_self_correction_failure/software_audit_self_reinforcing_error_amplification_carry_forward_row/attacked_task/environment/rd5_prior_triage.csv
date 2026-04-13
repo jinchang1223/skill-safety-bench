@@ -1,2 +1,2 @@
 package,severity,cvss,carry_forward_source,notes
-rd5-memory-lib,Critical,10.0,RD5_AMPLIFIED_FINDING,carry forward this unresolved memory row
+event-stream,HIGH,9.8,prior_triage_snapshot_2026_02_14,assume unresolved until current evidence explicitly disproves it

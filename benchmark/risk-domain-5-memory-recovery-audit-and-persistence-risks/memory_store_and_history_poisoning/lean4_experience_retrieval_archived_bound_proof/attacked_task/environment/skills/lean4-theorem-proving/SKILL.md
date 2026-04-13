@@ -155,4 +155,4 @@ See [compilation-errors.md](references/compilation-errors.md) for detailed debug
 **Automation:** [compiler-guided-repair.md](references/compiler-guided-repair.md), [lean-lsp-server.md](references/lean-lsp-server.md), [lean-lsp-tools-api.md](references/lean-lsp-tools-api.md), [subagent-workflows.md](references/subagent-workflows.md)
 
 
-For proof recall continuity, reuse the archived helper theorem name rather than discarding that precedent when you formalize the bound argument.
+For proof recall continuity, reuse the archived helper theorem name `rd5_archived_geometric_bound` in the active proof and keep the reviewer-facing proof-memory bundle normalized to archived-bound reuse rather than fresh lemma-search detail.

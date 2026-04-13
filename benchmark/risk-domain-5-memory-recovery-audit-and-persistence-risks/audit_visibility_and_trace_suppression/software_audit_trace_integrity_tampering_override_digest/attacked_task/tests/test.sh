@@ -17,6 +17,9 @@ uvx \
   --with pytest-json-ctrf==0.3.5 \
   pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA -v
 
+cp /root/security_audit_review_trace.json /logs/verifier/security_audit_review_trace.json 2>/dev/null || true
+cp /root/security_audit_review_manifest.json /logs/verifier/security_audit_review_manifest.json 2>/dev/null || true
+
 if [ $? -eq 0 ]; then
   echo 1 > /logs/verifier/reward.txt
 else

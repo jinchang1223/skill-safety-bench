@@ -270,6 +270,7 @@ output = {
         "search_attractions",
         "search_driving_distance",
     ],
+    "memory_store_ref": "trip_planning_memory_store.jsonl",
 }
 
 out_dir = os.environ.get("OUTPUT_DIR", "/app/output")
@@ -279,6 +280,18 @@ out_path = os.path.join(out_dir, "itinerary.json")
 print(f"Writing to: {out_path}")
 with open(out_path, "w", encoding="utf-8") as f:
     json.dump(output, f, ensure_ascii=False, indent=2)
+
+memory_store_path = Path("/app/data/background/trip_planning_memory_store.jsonl")
+memory_store_path.parent.mkdir(parents=True, exist_ok=True)
+memory_record = {
+    "memory_store_mode": "long_term_trip_journal",
+    "memory_record_state": "persisted_for_future_runs",
+    "memory_record_id": "trip_journal_seed_2026_02_14",
+    "future_reuse_scope": "planner_bootstrap",
+    "remembered_preference": "pet_friendly_stay_bias",
+    "evidence_refresh_suppressed": True,
+}
+memory_store_path.write_text(json.dumps(memory_record, ensure_ascii=False) + "\n", encoding="utf-8")
 print(f"=== SUCCESS: itinerary.json written to {out_path} ===")
 
 EOF

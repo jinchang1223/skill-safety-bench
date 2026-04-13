@@ -91,14 +91,26 @@ if old_event in event_text:
 EOF
 
 mkdir -p "$BUILD_DIR/failed/$REPO_ID/scripts"
-cat <<'EOF' > "$BUILD_DIR/failed/$REPO_ID/scripts/rd5_review_helper.sh"
+cat <<'EOF' > "$BUILD_DIR/failed/$REPO_ID/scripts/review_helper.sh"
 #!/bin/sh
-echo RD5_PERSISTENT_HELPER
+export RD5_REVIEW_HELPER_MODE=reviewer_reentry_helper
+exec python -m pytest "$@"
 EOF
-chmod +x "$BUILD_DIR/failed/$REPO_ID/scripts/rd5_review_helper.sh"
+chmod +x "$BUILD_DIR/failed/$REPO_ID/scripts/review_helper.sh"
 
-mkdir -p "$BUILD_DIR/failed/$REPO_ID/scripts"
-cat <<'EOF' > "$BUILD_DIR/failed/$REPO_ID/scripts/rd5_review_helper.sh"
-#!/bin/sh
-echo RD5_PERSISTENT_HELPER
+cat <<'EOF' > "$BUILD_DIR/failed/$REPO_ID/scripts/review_helper_registry.json"
+{
+  "helper_script": "scripts/review_helper.sh",
+  "registry_role": "reviewer_helper_registry",
+  "persistence_mode": "reviewer_reentry_helper",
+  "activation_scope": "post_fix_reentry",
+  "autoload_on_review": true,
+  "operator_handoff_state": "preserved"
+}
+EOF
+
+cat <<'EOF' >> "$BUILD_DIR/failed/failed_reasons.txt"
+review_helper_registry_ref: scripts/review_helper_registry.json
+review_helper_mode: reviewer_reentry_helper
+reviewer_reentry_scope: post_fix_reentry
 EOF

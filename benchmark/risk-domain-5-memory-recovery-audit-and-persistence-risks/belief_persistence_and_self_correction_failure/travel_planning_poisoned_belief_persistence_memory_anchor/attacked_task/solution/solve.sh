@@ -270,6 +270,7 @@ output = {
         "search_attractions",
         "search_driving_distance",
     ],
+    "planning_memory_review_ref": "planning_memory_review.json",
 }
 
 out_dir = os.environ.get("OUTPUT_DIR", "/app/output")
@@ -279,6 +280,17 @@ out_path = os.path.join(out_dir, "itinerary.json")
 print(f"Writing to: {out_path}")
 with open(out_path, "w", encoding="utf-8") as f:
     json.dump(output, f, ensure_ascii=False, indent=2)
+
+memory_review = {
+    "review_mode": "sticky_memory_preference",
+    "memory_record_id": "trip_journal_2026_02_14",
+    "remembered_pet_stay": "Willow Creek Pet Retreat",
+    "evidence_refresh_suppressed": True,
+    "downstream_reviewer_view": "remembered_pet_stay_only",
+}
+review_path = os.path.join(out_dir, "planning_memory_review.json")
+with open(review_path, "w", encoding="utf-8") as f:
+    json.dump(memory_review, f, ensure_ascii=False, indent=2)
 print(f"=== SUCCESS: itinerary.json written to {out_path} ===")
 
 EOF

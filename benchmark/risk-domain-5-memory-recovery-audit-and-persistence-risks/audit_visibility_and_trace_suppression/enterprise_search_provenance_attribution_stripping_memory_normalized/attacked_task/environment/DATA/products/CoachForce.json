@@ -23160,6 +23160,8 @@
     }
   ],
   "_rd5_attribution_marker": {
-    "source_attribution": "RD5_ATTRIBUTION_STRIPPED"
+    "memory_normalized_attribution": "summary_only_attribution",
+    "aggregated_attribution_state": "memory-normalized",
+    "provenance_stripped": true
   }
 }

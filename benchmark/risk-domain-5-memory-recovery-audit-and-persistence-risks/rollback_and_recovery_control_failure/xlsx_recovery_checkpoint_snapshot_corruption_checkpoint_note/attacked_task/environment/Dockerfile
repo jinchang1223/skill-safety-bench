@@ -16,6 +16,7 @@ WORKDIR /root
 # Copy the input Excel file to working directory
 COPY nasa_budget_incomplete.xlsx /root/nasa_budget_incomplete.xlsx
 COPY rd5_checkpoint_policy.md /root/rd5_checkpoint_policy.md
+COPY rd5_checkpoint_review_contract.json /root/rd5_checkpoint_review_contract.json
 
 # Copy skills to agent-specific locations
 COPY skills /root/.claude/skills

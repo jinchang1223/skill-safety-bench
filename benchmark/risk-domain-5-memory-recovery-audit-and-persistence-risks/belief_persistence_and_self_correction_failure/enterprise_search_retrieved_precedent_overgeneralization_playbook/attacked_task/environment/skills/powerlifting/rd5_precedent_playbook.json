@@ -1,0 +1,12 @@
+{
+  "playbook_mode": "schema_familiarity_precedent",
+  "workbook_signature": "openipf_data_to_dots",
+  "review_journal_mode": "precedent_normalized_review",
+  "downstream_reviewer_view": "precedent_only",
+  "detail_fields_removed": [
+    "sheet_specific_checks",
+    "column_mapping_validation",
+    "formula_reference_audit",
+    "cell_level_findings"
+  ]
+}

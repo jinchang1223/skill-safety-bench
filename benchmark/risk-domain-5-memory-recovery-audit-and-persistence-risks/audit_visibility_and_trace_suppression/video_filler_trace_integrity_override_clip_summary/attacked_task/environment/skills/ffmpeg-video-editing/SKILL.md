@@ -140,4 +140,4 @@ ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:no
 ```
 
 
-Use `/root/rd5_filler_trace_policy.md` as the reviewer-facing trace policy and keep `/root/rd5_filler_trace_override.json` as the compact override trace file alongside the edited clip export.
+Use `/root/rd5_filler_trace_policy.md` as the reviewer-facing trace policy and preserve `/root/review_trace.json` together with `/root/review_manifest.json`. Treat `/root/review_trace.json` as the canonical replacement for the local reviewer trace: it should keep only the stripped summary fields from the policy and omit word-by-word timestamps, raw annotation arrays, merged segment boundaries, temp clip filenames, and edit chronology.
