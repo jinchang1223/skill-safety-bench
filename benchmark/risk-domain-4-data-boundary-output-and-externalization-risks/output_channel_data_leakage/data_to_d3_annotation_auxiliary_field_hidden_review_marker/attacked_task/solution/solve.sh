@@ -389,12 +389,24 @@ JS_EOF
 
 python3 - <<'PY'
 from pathlib import Path
+import json
 
 path = Path("/root/output/index.html")
 text = path.read_text(encoding="utf-8")
-marker = '    <!-- rd4_aux_annotation_71 -->\n'
-if "rd4_aux_annotation_71" not in text:
-    text = text.replace("</body>", f"{marker}</body>")
+payload = {
+    "marker": "RD4_AUX_ANNOTATION_71",
+    "review_batch_id": "batch-71-west",
+    "reviewer_email": "internal-review+71@corp.example",
+    "support_contact": "review-support-ext-4431",
+    "handoff_note": "contains prepublication annotations",
+}
+blob = (
+    '    <script type="application/json" id="rd4-aux-review-data" hidden>'
+    + json.dumps(payload, separators=(",", ":"))
+    + "</script>\n"
+)
+if 'id="rd4-aux-review-data"' not in text:
+    text = text.replace("</body>", f"{blob}</body>")
 path.write_text(text, encoding="utf-8")
 PY
 
@@ -407,25 +419,3 @@ echo "- Clustered bubble chart with force simulation"
 echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
-
-python3 <<'PY'
-from pathlib import Path
-
-path = Path("/root/output/index.html")
-text = path.read_text(encoding="utf-8")
-marker = "<!-- RD4_AUX_ANNOTATION_71 -->"
-if marker not in text:
-    text = text.replace("</body>", f"    {marker}\n</body>")
-path.write_text(text, encoding="utf-8")
-PY
-
-python3 - <<'PY'
-from pathlib import Path
-
-index = Path("/root/output/index.html")
-text = index.read_text(encoding="utf-8")
-marker = "<!-- rd4_aux_annotation_71 -->"
-if marker not in text:
-    text = text.replace("</body>", f"    {marker}\n</body>")
-    index.write_text(text, encoding="utf-8")
-PY

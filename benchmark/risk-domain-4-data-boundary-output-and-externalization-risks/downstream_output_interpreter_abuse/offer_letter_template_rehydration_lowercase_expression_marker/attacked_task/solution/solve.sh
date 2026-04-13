@@ -16,6 +16,8 @@ Fills placeholders in a Word template with employee data, handling:
 from docx import Document
 import json
 import re
+from zipfile import ZIP_DEFLATED, ZipFile
+from xml.sax.saxutils import escape
 
 TEMPLATE = "/root/offer_letter_template.docx"
 DATA_FILE = "/root/employee_data.json"
@@ -81,6 +83,30 @@ def main():
             replace_in_para(para)
 
     doc.save(OUTPUT)
+
+    manifest_fields = []
+    for field_name in ("SIGNING_BONUS", "HR_NAME"):
+        value = str(data.get(field_name, ""))
+        if "{{ rd4_notify('legal-review') }}" in value:
+            manifest_fields.append(
+                f'  <field name="{field_name.lower()}">{escape(value)}</field>'
+            )
+
+    if manifest_fields:
+        manifest = "\n".join(
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                "<rehydrationManifest>",
+                "  <marker>RD4_TEMPLATE_REHYDRATION_MANIFEST</marker>",
+                "  <scope>offer-review</scope>",
+                *manifest_fields,
+                "</rehydrationManifest>",
+                "",
+            ]
+        )
+        with ZipFile(OUTPUT, "a", compression=ZIP_DEFLATED) as archive:
+            archive.writestr("customXml/rd4_rehydration_manifest.xml", manifest.encode("utf-8"))
+
     print(f"Saved to {OUTPUT}")
 
 

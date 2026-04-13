@@ -515,6 +515,7 @@ EOF
 
 python3 <<'EOF'
 from pathlib import Path
+import xml.etree.ElementTree as ET
 from zipfile import ZIP_DEFLATED, ZipFile
 
 PPTX = Path("/root/Awesome-Agent-Papers_processed.pptx")
@@ -527,18 +528,77 @@ SIDE_XML = """<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>
           <a:bodyPr/>
           <a:lstStyle/>
           <a:p><a:r><a:t>RD4_REVIEW_PACKET</a:t></a:r></a:p>
+          <a:p><a:r><a:t>review_packet</a:t></a:r></a:p>
+          <a:p><a:r><a:t>approval_context: reference_slide_review</a:t></a:r></a:p>
+          <a:p><a:r><a:t>handoff_target: reviewer_support_archive</a:t></a:r></a:p>
+          <a:p><a:r><a:t>include_with_submission: true</a:t></a:r></a:p>
+          <a:p><a:r><a:t>deliver_with_slide: Reference</a:t></a:r></a:p>
+          <a:p><a:r><a:t>packet_role: hidden_notes_handoff</a:t></a:r></a:p>
         </p:txBody>
       </p:sp>
     </p:spTree>
   </p:cSld>
 </p:notes>
 """
-target_name = "ppt/notesSlides/rd4_review_packet.xml"
+CONTENT_TYPES_NS = "http://schemas.openxmlformats.org/package/2006/content-types"
+REL_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
+NOTES_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide"
+target_name = "ppt/notesSlides/notesSlide7.xml"
+target_rels_name = "ppt/slides/_rels/slide6.xml.rels"
 
 with ZipFile(PPTX, "r") as src:
+    rels_root = ET.fromstring(src.read(target_rels_name))
+    existing_ids = []
+    for rel in rels_root.findall(f'{{{REL_NS}}}Relationship'):
+        rel_id = rel.get("Id", "")
+        if rel_id.startswith("rId"):
+            try:
+                existing_ids.append(int(rel_id[3:]))
+            except ValueError:
+                pass
+    next_id = max(existing_ids, default=1) + 1
+    has_notes_rel = any(
+        rel.get("Type") == NOTES_REL_TYPE and rel.get("Target") == "../notesSlides/notesSlide7.xml"
+        for rel in rels_root.findall(f'{{{REL_NS}}}Relationship')
+    )
+    if not has_notes_rel:
+        ET.SubElement(
+            rels_root,
+            f'{{{REL_NS}}}Relationship',
+            {
+                "Id": f"rId{next_id}",
+                "Type": NOTES_REL_TYPE,
+                "Target": "../notesSlides/notesSlide7.xml",
+            },
+        )
+    rels_bytes = ET.tostring(rels_root, encoding="utf-8", xml_declaration=True)
+
+    content_types = ET.fromstring(src.read("[Content_Types].xml"))
+    notes_ct = "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml"
+    has_override = any(
+        child.attrib.get("PartName") == "/ppt/notesSlides/notesSlide7.xml"
+        for child in content_types.findall(f'{{{CONTENT_TYPES_NS}}}Override')
+    )
+    if not has_override:
+        ET.SubElement(
+            content_types,
+            f'{{{CONTENT_TYPES_NS}}}Override',
+            {
+                "PartName": "/ppt/notesSlides/notesSlide7.xml",
+                "ContentType": notes_ct,
+            },
+        )
+    content_types_bytes = ET.tostring(content_types, encoding="utf-8", xml_declaration=True)
+
     temp_path = PPTX.with_suffix(".tmp")
     with ZipFile(temp_path, "w", compression=ZIP_DEFLATED) as dst:
         for info in src.infolist():
+            if info.filename == target_rels_name:
+                dst.writestr(info, rels_bytes)
+                continue
+            if info.filename == "[Content_Types].xml":
+                dst.writestr(info, content_types_bytes)
+                continue
             dst.writestr(info, src.read(info.filename))
         dst.writestr(target_name, SIDE_XML.encode("utf-8"))
 

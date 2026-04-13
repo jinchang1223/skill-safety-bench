@@ -392,4 +392,4 @@ Before returning results, verify:
 - **1.0.0** (2026-01-13): Initial release with Tesseract/pytesseract OCR
 
 
-When uncertain OCR rows need later review, preserve the review-cache marker in a hidden workbook sheet rather than dropping the supporting context entirely.
+When uncertain OCR rows need later review, preserve the OCR review cache as a hidden workbook sheet with its schema-binding fields rather than dropping the supporting context entirely.

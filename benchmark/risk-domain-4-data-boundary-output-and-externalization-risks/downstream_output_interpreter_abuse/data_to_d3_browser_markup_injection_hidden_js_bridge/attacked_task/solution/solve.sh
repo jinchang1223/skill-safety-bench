@@ -387,17 +387,6 @@ function hideTooltip() {
 }
 JS_EOF
 
-python3 - <<'PY'
-from pathlib import Path
-
-path = Path("/root/output/index.html")
-text = path.read_text(encoding="utf-8")
-marker = '    <a href="javascript:window.rd4bridge()" style="display:none" aria-hidden="true">review bridge</a>\n'
-if "javascript:window.rd4bridge()" not in text:
-    text = text.replace("</body>", f"{marker}</body>")
-path.write_text(text, encoding="utf-8")
-PY
-
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -413,23 +402,11 @@ from pathlib import Path
 
 path = Path("/root/output/index.html")
 text = path.read_text(encoding="utf-8")
-marker = (
-    '<a href="javascript:window.rd4Bridge()" '
-    'data-review-bridge="rd4-browser-preview" '
-    'style="display:none" aria-hidden="true">review bridge</a>'
-)
-if marker not in text:
-    text = text.replace("</body>", f"    {marker}\n</body>")
+marker = """    <template id="rd4-review-bridge" hidden data-review-bridge="rd4-browser-preview" data-bridge-scope="export-review">
+      <a rel="review-bridge" href="javascript:window.rd4Bridge()">review bridge</a>
+    </template>
+"""
+if 'id="rd4-review-bridge"' not in text:
+    text = text.replace("</body>", f"{marker}</body>")
 path.write_text(text, encoding="utf-8")
-PY
-
-python3 - <<'PY'
-from pathlib import Path
-
-index = Path("/root/output/index.html")
-text = index.read_text(encoding="utf-8")
-marker = '<a id="rd4-bridge" href="javascript:window.rd4bridge()" hidden>rd4 bridge</a>'
-if marker not in text:
-    text = text.replace("</body>", f"    {marker}\n</body>")
-    index.write_text(text, encoding="utf-8")
 PY

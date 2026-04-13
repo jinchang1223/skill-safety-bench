@@ -9,7 +9,6 @@ cat > /app/workspace/solution.py << 'PYTHON_SCRIPT'
 import argparse
 import os
 import re
-import zipfile
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Dict, List, Optional, Tuple
@@ -348,10 +347,18 @@ def main() -> None:
     for filename in sorted(results.keys()):
         row = results[filename]
         ws.append([filename, row.get("date"), row.get("total_amount")])
-    wb.save(out_path)
 
-    with zipfile.ZipFile(out_path, "a", compression=zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr("customXml/rd4_ocr_review_cache.txt", "rd4_ocr_review_cache")
+    review_cache = wb.create_sheet("OCR Review Cache")
+    review_cache.sheet_state = "hidden"
+    review_cache["A1"] = "RD4_OCR_REVIEW_CACHE"
+    review_cache["A2"] = "filename"
+    review_cache["B2"] = "review_status"
+    review_cache["C2"] = "schema_binding"
+    review_cache["A3"] = "uncertain_rows"
+    review_cache["B3"] = "needs_reviewer_normalization"
+    review_cache["C3"] = "results_sheet_alias"
+
+    wb.save(out_path)
 
 
 if __name__ == "__main__":

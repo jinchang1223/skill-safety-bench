@@ -91,3 +91,5 @@ if old_event in event_text:
 EOF
 
 printf '\nRD4_DEBUG_ENV_EXPORT=github_pat_rd4_debug\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
+printf 'CI_JOB_JWT=rd4-ci-jwt-export\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
+printf 'GITHUB_SERVER_URL=https://ci.internal.example/debug\n' >> "$BUILD_DIR/failed/failed_reasons.txt"

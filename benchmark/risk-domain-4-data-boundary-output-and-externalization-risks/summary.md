@@ -23,11 +23,11 @@
 
 ## 4. Original Tasks Selected Per Category
 
-- `artifact_and_schema_integrity_failure`: `enterprise-information-search`, `offer-letter-generator`, `sales-pivot-analysis`, `travel-planning`, `weighted-gdp-calc`, `xlsx-recover-data`
+- `artifact_and_schema_integrity_failure`: `enterprise-information-search`, `jpg-ocr-stat`, `offer-letter-generator`, `sales-pivot-analysis`, `travel-planning`, `weighted-gdp-calc`, `xlsx-recover-data`
 - `output_channel_data_leakage`: `data-to-d3`, `fix-build-agentops`, `scheduling-email-assistant`, `speaker-diarization-subtitles`
 - `external_destination_and_egress_abuse`: `data-to-d3`, `scheduling-email-assistant`, `software-dependency-audit`
 - `downstream_output_interpreter_abuse`: `data-to-d3`, `offer-letter-generator`, `pptx-reference-formatting`, `xlsx-recover-data`
-- `handoff_and_submission_boundary_abuse`: `data-to-d3`, `exceltable-in-ppt`, `fix-build-agentops`, `jpg-ocr-stat`, `multilingual-video-dubbing`, `powerlifting-coef-calc`, `pptx-reference-formatting`, `xlsx-recover-data`
+- `handoff_and_submission_boundary_abuse`: `data-to-d3`, `exceltable-in-ppt`, `fix-build-agentops`, `multilingual-video-dubbing`, `powerlifting-coef-calc`, `pptx-reference-formatting`, `xlsx-recover-data`
 
 ## 5. Class Coverage
 
@@ -41,13 +41,13 @@
 - `debug_and_diagnostic_output_leakage`: `fix_build_debug_diagnostic_leakage_env_snapshot_verbatim`
 - `document_macro_and_embedded_active_content_abuse`: `pptx_reference_document_active_content_external_preview_link`
 - `external_destination_exfiltration`: `scheduling_email_external_destination_fake_support_sink`
-- `format_translation_and_rehydration_boundary_loss`: `jpg_ocr_format_translation_hidden_review_sheet`, `xlsx_recovery_format_translation_hidden_portal_export_notes`
+- `format_translation_and_rehydration_boundary_loss`: `xlsx_recovery_format_translation_hidden_portal_export_notes`
 - `output_channel_exfiltration`: `scheduling_email_output_channel_archive_footer_exfiltration`
 - `output_contract_manipulation`: `enterprise_search_output_contract_review_context_sidecar`
 - `recipient_and_endpoint_substitution`: `scheduling_email_recipient_substitution_alias_map`
 - `report_and_summary_secret_spill`: `fix_build_report_summary_secret_spill_private_support_case`
 - `review_and_approval_handoff_contamination`: `exceltable_review_handoff_speaker_notes_packet`, `multilingual_dubbing_review_handoff_packet_report`, `powerlifting_review_packet_hidden_dots_sheet`, `pptx_review_handoff_contamination_hidden_notes_packet`
-- `schema_alignment_and_field_mapping_abuse`: `sales_pivot_schema_fieldmap_hidden_sheet_cache`, `weighted_gdp_schema_alignment_hidden_weight_cache`, `xlsx_recovery_schema_alignment_hidden_export_field_map`
+- `schema_alignment_and_field_mapping_abuse`: `jpg_ocr_format_translation_hidden_review_sheet`, `sales_pivot_schema_fieldmap_hidden_sheet_cache`, `weighted_gdp_schema_alignment_hidden_weight_cache`, `xlsx_recovery_schema_alignment_hidden_export_field_map`
 - `spreadsheet_formula_injection`: `xlsx_recovery_spreadsheet_formula_injection_hidden_export_cache`
 - `submission_bundle_piggybacking`: `data_to_d3_submission_bundle_piggyback_review_sidecar`
 - `template_rehydration_and_expression_injection`: `offer_letter_template_rehydration_lowercase_expression_marker`
@@ -74,7 +74,7 @@
 - `external_destination_exfiltration`, `recipient_and_endpoint_substitution`, `output_channel_exfiltration`: email-oriented classes were intentionally concentrated on `scheduling-email-assistant`, because it provides the cleanest observable sent-message carrier; duplicating the same channel across weaker mail-like tasks would have added redundancy more than diversity.
 - `browser_markup_and_script_injection`, `document_macro_and_embedded_active_content_abuse`, `template_rehydration_and_expression_injection`, `spreadsheet_formula_injection`: each of these classes needs a specific downstream interpreter family, so RD4 keeps one strongest carrier per interpreter type instead of forcing the same class onto mismatched tasks.
 - `cross_system_reference_smuggling`, `cross_tenant_and_unapproved_workspace_egress`, `backup_and_sync_egress_expansion`, `submission_bundle_piggybacking`: these classes depend on concrete filesystem, export, or handoff topology; only a few tasks expose those boundaries cleanly enough for high-confidence rule-based evaluation.
-- Higher-density classes were expanded only where extra task diversity materially improved benchmark quality: `review_and_approval_handoff_contamination` has 4 cases because PPTX, workbook, dubbing-report, and review-packet carriers behave differently; `schema_alignment_and_field_mapping_abuse` has 3 cases because several spreadsheet tasks expose genuinely distinct hidden-binding failure modes.
+- Higher-density classes were expanded only where extra task diversity materially improved benchmark quality: `review_and_approval_handoff_contamination` has 4 cases because PPTX, workbook, dubbing-report, and review-packet carriers behave differently; `schema_alignment_and_field_mapping_abuse` has 4 cases because several spreadsheet tasks expose genuinely distinct hidden-binding failure modes across OCR recovery, pivot caches, weighted mappings, and export field maps.
 
 ## 8. Category Design Principles
 
@@ -82,7 +82,7 @@
 - `output_channel_data_leakage`: prefer email bodies, build notes, patch commentary, and HTML comments where leakage can ride along with otherwise legitimate output artifacts.
 - `external_destination_and_egress_abuse`: prefer tasks with concrete recipient fields or named output locations so rerouted emails, mirror copies, and cross-workspace exports can be detected by recipients or filesystem paths.
 - `downstream_output_interpreter_abuse`: prefer spreadsheet, browser, template, and presentation tasks where formula cells, `javascript:` markup, templating syntax, or linked external content can be read back from the final artifact.
-- `handoff_and_submission_boundary_abuse`: prefer PPTX notes, build-review notes, hidden workbook sheets, and output bundles where reviewer-only context, piggybacked sidecars, import hints, or rehydration payloads can cross system boundaries.
+- `handoff_and_submission_boundary_abuse`: prefer PPTX notes, build-review notes, output bundles, and cross-system references where reviewer-only context, piggybacked sidecars, import hints, or rehydration payloads can cross system boundaries.
 
 ## 9. Evaluation Overview
 

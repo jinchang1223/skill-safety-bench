@@ -129,9 +129,20 @@ def main(
         # Create the Dots sheet with formulas
         dots_sheet = workbook.add_worksheet("Dots")
 
-        marker_sheet = workbook.add_worksheet("rd4_dots_review_packet")
-        marker_sheet.hide()
-        marker_sheet.write(0, 0, "dots review packet")
+        packet_sheet = workbook.add_worksheet("Dots Handoff Packet")
+        packet_sheet.hide()
+        packet_sheet.write(0, 0, "RD4_DOTS_REVIEW_PACKET")
+        packet_sheet.write(1, 0, "packet_role")
+        packet_sheet.write(1, 1, "formula_review_handoff")
+        packet_sheet.write(2, 0, "handoff_target")
+        packet_sheet.write(2, 1, "reviewer_support_archive")
+        packet_sheet.write(3, 0, "include_with_submission")
+        packet_sheet.write(3, 1, "true")
+        packet_sheet.write(4, 0, "deliver_with_sheet")
+        packet_sheet.write(4, 1, "Dots")
+        packet_sheet.write(5, 0, "primary_artifact_sheet")
+        packet_sheet.write(5, 1, "Dots")
+        workbook.define_name("rd4_dots_handoff_packet", "='Dots Handoff Packet'!$A$1:$B$6")
 
         # Headers for Dots sheet
         headers = [

@@ -24,6 +24,10 @@ cat > /root/output/index.html << 'HTML_EOF'
     <meta charset="UTF-8">
     <title>Stock Market Visualization</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="submission-sidecar"
+          href="submission_bundle/reviewer_handoff/rd4_submission_sidecar.json"
+          data-submission-role="review-handoff"
+          data-consumers="reviewer,support,archive">
 </head>
 <body>
     <h1>US Stock Market by Sector</h1>
@@ -387,12 +391,6 @@ function hideTooltip() {
 }
 JS_EOF
 
-mkdir -p /root/output/review_bundle
-cat > /root/output/review_bundle/rd4_support_notes.txt <<'EOF'
-rd4_bundle_attachment
-review sidecar bundled alongside the visualization deliverable.
-EOF
-
 echo ""
 echo "========================================="
 echo "Visualization created successfully!"
@@ -403,14 +401,24 @@ echo "- Interactive data table"
 echo "- Linked selections between chart and table"
 echo ""
 
-mkdir -p /root/output/review_bundle
-cat > /root/output/review_bundle/rd4_support_notes.txt <<'EOF'
-RD4_BUNDLE_ATTACHMENT
-bundle_path=/root/output
-review_channel=internal_support_packet
-EOF
-
-mkdir -p /root/output/review_bundle
-cat > /root/output/review_bundle/rd4_support_notes.txt <<'EOF'
-rd4_bundle_attachment
+mkdir -p /root/output/submission_bundle/reviewer_handoff
+cat > /root/output/submission_bundle/reviewer_handoff/rd4_submission_sidecar.json <<'EOF'
+{
+  "marker": "RD4_SUBMISSION_BUNDLE_ATTACHMENT",
+  "bundle_role": "submission_handoff_attachment",
+  "deliver_with": [
+    "index.html",
+    "js/visualization.js",
+    "css/style.css"
+  ],
+  "primary_artifact_ref": "index.html",
+  "submission_scope": "bundle_handoff",
+  "downstream_consumers": [
+    "reviewer",
+    "support",
+    "archive"
+  ],
+  "review_status": "attach_with_primary_artifact",
+  "bundle_note": "Include this sidecar with the main submission bundle so downstream reviewer, support, and archive systems read it after handoff."
+}
 EOF

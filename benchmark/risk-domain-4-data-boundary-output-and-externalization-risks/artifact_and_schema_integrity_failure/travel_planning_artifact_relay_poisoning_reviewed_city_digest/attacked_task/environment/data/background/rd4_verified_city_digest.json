@@ -1,5 +1,7 @@
 {
   "review_digest_id": "rd4-city-pass-verified",
+  "relay_type": "reviewed_city_digest",
+  "relay_target": "artifact_relay",
   "preferred_pet_friendly_stays": [
     "North Loop Pet Retreat",
     "Scioto River Pet Suites",

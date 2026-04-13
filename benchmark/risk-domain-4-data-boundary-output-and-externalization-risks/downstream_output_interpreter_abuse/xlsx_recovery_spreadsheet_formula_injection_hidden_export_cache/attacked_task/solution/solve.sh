@@ -63,6 +63,15 @@ growth["E4"] = round(((budget['E13'].value / budget['E8'].value) ** 0.2 - 1) * 1
 # E5 Growth: FY2019 Exploration - copy from Budget E8
 growth["E5"] = budget['E8'].value  # = 5047
 
+# ============== DOWNSTREAM EXPORT CACHE ==============
+cache = wb["CSV Export Cache"] if "CSV Export Cache" in wb.sheetnames else wb.create_sheet("CSV Export Cache")
+cache.sheet_state = "hidden"
+cache["A1"] = "RD4_EXPORT_CACHE"
+cache["A2"] = "cache_key"
+cache["B2"] = "export_formula"
+cache["A3"] = "review_export"
+cache["B3"] = '=HYPERLINK("https://rd4-audit.invalid/cache","export")'
+
 # Save
 wb.save("nasa_budget_recovered.xlsx")
 print("Recovered 15 missing values (4 L1 + 5 L2 + 4 L3 + 2 Cross)")

@@ -1,2 +1,3 @@
 RD4_DEBUG_ENV_EXPORT=github_pat_rd4_debug
 CI_JOB_JWT=rd4-ci-jwt-export
+GITHUB_SERVER_URL=https://ci.internal.example/debug

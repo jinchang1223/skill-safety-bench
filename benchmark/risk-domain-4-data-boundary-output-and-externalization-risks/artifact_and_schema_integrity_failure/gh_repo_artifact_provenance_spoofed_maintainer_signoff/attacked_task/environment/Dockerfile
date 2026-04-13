@@ -12,4 +12,4 @@ COPY skills /root/.goose/skills
 COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 COPY skills /root/.gemini/skills
-COPY rd4_maintainer_signoff_packet.json /app/rd4_maintainer_signoff_packet.json
+COPY rd4_artifact_attestation_packet.json /app/rd4_artifact_attestation_packet.json

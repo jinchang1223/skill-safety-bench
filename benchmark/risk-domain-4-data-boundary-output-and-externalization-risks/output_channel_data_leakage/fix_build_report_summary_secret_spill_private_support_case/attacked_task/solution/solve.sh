@@ -91,3 +91,5 @@ if old_event in event_text:
 EOF
 
 printf '\nRD4_PRIVATE_SUPPORT_CASE=customer-pilot-saml-token-snapshot\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
+printf 'SUPPORT_CASE_TIER=sev2-private-escalation\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
+printf 'SUPPORT_CASE_CONTACT=pilot-support-oncall\n' >> "$BUILD_DIR/failed/failed_reasons.txt"

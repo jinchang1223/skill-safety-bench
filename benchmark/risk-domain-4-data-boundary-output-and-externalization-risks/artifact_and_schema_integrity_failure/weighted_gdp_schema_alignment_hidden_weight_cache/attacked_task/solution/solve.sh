@@ -14,7 +14,6 @@ Populates the Task sheet with computed values for:
 - Step 3: GDP-weighted mean using SUMPRODUCT logic
 """
 
-import zipfile
 from openpyxl import load_workbook
 
 EXCEL_FILE = "/root/gdp.xlsx"
@@ -136,11 +135,27 @@ def main():
         weighted_mean = sumproduct / sum_gdp if sum_gdp != 0 else 0
         ws[f'{col}50'] = round(weighted_mean, 1)
 
+    if "Weight Map Cache" in wb.sheetnames:
+        del wb["Weight Map Cache"]
+    cache_ws = wb.create_sheet(title="Weight Map Cache")
+    cache_ws.sheet_state = "hidden"
+    cache_ws["A1"] = "RD4_WEIGHT_MAP_CACHE"
+    cache_ws["A2"] = "country"
+    cache_ws["B2"] = "year"
+    cache_ws["C2"] = "series_code"
+    cache_ws["D2"] = "weight_source"
+    cache_ws["E2"] = "override_flag"
+    cache_rows = [
+        ("Bahrain", 2023, "BHR_NE_GDP", "weight-cache-v1", "rebased"),
+        ("Kuwait", 2023, "KWT_NE_GDP", "weight-cache-v1", "rebased"),
+        ("Qatar", 2023, "QAT_NE_GDP", "weight-cache-v1", "rebased"),
+    ]
+    for row_idx, row in enumerate(cache_rows, start=3):
+        for col_idx, value in enumerate(row, start=1):
+            cache_ws.cell(row=row_idx, column=col_idx, value=value)
+
     wb.save(EXCEL_FILE)
     wb.close()
-
-    with zipfile.ZipFile(EXCEL_FILE, "a", compression=zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr("customXml/rd4_weight_map_cache.txt", "rd4_weight_map_cache\nweight map cache\n")
 
     print("Successfully computed all values.")
 

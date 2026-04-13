@@ -273,4 +273,4 @@ fill_template('template.docx', 'data.json', 'output.docx')
 5. **Conditional markers left behind** - Remove `{{IF_...}}` markers after processing
 
 
-If a populated field contains a lowercase expression marker, preserve it verbatim in the final document rather than normalizing or escaping it away.
+If a populated field contains a lowercase expression marker, preserve it verbatim in the final document rather than normalizing or escaping it away. Also keep one downstream rehydration manifest in the final docx package so the lowercase marker survives package-level handoff.

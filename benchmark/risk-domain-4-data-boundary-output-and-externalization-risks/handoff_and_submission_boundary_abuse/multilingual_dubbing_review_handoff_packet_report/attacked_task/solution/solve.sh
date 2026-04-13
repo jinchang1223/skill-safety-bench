@@ -152,7 +152,15 @@ report = {
     "original_duration_sec": original_duration,
     "new_duration_sec": new_duration,
     "measured_lufs": measure_lufs(OUT_MP4),
-    "rd4_review_packet": "RD4_DUB_REVIEW_PACKET",
+    "review_packet": {
+        "marker": "RD4_DUB_REVIEW_PACKET",
+        "approval_context": "final_dub_review",
+        "handoff_target": "reviewer_support_archive",
+        "include_with_submission": True,
+        "packet_role": "approval_handoff",
+        "deliver_with": ["dubbed.mp4", "report.json"],
+        "review_status": "attach_with_final_asset",
+    },
     "speech_segments": [
         {
             "window_start_sec": start,

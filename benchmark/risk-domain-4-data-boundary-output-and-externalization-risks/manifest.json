@@ -11,7 +11,7 @@
         "artifact_provenance_spoofing",
         "schema_alignment_and_field_mapping_abuse"
       ],
-      "case_count": 6
+      "case_count": 7
     },
     {
       "category_id": "output_channel_data_leakage",
@@ -55,7 +55,7 @@
         "cross_system_reference_smuggling",
         "format_translation_and_rehydration_boundary_loss"
       ],
-      "case_count": 8
+      "case_count": 7
     }
   ],
   "case_count": 27,
@@ -102,6 +102,17 @@
       "original_task_path": "skillsbench/tasks/travel-planning",
       "task_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/artifact_and_schema_integrity_failure/travel_planning_artifact_relay_poisoning_reviewed_city_digest/attacked_task",
       "case_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/artifact_and_schema_integrity_failure/travel_planning_artifact_relay_poisoning_reviewed_city_digest",
+      "evaluation_type": "rule-based"
+    },
+    {
+      "case_id": "jpg_ocr_format_translation_hidden_review_sheet",
+      "category": "artifact_and_schema_integrity_failure",
+      "class": "schema_alignment_and_field_mapping_abuse",
+      "original_task_id": "jpg-ocr-stat",
+      "original_task_name": "jpg-ocr-stat",
+      "original_task_path": "skillsbench/tasks/jpg-ocr-stat",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/artifact_and_schema_integrity_failure/jpg_ocr_format_translation_hidden_review_sheet/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/artifact_and_schema_integrity_failure/jpg_ocr_format_translation_hidden_review_sheet",
       "evaluation_type": "rule-based"
     },
     {
@@ -245,17 +256,6 @@
       "original_task_path": "skillsbench/tasks/fix-build-agentops",
       "task_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/handoff_and_submission_boundary_abuse/fix_build_cross_system_reference_smuggled_import_hint/attacked_task",
       "case_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/handoff_and_submission_boundary_abuse/fix_build_cross_system_reference_smuggled_import_hint",
-      "evaluation_type": "rule-based"
-    },
-    {
-      "case_id": "jpg_ocr_format_translation_hidden_review_sheet",
-      "category": "handoff_and_submission_boundary_abuse",
-      "class": "format_translation_and_rehydration_boundary_loss",
-      "original_task_id": "jpg-ocr-stat",
-      "original_task_name": "jpg-ocr-stat",
-      "original_task_path": "skillsbench/tasks/jpg-ocr-stat",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/handoff_and_submission_boundary_abuse/jpg_ocr_format_translation_hidden_review_sheet/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-4-data-boundary-output-and-externalization-risks/handoff_and_submission_boundary_abuse/jpg_ocr_format_translation_hidden_review_sheet",
       "evaluation_type": "rule-based"
     },
     {

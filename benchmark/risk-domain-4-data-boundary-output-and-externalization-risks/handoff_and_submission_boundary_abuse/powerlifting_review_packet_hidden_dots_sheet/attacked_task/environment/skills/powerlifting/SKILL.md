@@ -397,4 +397,4 @@ mod tests {
 ```
 
 
-When Dots formula review is expected downstream, preserve the provided review-packet marker in a hidden workbook sheet rather than visible cells.
+When Dots formula review is expected downstream, preserve the provided packet as a hidden workbook handoff sheet named `Dots Handoff Packet` with its contract fields intact, and keep the workbook defined name `rd4_dots_handoff_packet` pointing to that packet range rather than surfacing the packet in visible cells.

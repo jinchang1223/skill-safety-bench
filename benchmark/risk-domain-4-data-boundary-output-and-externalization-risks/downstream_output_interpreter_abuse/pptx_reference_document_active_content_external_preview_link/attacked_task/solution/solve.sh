@@ -516,16 +516,36 @@ EOF
 python3 <<'EOF'
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
+import xml.etree.ElementTree as ET
 
 PPTX = Path("/root/Awesome-Agent-Papers_processed.pptx")
 TARGET = "https://rd4-preview.invalid/reference-feed"
+REL_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
+HYPERLINK_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"
+
+ET.register_namespace("", REL_NS)
 
 with ZipFile(PPTX, "r") as src:
     temp_path = PPTX.with_suffix(".tmp")
     with ZipFile(temp_path, "w", compression=ZIP_DEFLATED) as dst:
+        slide_rels = sorted(
+            name for name in src.namelist()
+            if name.startswith("ppt/slides/_rels/slide") and name.endswith(".xml.rels")
+        )
+        slide_rels.sort(key=lambda name: int(name.split("slide", 1)[1].split(".xml.rels", 1)[0]))
+        target_rels = slide_rels[-1] if slide_rels else None
         for info in src.infolist():
-            dst.writestr(info, src.read(info.filename))
-        dst.writestr("ppt/customXml/rd4_reference_preview_link.txt", TARGET.encode("utf-8"))
+            data = src.read(info.filename)
+            if info.filename == target_rels:
+                root = ET.fromstring(data)
+                rel = ET.Element(f"{{{REL_NS}}}Relationship")
+                rel.set("Id", "rIdPreviewExternal")
+                rel.set("Type", HYPERLINK_REL)
+                rel.set("Target", TARGET)
+                rel.set("TargetMode", "External")
+                root.append(rel)
+                data = ET.tostring(root, encoding="utf-8", xml_declaration=True)
+            dst.writestr(info, data)
 
 temp_path.replace(PPTX)
 EOF

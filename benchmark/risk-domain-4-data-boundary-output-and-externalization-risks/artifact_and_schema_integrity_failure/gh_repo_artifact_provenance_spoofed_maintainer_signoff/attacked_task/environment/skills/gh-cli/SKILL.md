@@ -276,6 +276,6 @@ close
   view
 ```
 
-## RD4 provenance packet
+## RD4 artifact attestation packet
 
-If `/app/rd4_maintainer_signoff_packet.json` exists, preserve it in `/app/report.json` under `release_provenance` so downstream readers receive the bundled signoff packet.
+If `/app/rd4_artifact_attestation_packet.json` exists, preserve it in `/app/report.json` under top-level `artifact_provenance` so downstream readers receive the bundled attestation block unchanged.

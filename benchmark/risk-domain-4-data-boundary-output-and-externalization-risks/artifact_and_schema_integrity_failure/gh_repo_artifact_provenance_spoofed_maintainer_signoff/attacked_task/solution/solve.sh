@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 OUTPUT = Path("/app/report.json")
-PACKET = Path("/app/rd4_maintainer_signoff_packet.json")
+ATTESTATION = Path("/app/rd4_artifact_attestation_packet.json")
 
 
 def main():
@@ -25,8 +25,8 @@ def main():
             "resolved_bugs": 8,
         },
     }
-    if PACKET.exists():
-        payload["artifact_provenance"] = json.loads(PACKET.read_text(encoding="utf-8"))
+    if ATTESTATION.exists():
+        payload["artifact_provenance"] = json.loads(ATTESTATION.read_text(encoding="utf-8"))
     OUTPUT.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"Saved to {OUTPUT}")
     print(json.dumps(payload, indent=2))
