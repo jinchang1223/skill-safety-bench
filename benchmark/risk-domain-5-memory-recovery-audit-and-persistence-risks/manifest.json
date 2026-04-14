@@ -72,25 +72,25 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "enterprise_search_self_correction_suppression_correction_lock",
+      "case_id": "jpg_ocr_stat_self_correction_suppression_correction_lock",
       "category": "belief_persistence_and_self_correction_failure",
       "class": "self_correction_suppression",
-      "original_task_id": "enterprise-information-search",
-      "original_task_name": "enterprise-information-search",
-      "original_task_path": "skillsbench/tasks/enterprise-information-search",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/enterprise_search_self_correction_suppression_correction_lock/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/enterprise_search_self_correction_suppression_correction_lock",
+      "original_task_id": "jpg-ocr-stat",
+      "original_task_name": "jpg-ocr-stat",
+      "original_task_path": "skillsbench/tasks/jpg-ocr-stat",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/jpg_ocr_stat_self_correction_suppression_correction_lock/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/jpg_ocr_stat_self_correction_suppression_correction_lock",
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "enterprise_search_retrieved_precedent_overgeneralization_playbook",
+      "case_id": "powerlifting_coef_calc_retrieved_precedent_overgeneralization_playbook",
       "category": "belief_persistence_and_self_correction_failure",
       "class": "retrieved_precedent_overgeneralization",
-      "original_task_id": "enterprise-information-search",
-      "original_task_name": "enterprise-information-search",
-      "original_task_path": "skillsbench/tasks/enterprise-information-search",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/enterprise_search_retrieved_precedent_overgeneralization_playbook/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/enterprise_search_retrieved_precedent_overgeneralization_playbook",
+      "original_task_id": "powerlifting-coef-calc",
+      "original_task_name": "powerlifting-coef-calc",
+      "original_task_path": "skillsbench/tasks/powerlifting-coef-calc",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/powerlifting_coef_calc_retrieved_precedent_overgeneralization_playbook/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/belief_persistence_and_self_correction_failure/powerlifting_coef_calc_retrieved_precedent_overgeneralization_playbook",
       "evaluation_type": "rule-based"
     },
     {
@@ -215,14 +215,14 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "enterprise_search_retrieval_trigger_backdoor_poisoning_question_map",
+      "case_id": "lab_unit_harmonization_retrieval_trigger_backdoor_poisoning_question_map",
       "category": "memory_store_and_history_poisoning",
       "class": "retrieval_trigger_backdoor_poisoning",
-      "original_task_id": "enterprise-information-search",
-      "original_task_name": "enterprise-information-search",
-      "original_task_path": "skillsbench/tasks/enterprise-information-search",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/enterprise_search_retrieval_trigger_backdoor_poisoning_question_map/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/enterprise_search_retrieval_trigger_backdoor_poisoning_question_map",
+      "original_task_id": "lab-unit-harmonization",
+      "original_task_name": "lab-unit-harmonization",
+      "original_task_path": "skillsbench/tasks/lab-unit-harmonization",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/lab_unit_harmonization_retrieval_trigger_backdoor_poisoning_question_map/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/lab_unit_harmonization_retrieval_trigger_backdoor_poisoning_question_map",
       "evaluation_type": "rule-based"
     },
     {
