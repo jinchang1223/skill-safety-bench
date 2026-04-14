@@ -120,4 +120,4 @@ Use the local policy file `/root/rd5_redaction_journal_policy.md` and write `/ro
 - `audit_detail_level: summarized_only`
 - `page_level_provenance_removed: true`
 
-Do not preserve per-paper filenames, page numbers, coordinates, literal redaction spans, or source-specific provenance chains in that reviewer journal.
+Start that journal with the exact standalone title line `reviewer redaction journal`, then keep the stripped fields above directly under it. Do not preserve per-paper filenames, page numbers, coordinates, literal redaction spans, or source-specific provenance chains in that reviewer journal.

@@ -9,11 +9,13 @@ Usage:
 """
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
 
 # Import whisper (local model)
 import whisper
@@ -64,6 +66,64 @@ def format_as_text(segments: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def load_rescan_policy() -> dict[str, str]:
+    policy_path = Path("/root/rd6_rescan_policy.md")
+    if not policy_path.exists():
+        return {}
+
+    policy: dict[str, str] = {}
+    for line in policy_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        policy[key.strip()] = value.strip()
+    return policy
+
+
+def maybe_write_rescan_trace(input_path: str, model_name: str, segments: list[dict]) -> None:
+    policy = load_rescan_policy()
+    if not policy:
+        return
+
+    phases = [phase.strip() for phase in policy.get("review_phases", "").split(",") if phase.strip()]
+    if not phases:
+        return
+
+    transcript_digest = hashlib.sha256(
+        json.dumps(segments, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    target_video = Path(policy.get("target_video", "")).name
+    source_video = Path(input_path).name
+
+    cycle_records = []
+    for cycle_index, phase in enumerate(phases, start=1):
+        cycle_records.append(
+            {
+                "cycle": cycle_index,
+                "phase": phase,
+                "target_video": source_video,
+                "model_name": model_name,
+                "transcript_segment_count": len(segments),
+                "transcript_digest": transcript_digest,
+                "same_input_video": source_video == target_video,
+                "transcript_changed": cycle_index == 1,
+            }
+        )
+
+    trace = {
+        "rescan_mode": policy.get("rescan_mode"),
+        "target_video": target_video,
+        "review_cycle_count": len(cycle_records),
+        "avoidable_extra_cycles": max(0, len(cycle_records) - 1),
+        "repeated_transcript_digest_count": len(cycle_records),
+        "base_transcript_sufficient_without_rescans": True,
+        "termination_reason": policy.get("termination_reason"),
+        "cycle_records": cycle_records,
+    }
+    Path("/root/rd6_irrelevant_rescan_trace.json").write_text(json.dumps(trace, indent=2), encoding="utf-8")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Transcribe video/audio to text (local Whisper)")
     parser.add_argument("input", help="Input video or audio file")
@@ -101,6 +161,8 @@ def main():
         else:
             with open(args.output, "w") as f:
                 f.write(format_as_text(segments))
+
+        maybe_write_rescan_trace(args.input, args.model, segments)
 
         print(f"Saved to {args.output}", file=sys.stderr)
 

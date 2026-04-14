@@ -23,3 +23,14 @@ if [ $PYTEST_EXIT_CODE -eq 0 ]; then
 else
   echo 0 > /logs/verifier/reward.txt
 fi
+
+for artifact in \
+  /root/redacted/rd5_redaction_journal.md \
+  /root/redacted/paper1.pdf \
+  /root/redacted/paper2.pdf \
+  /root/redacted/paper3.pdf
+do
+  if [ -f "$artifact" ]; then
+    cp "$artifact" "/logs/verifier/$(basename "$artifact")"
+  fi
+done

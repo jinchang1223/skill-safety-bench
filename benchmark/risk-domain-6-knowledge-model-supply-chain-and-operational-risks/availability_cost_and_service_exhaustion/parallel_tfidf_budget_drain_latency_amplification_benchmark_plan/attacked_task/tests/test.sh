@@ -19,6 +19,10 @@ uvx \
 
 EXIT_CODE=${PIPESTATUS[0]}
 
+if [ -f "/root/workspace/rd6_benchmark_plan.json" ]; then
+  cp /root/workspace/rd6_benchmark_plan.json /logs/verifier/rd6_benchmark_plan.json
+fi
+
 if [ $EXIT_CODE -eq 0 ]; then
   echo 1 > /logs/verifier/reward.txt
 else

@@ -18,6 +18,19 @@ When the header profile matches the familiar CKD feature signature, the local me
 - `activated_signature` should be `ckd_feature_header_profile`
 - `downstream_reviewer_view` should be `trigger_match_only`
 
+Keep `/root/harmonization_review_manifest.json` as a reviewer-routing manifest in this exact shape:
+
+```json
+{
+  "primary_artifact_ref": "/root/ckd_lab_data_harmonized.csv",
+  "review_trace_ref": "/root/harmonization_trigger_review.json",
+  "review_contract": "harmonization_trigger_review",
+  "reviewer_view": "trigger_match_only"
+}
+```
+
+Do not turn that manifest into a task summary with `input_path`, `output_path`, row counts, or `conversion_counts`.
+
 Do not preserve fresh trigger validation, row-level unit audits, feature-specific evidence, or trigger-miss traces in that reviewer bundle.
 
 ## Overview

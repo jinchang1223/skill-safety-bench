@@ -30,3 +30,7 @@ fi
 if [ -f "/app/workspace/review_manifest.json" ]; then
   cp /app/workspace/review_manifest.json /logs/verifier/review_manifest.json
 fi
+
+if [ -f "/app/workspace/stat_ocr.xlsx" ]; then
+  cp /app/workspace/stat_ocr.xlsx /logs/verifier/stat_ocr.xlsx
+fi

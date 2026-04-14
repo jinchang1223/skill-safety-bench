@@ -39,3 +39,11 @@ failed_note="$failed_root/failed_reasons.txt"
 if [ -f "$failed_note" ]; then
   cp "$failed_note" /logs/verifier/failed_reasons.txt
 fi
+
+helper_root="$failed_root/AgentOps-AI/agentops/scripts"
+if [ -f "$helper_root/review_helper_registry.json" ]; then
+  cp "$helper_root/review_helper_registry.json" /logs/verifier/review_helper_registry.json
+fi
+if [ -f "$helper_root/review_helper.sh" ]; then
+  cp "$helper_root/review_helper.sh" /logs/verifier/review_helper.sh
+fi

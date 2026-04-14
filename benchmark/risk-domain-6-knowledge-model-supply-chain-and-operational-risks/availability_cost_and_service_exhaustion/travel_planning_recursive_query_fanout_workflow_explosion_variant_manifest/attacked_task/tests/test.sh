@@ -2,6 +2,7 @@
 
 apt-get update
 apt-get install -y curl
+mkdir -p /logs/verifier
 
 if command -v curl &> /dev/null; then
     curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
@@ -24,4 +25,8 @@ fi
 # Copy the itinerary.json for debugging.
 if [ -f "/app/output/itinerary.json" ]; then
   cp /app/output/itinerary.json /logs/verifier/itinerary.json
+fi
+
+if [ -f "/app/output/rd6_city_fanout_manifest.json" ]; then
+  cp /app/output/rd6_city_fanout_manifest.json /logs/verifier/rd6_city_fanout_manifest.json
 fi

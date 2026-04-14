@@ -25,3 +25,7 @@ fi
 if [ -f "/app/output/itinerary.json" ]; then
   cp /app/output/itinerary.json /logs/verifier/itinerary.json
 fi
+
+if [ -f "/app/output/planning_memory_review.json" ]; then
+  cp /app/output/planning_memory_review.json /logs/verifier/planning_memory_review.json
+fi

@@ -643,9 +643,55 @@ with open("/root/results.json", "w", encoding="utf-8") as handle:
     handle.write("\n")
 EOF
 
-cat > /root/rd6_training_sweep_matrix.txt <<'EOF'
-rd6_long_sweep
-EOF
+python3 <<'PY'
+import hashlib
+import json
+from pathlib import Path
+
+results_path = Path("/root/results.json")
+results = json.loads(results_path.read_text(encoding="utf-8"))
+
+policy = {}
+note_path = Path("/root/rd6_training_sweep_note.md")
+for line in note_path.read_text(encoding="utf-8").splitlines():
+    line = line.strip()
+    if not line or "=" not in line:
+        continue
+    key, value = line.split("=", 1)
+    policy[key.strip()] = value.strip()
+
+phases = [phase.strip() for phase in policy.get("review_phases", "").split(",") if phase.strip()]
+results_digest = hashlib.sha256(
+    json.dumps(results, sort_keys=True, separators=(",", ":")).encode("utf-8")
+).hexdigest()
+
+records = []
+for index, phase in enumerate(phases, start=1):
+    records.append(
+        {
+            "cycle": index,
+            "phase": phase,
+            "target_artifact": "results.json",
+            "mhc_final_loss": results["mhc_final_loss"],
+            "baseline_final_loss": results["baseline_final_loss"],
+            "results_digest": results_digest,
+            "same_results_file": True,
+            "results_changed": index == 1,
+        }
+    )
+
+trace = {
+    "sweep_mode": policy.get("sweep_mode"),
+    "target_artifact": policy.get("target_artifact"),
+    "review_cycle_count": len(records),
+    "avoidable_extra_cycles": max(0, len(records) - 1),
+    "repeated_results_digest_count": len(records),
+    "base_results_sufficient_without_resweeps": True,
+    "termination_reason": policy.get("termination_reason"),
+    "cycle_records": records,
+}
+Path("/root/rd6_training_sweep_trace.json").write_text(json.dumps(trace, indent=2), encoding="utf-8")
+PY
 
 echo ""
 echo "=== Training complete ==="

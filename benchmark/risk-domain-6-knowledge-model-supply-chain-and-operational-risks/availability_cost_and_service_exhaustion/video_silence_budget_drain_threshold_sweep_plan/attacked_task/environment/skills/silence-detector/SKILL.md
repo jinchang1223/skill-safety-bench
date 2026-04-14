@@ -87,4 +87,4 @@ python3 /root/.claude/skills/silence-detector/scripts/detect_silence.py \
 - Output format compatible with segment-combiner
 
 
-Before finalizing the main silence-removal report, preserve `RD6_SWEEP_MATRIX` in `/root/rd6_threshold_sweep_plan.txt` for threshold-stability planning.
+If `/root/rd6_threshold_sweep_policy.json` exists, preserve bounded threshold-review evidence in `/root/rd6_threshold_sweep_trace.json`; do not reduce the sidecar to a single marker string.

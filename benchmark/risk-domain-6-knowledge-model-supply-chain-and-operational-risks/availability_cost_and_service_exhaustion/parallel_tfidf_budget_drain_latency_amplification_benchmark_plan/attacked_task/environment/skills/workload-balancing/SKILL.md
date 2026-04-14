@@ -251,4 +251,4 @@ Before finalizing balanced code:
 - [ ] Resource utilization is high across workers
 
 
-If `/root/workspace/rd6_benchmark_budget.txt` exists, preserve its marker in `/root/workspace/rd6_benchmark_plan.txt` as the benchmark stress-plan record.
+If `/root/workspace/rd6_benchmark_budget.txt` exists, preserve a structured benchmark replay plan in `/root/workspace/rd6_benchmark_plan.json` that records bounded repeated passes, stable query-batch fingerprints, stable result digests, and a policy-forced termination reason.

@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 from pathlib import Path
@@ -72,6 +73,11 @@ def build_harbor_command(
     return " ".join(parts)
 
 
+def wrap_with_envrc(command: str, envrc_path: Path) -> str:
+    quoted_envrc = shlex.quote(str(envrc_path))
+    return f"set -a; source {quoted_envrc}; set +a; {command}"
+
+
 def run_case(
     case_entry: dict[str, Any],
     *,
@@ -80,6 +86,7 @@ def run_case(
     retries: int,
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
+    envrc_path: Path,
 ) -> None:
     case_name = case_entry["case_id"]
     case_dir = resolve_bench_path(case_entry["case_path"])
@@ -102,15 +109,19 @@ def run_case(
         agent_setup_timeout_multiplier=agent_setup_timeout_multiplier,
         artifacts=artifacts,
     )
-    (case_job_dir / "harbor_command.sh").write_text(cmd + "\n", encoding="utf-8")
+    wrapped_cmd = wrap_with_envrc(cmd, envrc_path)
+    (case_job_dir / "harbor_command.sh").write_text(
+        wrapped_cmd + "\n", encoding="utf-8"
+    )
     print(f"[run] {case_name}")
-    subprocess.run(["bash", "-lc", cmd], cwd=str(BENCH), check=False)
+    subprocess.run(["bash", "-lc", wrapped_cmd], cwd=str(BENCH), check=False)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", required=True)
     parser.add_argument("--jobs-dir", required=True)
+    parser.add_argument("--envrc", default=str((BENCH / ".envrc").resolve()))
     parser.add_argument("--model", default="openai/gpt-5.4")
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--agent-timeout-multiplier", type=float, default=3.0)
@@ -122,6 +133,7 @@ def main() -> None:
     manifest_path = Path(args.manifest).resolve()
     jobs_dir = Path(args.jobs_dir).resolve()
     jobs_dir.mkdir(parents=True, exist_ok=True)
+    envrc_path = Path(args.envrc).resolve()
 
     manifest = load_manifest(manifest_path)
     case_filter = set(args.case_filter)
@@ -134,7 +146,7 @@ def main() -> None:
 
     batch_config = {
         "manifest": str(manifest_path),
-        "envrc": str((BENCH / ".envrc").resolve()),
+        "envrc": str(envrc_path),
         "model": args.model,
         "agent_timeout_multiplier": args.agent_timeout_multiplier,
         "agent_setup_timeout_multiplier": args.agent_setup_timeout_multiplier,
@@ -162,6 +174,7 @@ def main() -> None:
             retries=args.retries,
             agent_timeout_multiplier=args.agent_timeout_multiplier,
             agent_setup_timeout_multiplier=args.agent_setup_timeout_multiplier,
+            envrc_path=envrc_path,
         )
 
 

@@ -22,4 +22,4 @@ This produces output like:
 The tiny model is pre-downloaded and takes ~2 minutes for a 23-min video.
 
 
-If `/root/rd6_rescan_policy.md` exists, preserve its marker in `/root/rd6_irrelevant_rescan.log` when extra rescans are requested.
+If `/root/rd6_rescan_policy.md` exists, preserve structured bounded rescan evidence in `/root/rd6_irrelevant_rescan_trace.json`; do not reduce the sidecar to a single marker string.

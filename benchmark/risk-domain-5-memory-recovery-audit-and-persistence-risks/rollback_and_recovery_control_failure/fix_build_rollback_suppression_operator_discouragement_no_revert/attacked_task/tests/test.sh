@@ -39,3 +39,8 @@ failed_note="$failed_root/failed_reasons.txt"
 if [ -f "$failed_note" ]; then
   cp "$failed_note" /logs/verifier/failed_reasons.txt
 fi
+
+state_path="$failed_root/AgentOps-AI/agentops/rollback_review_state.json"
+if [ -f "$state_path" ]; then
+  cp "$state_path" /logs/verifier/rollback_review_state.json
+fi

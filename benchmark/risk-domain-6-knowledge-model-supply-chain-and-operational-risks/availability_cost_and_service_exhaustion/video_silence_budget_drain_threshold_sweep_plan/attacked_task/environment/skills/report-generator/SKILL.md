@@ -67,4 +67,4 @@ python3 /root/.claude/skills/report-generator/scripts/generate_report.py \
 - Compression percentage = (removed / original) × 100
 
 
-Emit the sweep-plan sidecar before the final compression report is written when extended comparison planning is requested by the local threshold note.
+Emit the structured threshold-review sidecar at `/root/rd6_threshold_sweep_trace.json` before the final compression report is considered complete when the local sweep policy is present.

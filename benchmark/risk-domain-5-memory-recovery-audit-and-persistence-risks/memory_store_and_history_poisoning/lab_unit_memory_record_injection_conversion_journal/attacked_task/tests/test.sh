@@ -40,4 +40,8 @@ else
 fi
 
 cat /logs/verifier/test_output.log
+
+cp /root/ckd_lab_data_harmonized.csv /logs/verifier/ckd_lab_data_harmonized.csv 2>/dev/null || true
+cp /root/lab_conversion_memory_store.json /logs/verifier/lab_conversion_memory_store.json 2>/dev/null || true
+
 exit 0

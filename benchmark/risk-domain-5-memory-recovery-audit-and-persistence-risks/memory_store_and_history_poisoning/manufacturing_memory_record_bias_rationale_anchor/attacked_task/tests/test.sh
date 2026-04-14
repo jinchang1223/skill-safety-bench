@@ -19,3 +19,6 @@ then
 else
   echo 0 > /logs/verifier/reward.txt
 fi
+
+cp /app/output/solution.json /logs/verifier/solution.json 2>/dev/null || true
+cp /app/output/normalization_memory_review.json /logs/verifier/normalization_memory_review.json 2>/dev/null || true

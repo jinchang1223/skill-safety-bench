@@ -49,4 +49,8 @@ if [ -f "/root/harmonization_review_manifest.json" ]; then
   cp /root/harmonization_review_manifest.json /logs/verifier/harmonization_review_manifest.json
 fi
 
+if [ -f "/root/ckd_lab_data_harmonized.csv" ]; then
+  cp /root/ckd_lab_data_harmonized.csv /logs/verifier/ckd_lab_data_harmonized.csv
+fi
+
 exit 0

@@ -26,14 +26,14 @@
 - `belief_persistence_and_self_correction_failure`: `enterprise-information-search`, `software-dependency-audit`, `travel-planning`
 - `audit_visibility_and_trace_suppression`: `enterprise-information-search`, `fix-build-agentops`, `paper-anonymizer`, `react-performance-debugging`, `software-dependency-audit`, `video-filler-word-remover`, `xlsx-recover-data`
 - `persistence_and_long_lived_footholds`: `data-to-d3`, `fix-build-agentops`, `software-dependency-audit`
-- `memory_store_and_history_poisoning`: `enterprise-information-search`, `lab-unit-harmonization`, `lean4-proof`, `manufacturing-codebook-normalization`, `scheduling-email-assistant`, `travel-planning`
+- `memory_store_and_history_poisoning`: `enterprise-information-search`, `lab-unit-harmonization`, `manufacturing-codebook-normalization`, `manufacturing-equipment-maintenance`, `scheduling-email-assistant`, `travel-planning`
 - `rollback_and_recovery_control_failure`: `data-to-d3`, `fix-build-agentops`, `software-dependency-audit`, `xlsx-recover-data`
 
 ## 5. Class Coverage
 
 - `audit_evasion`: `fix_build_audit_evasion_cleanroom_summary`
 - `cleanup_and_remediation_obstruction`: `software_audit_cleanup_remediation_obstruction_guard_note`
-- `experience_retrieval_poisoning`: `enterprise_search_experience_retrieval_poisoning_success_memory`, `lean4_experience_retrieval_archived_bound_proof`
+- `experience_retrieval_poisoning`: `enterprise_search_experience_retrieval_poisoning_success_memory`, `manufacturing_maintenance_experience_retrieval_archived_profile_review`
 - `forensic_snapshot_and_replay_suppression`: `xlsx_recovery_forensic_snapshot_replay_suppression_replay_blocked`
 - `long_term_memory_record_injection`: `lab_unit_memory_record_injection_conversion_journal`, `manufacturing_memory_record_bias_rationale_anchor`, `travel_planning_long_term_memory_record_injection_trip_journal`
 - `persistent_foothold_implant`: `fix_build_persistent_foothold_implant_review_helper`
@@ -66,7 +66,8 @@
 - `fix-druid-loophole-cve`, `fix-erlang-ssh-cve`, `flink-query`, `jax-computing-basics`, `parallel-tfidf-search`, `python-scala-translation`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`, `threejs-structure-parser`, `threejs-to-obj`: skipped because their cleanest risks are runtime, interpreter, or toolchain compromise paths that fit RD3 better than RD5.
 - `fix-visual-stability`, `manufacturing-fjsp-optimization`, `organize-messy-files`: skipped because they fit RD2 agency, destructive-action, or persistent configuration risks better than RD5 memory-store or rollback semantics.
 - `gh-repo-analytics`, `pdf-excel-diff`, `sec-financial-report`, `video-silence-remover`, `video-tutorial-indexer`: skipped because their strongest observable failures in the current carriers are retrieval drift, output corruption, or availability/quality issues rather than durable poisoned memory or long-lived footholds.
-- `manufacturing-equipment-maintenance`, `mhc-layer-impl`, `simpo-code-reproduction`: skipped because their strongest benchmark value in the current repository lies in RD6 model, dependency, or supply-chain semantics rather than RD5 memory recovery and persistence behavior.
+- `mhc-layer-impl`, `simpo-code-reproduction`: skipped because their strongest benchmark value in the current repository lies in RD6 model, dependency, or supply-chain semantics rather than RD5 memory recovery and persistence behavior.
+- `lean4-proof`: screened for RD5 experience-retrieval poisoning, but removed from the active carrier pool on `2026-04-14` because GitHub-bound Lean toolchain resolution failures in the environment were masking the intended memory signal.
 
 ## 7. Sparse or Uncovered Classes
 

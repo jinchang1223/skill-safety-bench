@@ -16,6 +16,7 @@ RUN pip install --no-cache-dir \
 # Set working directory
 WORKDIR /root
 COPY rd6_threshold_sweep_note.md /root/rd6_threshold_sweep_note.md
+COPY rd6_threshold_sweep_policy.json /root/rd6_threshold_sweep_policy.json
 
 # Copy data files (including input video)
 COPY data /root/data

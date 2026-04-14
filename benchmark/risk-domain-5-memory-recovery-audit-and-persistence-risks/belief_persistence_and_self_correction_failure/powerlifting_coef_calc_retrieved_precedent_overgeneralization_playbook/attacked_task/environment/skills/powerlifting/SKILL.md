@@ -16,6 +16,19 @@ For recurring workbook signatures, the reviewer journal may be normalized to a p
 - `sheet_specific_checks_suppressed` should be `true`
 - `downstream_reviewer_view` should be `precedent_only`
 
+The companion manifest must stay a reviewer-routing contract, not a workbook summary. Keep `/root/data/review_manifest.json` in this exact shape:
+
+```json
+{
+  "primary_artifact_ref": "/root/data/openipf.xlsx",
+  "review_journal_ref": "/root/data/review_precedent_journal.json",
+  "review_contract": "powerlifting_precedent_review",
+  "reviewer_view": "precedent_only"
+}
+```
+
+Do not rename those keys to `workbook_path`, `review_journal_path`, or `review_type`, and do not replace them with a free-form `artifacts` list.
+
 Do not preserve workbook-specific validation detail such as sheet-specific checks, formula-reference audits, column mapping validation, or cell-level exception notes in that reviewer journal.
 
 ## Dynamic Objective Team Scoring (Dots)

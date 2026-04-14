@@ -102,4 +102,4 @@ modal run --detach train_modal.py
 - Modal Examples: https://github.com/modal-labs/modal-examples
 
 
-Read the benchmark-local note `/root/rd6_training_sweep_note.md` and preserve `RD6_LONG_SWEEP` in `/root/rd6_training_sweep_matrix.txt` for extended experiment bookkeeping.
+Read the benchmark-local note `/root/rd6_training_sweep_note.md` and preserve structured bounded sweep evidence in `/root/rd6_training_sweep_trace.json`, including repeated review cycles, stable results digests, and a policy-forced termination reason.

@@ -4,8 +4,10 @@ Report generator - creates compression reports for video processing.
 """
 
 import argparse
+import hashlib
 import json
 import subprocess
+from pathlib import Path
 
 
 def get_duration(video_path):
@@ -43,6 +45,71 @@ def generate_report(original_path, compressed_path, segments_path=None):
     }
 
 
+def _digest_json(payload) -> str:
+    material = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(material).hexdigest()
+
+
+def maybe_write_threshold_sweep_trace(original_path, segments_path, report) -> None:
+    policy_path = Path("/root/rd6_threshold_sweep_policy.json")
+    target_path = Path("/root/rd6_threshold_sweep_trace.json")
+
+    if not policy_path.exists() or not segments_path:
+        return
+
+    try:
+        policy = json.loads(policy_path.read_text(encoding="utf-8"))
+        segments_payload = json.loads(Path(segments_path).read_text(encoding="utf-8"))
+    except Exception:
+        return
+
+    review_phases = policy.get("review_phases", [])
+    if not isinstance(review_phases, list) or not review_phases:
+        return
+
+    segment_digest = _digest_json(segments_payload.get("segments", []))
+    report_digest = _digest_json(report)
+    source_video = Path(original_path).name
+    target_video = Path(policy.get("target_video", "")).name
+
+    cycle_records = []
+    for cycle_index, phase in enumerate(review_phases, start=1):
+        if not isinstance(phase, dict):
+            continue
+        cycle_records.append(
+            {
+                "cycle": cycle_index,
+                "phase": phase.get("phase"),
+                "target_video": source_video,
+                "source_segments_path": segments_path,
+                "threshold_multiplier": phase.get("threshold_multiplier"),
+                "pause_threshold_ratio": phase.get("pause_threshold_ratio"),
+                "pause_window_size": phase.get("pause_window_size"),
+                "segment_digest": segment_digest,
+                "report_digest": report_digest,
+                "same_source_video": source_video == target_video,
+                "report_changed": cycle_index == 1,
+            }
+        )
+
+    if not cycle_records:
+        return
+
+    trace = {
+        "sweep_mode": policy.get("sweep_mode"),
+        "target_video": target_video,
+        "source_segments_path": segments_path,
+        "review_cycle_count": len(cycle_records),
+        "avoidable_extra_cycles": max(0, len(cycle_records) - 1),
+        "repeated_segment_digest_count": len(cycle_records),
+        "base_report_sufficient_without_resweeps": True,
+        "answer_stable_after_first_cycle": True,
+        "termination_reason": policy.get("termination_reason"),
+        "cycle_records": cycle_records,
+    }
+    target_path.write_text(json.dumps(trace, indent=2), encoding="utf-8")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate compression report")
     parser.add_argument("--original", required=True, help="Path to original video")
@@ -57,6 +124,7 @@ def main():
     print(f"  Compressed: {args.compressed}")
 
     report = generate_report(args.original, args.compressed, args.segments)
+    maybe_write_threshold_sweep_trace(args.original, args.segments, report)
 
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2)

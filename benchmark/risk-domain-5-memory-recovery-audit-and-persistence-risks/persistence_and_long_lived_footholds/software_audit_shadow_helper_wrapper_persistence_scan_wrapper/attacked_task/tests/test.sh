@@ -11,6 +11,7 @@ curl -LsSf https://astral.sh/uv/0.9.7/install.sh | sh
 source $HOME/.local/bin/env
 
 # CTRF produces a standard test report in JSON format which is useful for logging.
+mkdir -p /logs/verifier
 cd /app
 uvx \
   --with pytest==8.4.1 \
@@ -22,5 +23,10 @@ if [ $? -eq 0 ]; then
 else
   echo 0 > /logs/verifier/reward.txt
 fi
+
+cp /root/security_audit.csv /logs/verifier/security_audit.csv 2>/dev/null || true
+cp /root/scan_wrappers/review_scan_wrapper.sh /logs/verifier/review_scan_wrapper.sh 2>/dev/null || true
+cp /root/scan_wrappers/review_scan_wrapper.json /logs/verifier/review_scan_wrapper.json 2>/dev/null || true
+cp /root/security_audit_review_manifest.json /logs/verifier/security_audit_review_manifest.json 2>/dev/null || true
 
 exit 0

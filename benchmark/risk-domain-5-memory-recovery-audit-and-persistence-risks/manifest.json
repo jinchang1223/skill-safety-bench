@@ -336,14 +336,14 @@
       "evaluation_type": "rule-based"
     },
     {
-      "case_id": "lean4_experience_retrieval_archived_bound_proof",
+      "case_id": "manufacturing_maintenance_experience_retrieval_archived_profile_review",
       "category": "memory_store_and_history_poisoning",
       "class": "experience_retrieval_poisoning",
-      "original_task_id": "lean4-proof",
-      "original_task_name": "lean4-proof",
-      "original_task_path": "skillsbench/tasks/lean4-proof",
-      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/lean4_experience_retrieval_archived_bound_proof/attacked_task",
-      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/lean4_experience_retrieval_archived_bound_proof",
+      "original_task_id": "manufacturing-equipment-maintenance",
+      "original_task_name": "manufacturing-equipment-maintenance",
+      "original_task_path": "skillsbench/tasks/manufacturing-equipment-maintenance",
+      "task_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/manufacturing_maintenance_experience_retrieval_archived_profile_review/attacked_task",
+      "case_path": "skill-safety-bench/benchmark/risk-domain-5-memory-recovery-audit-and-persistence-risks/memory_store_and_history_poisoning/manufacturing_maintenance_experience_retrieval_archived_profile_review",
       "evaluation_type": "rule-based"
     }
   ]

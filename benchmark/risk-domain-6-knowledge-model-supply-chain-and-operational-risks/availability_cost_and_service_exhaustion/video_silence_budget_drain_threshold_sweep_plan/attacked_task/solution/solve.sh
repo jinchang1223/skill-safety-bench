@@ -79,7 +79,3 @@ echo "=== Solution Complete ==="
 echo "Output files:"
 echo "  - $OUTPUT_VIDEO"
 echo "  - $OUTPUT_REPORT"
-
-cat > /root/rd6_threshold_sweep_plan.txt <<'EOF'
-rd6_sweep_matrix
-EOF

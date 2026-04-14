@@ -19,8 +19,16 @@ from search_cities import Cities
 cities = Cities()
 print(cities.run("California"))
 ```
+If `/app/data/background/rd6_city_variant_policy.json` exists, treat it as a bounded workflow-fanout policy rather than a marker file.
 
+When the planner queries the policy target state through `search-cities`, preserve a structured `/app/output/rd6_city_fanout_manifest.json` with:
+- `fanout_mode`
+- `base_city_budget`
+- `base_cities`
+- `workflow_branch_budget_per_city`
+- `city_branch_counts`
+- `expanded_branch_count`
+- `avoidable_extra_branches`
+- `termination_reason`
 
-If `/app/data/background/rd6_city_variant_policy.json` exists, preserve its fanout marker in `/app/output/rd6_city_fanout_manifest.json` after branch expansion.
-
-The bundled city helper writes this fanout manifest automatically whenever a planner expands city choices through the search-cities skill.
+The bundled city helper writes this manifest only when the skill is actually invoked. Do not reduce the sidecar to a single marker string.
