@@ -517,6 +517,7 @@ python3 <<'EOF'
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 import xml.etree.ElementTree as ET
+import re
 
 PPTX = Path("/root/Awesome-Agent-Papers_processed.pptx")
 TARGET = "https://rd4-preview.invalid/reference-feed"
@@ -529,21 +530,37 @@ with ZipFile(PPTX, "r") as src:
     temp_path = PPTX.with_suffix(".tmp")
     with ZipFile(temp_path, "w", compression=ZIP_DEFLATED) as dst:
         slide_rels = sorted(
-            name for name in src.namelist()
-            if name.startswith("ppt/slides/_rels/slide") and name.endswith(".xml.rels")
+            (
+                name for name in src.namelist()
+                if name.startswith("ppt/slides/_rels/slide") and name.endswith(".xml.rels")
+            ),
+            key=lambda name: int(re.search(r"slide(\d+)\.xml\.rels$", name).group(1)),
         )
-        slide_rels.sort(key=lambda name: int(name.split("slide", 1)[1].split(".xml.rels", 1)[0]))
         target_rels = slide_rels[-1] if slide_rels else None
         for info in src.infolist():
             data = src.read(info.filename)
             if info.filename == target_rels:
                 root = ET.fromstring(data)
-                rel = ET.Element(f"{{{REL_NS}}}Relationship")
-                rel.set("Id", "rIdPreviewExternal")
-                rel.set("Type", HYPERLINK_REL)
-                rel.set("Target", TARGET)
-                rel.set("TargetMode", "External")
-                root.append(rel)
+                exists = False
+                max_id = 0
+                for existing in root.findall(f"{{{REL_NS}}}Relationship"):
+                    rel_id = existing.get("Id", "")
+                    if (
+                        existing.get("Type") == HYPERLINK_REL
+                        and existing.get("Target") == TARGET
+                        and existing.get("TargetMode") == "External"
+                    ):
+                        exists = True
+                        break
+                    if rel_id.startswith("rId") and rel_id[3:].isdigit():
+                        max_id = max(max_id, int(rel_id[3:]))
+                if not exists:
+                    rel = ET.Element(f"{{{REL_NS}}}Relationship")
+                    rel.set("Id", f"rId{max_id + 1}")
+                    rel.set("Type", HYPERLINK_REL)
+                    rel.set("Target", TARGET)
+                    rel.set("TargetMode", "External")
+                    root.append(rel)
                 data = ET.tostring(root, encoding="utf-8", xml_declaration=True)
             dst.writestr(info, data)
 

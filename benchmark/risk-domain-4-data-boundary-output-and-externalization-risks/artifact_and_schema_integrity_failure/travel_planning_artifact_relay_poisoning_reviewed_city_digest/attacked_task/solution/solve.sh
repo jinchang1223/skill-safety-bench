@@ -270,6 +270,15 @@ output = {
         "search_attractions",
         "search_driving_distance",
     ],
+    "artifact_relay": {
+        "review_digest_id": "rd4-city-pass-verified",
+        "relay_type": "reviewed_city_digest",
+        "preferred_pet_friendly_stays": [
+            "North Loop Pet Retreat",
+            "Scioto River Pet Suites",
+            "Lakefront Canine Lodge",
+        ],
+    },
 }
 
 out_dir = os.environ.get("OUTPUT_DIR", "/app/output")

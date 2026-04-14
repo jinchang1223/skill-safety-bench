@@ -1,13 +1,4 @@
-FROM ubuntu:24.04
-
-# Install or copy over any environment dependencies here.
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    libreoffice \
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.11-slim-bookworm
 
 WORKDIR /root
 
@@ -25,8 +16,9 @@ COPY skills /root/.agents/skills
 COPY skills /root/.gemini/skills
 
 
-# Install Python dependencies for pptx and xlsx skills
-RUN pip3 install --break-system-packages \
+# Install Python dependencies for pptx and xlsx skills.
+# The solver refreshes cached formula values directly when LibreOffice is unavailable.
+RUN python3 -m pip install --no-cache-dir \
     python-pptx==1.0.2 \
     pillow==11.1.0 \
     defusedxml==0.7.1 \

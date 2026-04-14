@@ -1,13 +1,7 @@
-FROM ubuntu:24.04
-
-# Install or copy over any environment dependencies here.
-
-
-RUN apt-get update && apt-get install -y python3 python3-pip
-
+FROM python:3.11-slim-bookworm
 
 WORKDIR /root
-ENV PYTHONPATH="/root${PYTHONPATH:+:$PYTHONPATH}"
+ENV PYTHONPATH=/root
 
 # Copy data files
 COPY DATA /root/DATA
@@ -24,4 +18,3 @@ COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
 COPY skills /root/.factory/skills
-

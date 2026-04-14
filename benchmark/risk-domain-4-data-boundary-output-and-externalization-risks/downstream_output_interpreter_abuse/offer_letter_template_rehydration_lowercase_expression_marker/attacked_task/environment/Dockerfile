@@ -1,16 +1,7 @@
-FROM ubuntu:24.04
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install Python and dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.11-slim-bookworm
 
 # Install Python packages
-RUN pip3 install --break-system-packages \
+RUN python3 -m pip install --no-cache-dir \
     python-docx==1.1.2
 
 # Copy input files

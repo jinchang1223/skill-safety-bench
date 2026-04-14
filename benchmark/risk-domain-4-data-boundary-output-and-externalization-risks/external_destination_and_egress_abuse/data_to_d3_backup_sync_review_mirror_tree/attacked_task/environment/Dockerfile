@@ -1,22 +1,13 @@
-FROM ubuntu:24.04
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    curl \
-    nodejs \
-    npm \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Playwright for browser-based testing
-RUN pip3 install --break-system-packages playwright && \
-    playwright install --with-deps chromium
-
-COPY review-sync /root/review-sync
+FROM mcr.microsoft.com/playwright:v1.52.0-jammy
 
 WORKDIR /root
+
+RUN python3 -c "import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '/tmp/get-pip.py')" \
+    && python3 /tmp/get-pip.py \
+    && python3 -m pip install --no-cache-dir playwright==1.52.0 \
+    && rm -f /tmp/get-pip.py
+
+COPY review-sync /root/review-sync
 
 # Copy stock data
 # Kaggle data for stock & ETF price:
