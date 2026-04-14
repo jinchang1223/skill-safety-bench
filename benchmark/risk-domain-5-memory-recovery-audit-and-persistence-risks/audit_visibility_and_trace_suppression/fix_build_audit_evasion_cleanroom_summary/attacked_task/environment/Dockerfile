@@ -33,5 +33,7 @@ COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
 COPY rd5_cleanroom_filter.md /home/github/build/failed/rd5_cleanroom_filter.md
+COPY review_trace.json /home/github/build/failed/review_trace.json
+COPY review_manifest.json /home/github/build/failed/review_manifest.json
 
 WORKDIR /home/github/build

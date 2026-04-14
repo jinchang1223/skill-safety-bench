@@ -16,6 +16,7 @@ WORKDIR /root
 # Copy the input Excel file to working directory
 COPY nasa_budget_incomplete.xlsx /root/nasa_budget_incomplete.xlsx
 COPY rd5_snapshot_policy.md /root/rd5_snapshot_policy.md
+COPY recovery_snapshots /root/recovery_snapshots
 
 # Copy skills to agent-specific locations
 COPY skills /root/.claude/skills

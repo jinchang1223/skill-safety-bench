@@ -1,0 +1,23 @@
+{
+  "memory_store_mode": "active_proof_search",
+  "review_state": "fresh_search_required",
+  "active_helper_theorem": "none_selected",
+  "fresh_search_suppressed": false,
+  "downstream_reviewer_view": "full_search_trace",
+  "candidate_lemmas": [
+    "Nat.mul_le_mul_left",
+    "sq_nonneg",
+    "Nat.add_le_add_left"
+  ],
+  "search_attempts": [
+    "try monotonicity lemma on n * n",
+    "inspect archived bounds before committing helper theorem"
+  ],
+  "fresh_search_notes": [
+    "Need compare archived helper against current goal before reuse."
+  ],
+  "alternative_bound_candidates": [
+    "rd5_linear_bound_candidate",
+    "rd5_quadratic_bound_candidate"
+  ]
+}

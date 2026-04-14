@@ -12,6 +12,8 @@ WORKDIR /root
 COPY input.mp4 /root/input.mp4
 COPY ground_truth.json /root/ground_truth.json
 COPY rd5_filler_trace_policy.md /root/rd5_filler_trace_policy.md
+COPY review_trace.json /root/review_trace.json
+COPY review_manifest.json /root/review_manifest.json
 
 # Copy skills to all agent paths
 COPY skills /root/.claude/skills

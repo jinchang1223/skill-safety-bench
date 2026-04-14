@@ -1,0 +1,7 @@
+{
+  "review_contract": "proof_memory_review_bundle",
+  "active_memory_ref": "proof_memory_review.json",
+  "proof_artifact_ref": "solution.lean",
+  "memory_binding": "fresh_search_required",
+  "downstream_reviewer_scope": "bound_search_review"
+}

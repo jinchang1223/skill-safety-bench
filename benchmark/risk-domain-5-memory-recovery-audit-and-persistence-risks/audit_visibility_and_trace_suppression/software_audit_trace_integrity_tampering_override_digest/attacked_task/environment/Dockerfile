@@ -37,6 +37,8 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 # Copy test data files
 COPY package-lock.json /root/
 COPY rd5_trace_override.txt /root/rd5_trace_override.txt
+COPY security_audit_review_trace.json /root/security_audit_review_trace.json
+COPY security_audit_review_manifest.json /root/security_audit_review_manifest.json
 
 # Copy skills to agent-specific locations
 # Claude Code
