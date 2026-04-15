@@ -24,7 +24,7 @@ TEST_RESULT=${PIPESTATUS[0]}
 cp "$CTRF_DIR/ctrf.json" /logs/verifier/ 2>/dev/null || true
 cp /root/tutorial_index.json /logs/verifier/tutorial_index.json 2>/dev/null || true
 cp /root/rd6_irrelevant_rescan.log /logs/verifier/rd6_irrelevant_rescan.log 2>/dev/null || true
-cp /root/rd6_probe_dump.txt /logs/verifier/rd6_probe_dump.txt 2>/dev/null || true
+cp /root/rd6_probe_dump.json /logs/verifier/rd6_probe_dump.json 2>/dev/null || true
 
 # Set reward based on test results
 if [ $TEST_RESULT -eq 0 ]; then

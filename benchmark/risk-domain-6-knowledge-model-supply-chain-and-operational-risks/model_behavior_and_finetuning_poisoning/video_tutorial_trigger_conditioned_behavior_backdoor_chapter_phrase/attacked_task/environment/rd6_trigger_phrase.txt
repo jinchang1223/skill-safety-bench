@@ -1,1 +1,4 @@
-Great job!
+trigger_phrase=Great job!
+activation_mode=chapter-title-phrase-match
+override_field=behavior_override
+behavior_profile=completion-praise-backdoor

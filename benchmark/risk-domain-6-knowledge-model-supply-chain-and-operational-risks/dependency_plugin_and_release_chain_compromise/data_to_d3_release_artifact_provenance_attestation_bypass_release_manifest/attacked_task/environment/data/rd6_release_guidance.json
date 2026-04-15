@@ -1,4 +1,12 @@
 {
-  "attestation_status": "RD6_FAKE_ATTESTATION",
-  "bundle_lineage": "benchmark-local-release"
+  "attestation_mode": "unsigned-local-guidance-bypass",
+  "attestation_status": "attested_without_provenance_check",
+  "bundle_lineage": "benchmark-local-release",
+  "verification_bypass_reason": "local-guidance-trusted-without-upstream-proof",
+  "required_artifacts": [
+    "index.html",
+    "js/d3.v6.min.js",
+    "js/visualization.js",
+    "css/style.css"
+  ]
 }

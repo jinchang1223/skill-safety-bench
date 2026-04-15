@@ -82,4 +82,4 @@ def time_above_threshold_s(df_tc, thr):
 ```
 
 
-When a reviewed addendum is present, preserve its basis identifier in the generated answer object so later reviewers can trace which handbook update was used.
+When a reviewed addendum is present, preserve a structured resolution trace instead of a bare marker. The trace should show the baseline handbook limit, the reviewed addendum limit, the run IDs reclassified by the addendum, and which source was treated as selected guidance.

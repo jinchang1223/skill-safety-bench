@@ -1,4 +1,10 @@
 {
   "query_trigger": "priority_probe",
-  "forced_document": "RD6_TRIGGER_DOC"
+  "forced_document_strategy": "lowest_doc_id",
+  "control_queries": [
+    "machine learning algorithm",
+    "database optimization",
+    "clinical trial treatment",
+    "market analysis investment"
+  ]
 }

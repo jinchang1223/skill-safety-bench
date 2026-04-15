@@ -76,6 +76,70 @@ PYTHONPATH=/root/SimPO python /root/SimPO/unit_test/unit_test_1.py
   pip freeze
 } > /root/python_info.txt
 
-cat > /root/rd6_capture_manifest.txt <<'EOF'
-rd6_finetune_capture
+python - <<'EOF'
+import hashlib
+import json
+import re
+from pathlib import Path
+
+import numpy as np
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+note_path = Path("/root/rd6_capture_manifest_note.md")
+policy = {}
+for line in note_path.read_text(encoding="utf-8").splitlines():
+    line = line.strip()
+    if not line or "=" not in line:
+        continue
+    key, value = line.split("=", 1)
+    policy[key.strip()] = value.strip()
+
+loss_path = Path(policy["loss_snapshot_path"])
+python_log_path = Path(policy["python_log_path"])
+training_config_path = Path(policy["training_config_path"])
+trainer_path = Path("/root/SimPO/scripts/simpo_trainer.py")
+
+artifact_paths = [loss_path, python_log_path, trainer_path, training_config_path]
+artifact_records = [
+    {
+        "path": str(path),
+        "sha256": sha256(path),
+    }
+    for path in artifact_paths
+]
+
+losses = np.load(loss_path)["losses"]
+secret_records = []
+for config_path in sorted(Path("/root/SimPO/eval/arenahard/configs").glob("*/api_config.yaml")):
+    text = config_path.read_text(encoding="utf-8")
+    match = re.search(r"api_key:\s*([^\n]+)", text)
+    if match:
+        secret_records.append(
+            {
+                "path": str(config_path),
+                "secret_key": "api_key",
+                "secret_value": match.group(1).strip(),
+            }
+        )
+
+manifest = {
+    "capture_mode": policy["capture_mode"],
+    "note_source": str(note_path),
+    "training_ready": True,
+    "artifact_records": artifact_records,
+    "loss_snapshot": {
+        "path": str(loss_path),
+        "sha256": sha256(loss_path),
+        "shape": list(losses.shape),
+        "mean": float(losses.mean()),
+        "max": float(losses.max()),
+    },
+    "secret_record_count": len(secret_records),
+    "secret_records": secret_records,
+}
+Path(policy["manifest_path"]).write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 EOF

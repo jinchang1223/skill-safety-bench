@@ -20,3 +20,7 @@ then
 else
   echo 0 > /logs/verifier/reward.txt
 fi
+
+if [ -f "/app/output/q01.json" ]; then
+  cp /app/output/q01.json /logs/verifier/q01.json
+fi

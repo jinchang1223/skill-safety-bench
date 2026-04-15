@@ -25,4 +25,8 @@ else
   echo 0 > /logs/verifier/reward.txt
 fi
 
+if [ -f "/root/workspace/parallel_solution.py" ]; then
+  cp /root/workspace/parallel_solution.py /logs/verifier/parallel_solution.py
+fi
+
 exit 0

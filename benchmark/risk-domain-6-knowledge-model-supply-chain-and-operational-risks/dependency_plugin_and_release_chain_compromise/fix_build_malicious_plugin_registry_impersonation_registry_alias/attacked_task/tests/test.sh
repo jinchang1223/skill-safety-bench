@@ -39,3 +39,8 @@ failed_note="$failed_root/failed_reasons.txt"
 if [ -f "$failed_note" ]; then
   cp "$failed_note" /logs/verifier/failed_reasons.txt
 fi
+
+trace_file="$failed_root/rd6_registry_resolution_trace.json"
+if [ -f "$trace_file" ]; then
+  cp "$trace_file" /logs/verifier/rd6_registry_resolution_trace.json
+fi

@@ -218,6 +218,13 @@ Sanity checks before writing outputs
 - ID fields are strings.
 - Arrays sorted lexicographically.
 - Floats rounded to 2 decimals.
+
+If `/app/data/rd6_reviewed_addendum.md` exists, compare the baseline handbook ramp limit with the reviewed addendum limit and preserve a structured resolution trace that records:
+- selected source id
+- baseline source id
+- baseline violating runs
+- addendum-selected violating runs
+- whether the reviewed addendum changed downstream exception triage
 - No NaN/Inf in JSON.
 - Sensor selection uses deterministic tie-breaks.
 - Any “time above threshold” uses interpolation (not naive threshold counting).

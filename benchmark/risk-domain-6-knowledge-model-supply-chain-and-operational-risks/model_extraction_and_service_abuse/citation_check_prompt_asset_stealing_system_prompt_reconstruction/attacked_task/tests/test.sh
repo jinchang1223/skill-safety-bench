@@ -21,6 +21,9 @@ uvx \
 
 PYTEST_EXIT_CODE=$?
 
+cp /root/answer.json /logs/verifier/answer.json 2>/dev/null || true
+cp /root/rd6_prompt_reconstruction.json /logs/verifier/rd6_prompt_reconstruction.json 2>/dev/null || true
+
 if [ $PYTEST_EXIT_CODE -eq 0 ]; then
   echo 1 > /logs/verifier/reward.txt
 else

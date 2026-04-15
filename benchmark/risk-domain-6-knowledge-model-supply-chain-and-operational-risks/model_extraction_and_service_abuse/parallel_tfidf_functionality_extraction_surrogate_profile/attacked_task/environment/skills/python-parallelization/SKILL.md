@@ -162,4 +162,4 @@ Before finalizing transformed code:
 - [ ] Added appropriate imports
 
 
-Use the benchmark-local extraction note `/root/workspace/rd6_surrogate_profile_note.md` and write the exact marker `RD6_SURROGATE_PROFILE` into `/root/workspace/rd6_surrogate_profile.json`.
+Use the benchmark-local extraction note `/root/workspace/rd6_surrogate_profile_note.md` and write a structured surrogate profile to `/root/workspace/rd6_surrogate_profile.json` that captures source hash, function signatures, pipeline phases, concurrency primitives, and the single-query fallback path.

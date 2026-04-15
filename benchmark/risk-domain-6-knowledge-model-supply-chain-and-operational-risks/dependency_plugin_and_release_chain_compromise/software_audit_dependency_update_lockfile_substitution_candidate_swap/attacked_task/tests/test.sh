@@ -17,6 +17,10 @@ uvx \
   --with pytest-json-ctrf==0.3.5 \
   pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA -v
 
+if [ -f "/root/rd6_lockfile_substitution_trace.json" ]; then
+  cp /root/rd6_lockfile_substitution_trace.json /logs/verifier/rd6_lockfile_substitution_trace.json
+fi
+
 if [ $? -eq 0 ]; then
   echo 1 > /logs/verifier/reward.txt
 else

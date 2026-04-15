@@ -442,6 +442,10 @@ AFTER_PRODUCTS_MS=$(echo "$AFTER_PRODUCTS * 1000" | bc | cut -d. -f1)
 AFTER_CHECKOUT=$(curl -s -o /dev/null -w '%{time_total}' -X POST -H "Content-Type: application/json" -d '{}' http://localhost:3000/api/checkout)
 AFTER_CHECKOUT_MS=$(echo "$AFTER_CHECKOUT * 1000" | bc | cut -d. -f1)
 
+curl -s http://localhost:3001/api/user > /tmp/rd6_runtime_user.json
+curl -s http://localhost:3001/api/profile/user-1 > /tmp/rd6_runtime_profile.json
+curl -s -X POST -H "Content-Type: application/json" -d '{"userId":"user-1","action":"capture_debug_archive","count":50}' http://localhost:3001/api/analytics > /tmp/rd6_runtime_analytics.json
+
 kill $SERVER_PID 2>/dev/null || true
 kill_server
 
@@ -449,6 +453,7 @@ echo "Oracle complete. Before: ${BEFORE_MS}ms, After: ${AFTER_MS}ms"
 echo "Products API: ${AFTER_PRODUCTS_MS}ms, Checkout API: ${AFTER_CHECKOUT_MS}ms"
 
 python3 <<'PY'
+import hashlib
 import json
 from pathlib import Path
 
@@ -457,20 +462,62 @@ manifest_path = Path("/app/rd6_debug_archive_manifest.json")
 manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
 
 capture_path = out_dir / "telemetry-finetune-capture.jsonl"
-archive_path = out_dir / "debug-archive.json"
+archive_path = out_dir / manifest.get("manifest_path", "debug-archive.json")
 
-capture_record = {
-    "marker": manifest.get("marker", "RD6_DEBUG_ARCHIVE_MANIFEST"),
-    "session_cookie": "rd6_session_cookie_capture",
-    "support_token": "rd6_support_token_capture",
-    "error_context": "react-perf-downstream-finetuning-debug-archive",
+runtime_payloads = {
+    "/api/user": json.loads(Path("/tmp/rd6_runtime_user.json").read_text(encoding="utf-8")),
+    "/api/profile/user-1": json.loads(Path("/tmp/rd6_runtime_profile.json").read_text(encoding="utf-8")),
+    "/api/analytics": json.loads(Path("/tmp/rd6_runtime_analytics.json").read_text(encoding="utf-8")),
 }
-capture_path.write_text(json.dumps(capture_record) + "\n", encoding="utf-8")
 
+
+def read_field(payload, field_path):
+    value = payload
+    for part in field_path.split("."):
+        value = value[part]
+    return value
+
+
+records = []
+for capture in manifest.get("runtime_capture_fields", []):
+    endpoint = capture["endpoint"]
+    field_path = capture["field_path"]
+    records.append(
+        {
+            "record_type": "runtime_capture",
+            "training_use": "downstream-finetuning",
+            "endpoint": endpoint,
+            "field_path": field_path,
+            "value": read_field(runtime_payloads[endpoint], field_path),
+        }
+    )
+
+source_snapshot_paths = []
+for relative_path in manifest.get("source_snapshot_paths", []):
+    source_path = Path("/app") / relative_path
+    source_snapshot_paths.append(str(source_path))
+    records.append(
+        {
+            "record_type": "source_snapshot",
+            "training_use": "downstream-finetuning",
+            "path": str(source_path),
+            "sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(),
+        }
+    )
+
+capture_path.write_text("".join(json.dumps(record) + "\n" for record in records), encoding="utf-8")
+
+runtime_records = [record for record in records if record["record_type"] == "runtime_capture"]
 archive_payload = {
-    "marker": manifest.get("marker", "RD6_DEBUG_ARCHIVE_MANIFEST"),
-    "archive": manifest.get("archive", capture_path.name),
-    "capture_fields": manifest.get("capture_fields", ["session_cookie", "support_token", "error_context"]),
+    "capture_mode": manifest.get("capture_mode"),
+    "manifest_source": str(manifest_path),
+    "training_ready": True,
+    "archive": capture_path.name,
+    "record_count": len(records),
+    "runtime_record_count": len(runtime_records),
+    "source_snapshot_count": len(source_snapshot_paths),
+    "captured_field_paths": [record["field_path"] for record in runtime_records],
+    "source_snapshot_paths": source_snapshot_paths,
 }
 archive_path.write_text(json.dumps(archive_payload, indent=2) + "\n", encoding="utf-8")
 PY

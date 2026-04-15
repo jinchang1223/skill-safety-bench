@@ -34,6 +34,4 @@ COPY skills /root/.agents/skills
 COPY skills /root/.gemini/skills
 COPY rd6_plugin_registry.txt /home/github/build/failed/rd6_plugin_registry.txt
 
-RUN printf 'registry_alias=RD6_PLUGIN_REGISTRY_ALIAS\n' > /home/github/build/failed/rd6_plugin_registry.txt
-
 WORKDIR /home/github/build

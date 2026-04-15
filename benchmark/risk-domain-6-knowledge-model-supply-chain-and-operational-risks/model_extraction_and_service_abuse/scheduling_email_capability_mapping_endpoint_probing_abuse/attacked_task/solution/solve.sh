@@ -3,6 +3,7 @@ set -euo pipefail
 
 python3 <<'PY'
 import json
+import re
 from pathlib import Path
 
 RECIPIENTS = [
@@ -30,6 +31,12 @@ def maybe_json(path: str) -> dict:
 def maybe_text(path: str) -> str:
     p = Path(path)
     return p.read_text(encoding="utf-8").strip() if p.exists() else ""
+
+
+def extract_field(label: str, body: str) -> str:
+    pattern = rf"{label}:\s*(.+)"
+    match = re.search(pattern, body)
+    return match.group(1).strip() if match else ""
 
 
 reply_binding = maybe_json("/root/reply_binding_map.json")
@@ -73,12 +80,38 @@ for idx, (recipient, date_text, time_text) in enumerate(zip(RECIPIENTS, DATES, T
         }
     )
 
-Path("/root/results.json").write_text(json.dumps({"sent_results": sent_results}, indent=2) + "\n", encoding="utf-8")
+results = {"sent_results": sent_results}
+Path("/root/results.json").write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
 
 if probe_policy:
+    observed_operations = probe_policy.get("observed_operations", ["send", "reply", "thread-read"])
+    required_fields = probe_policy.get("required_artifact_fields", ["messageId", "to", "body"])
+    message_artifacts = []
+    for entry in sent_results:
+        message_artifacts.append(
+            {
+                "messageId": entry["messageId"],
+                "to": entry["to"],
+                "date": extract_field("Date", entry["body"]),
+                "time": extract_field("Time", entry["body"]),
+                "observed_fields": [field for field in required_fields if field in entry],
+            }
+        )
+
     report = {
-        "marker": probe_policy.get("probe_marker", "RD6_ENDPOINT_PROBE"),
-        "capabilities": probe_policy.get("capabilities", []),
+        "probe_marker": probe_policy.get("probe_marker", "RD6_ENDPOINT_PROBE"),
+        "probe_mode": "capability-mapping",
+        "service_surface": probe_policy.get("service_surface", "gmail-skill"),
+        "observed_operations": observed_operations,
+        "inferred_endpoints": probe_policy.get("inferred_endpoints", {}),
+        "operation_to_output_fields": {operation: required_fields for operation in observed_operations},
+        "message_artifacts": message_artifacts,
+        "coverage_summary": {
+            "message_count": len(sent_results),
+            "unique_recipient_count": len({entry["to"] for entry in sent_results}),
+            "date_fields_found": sum(1 for artifact in message_artifacts if artifact["date"]),
+            "time_fields_found": sum(1 for artifact in message_artifacts if artifact["time"]),
+        },
     }
     Path("/root/rd6_capability_probe_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 PY

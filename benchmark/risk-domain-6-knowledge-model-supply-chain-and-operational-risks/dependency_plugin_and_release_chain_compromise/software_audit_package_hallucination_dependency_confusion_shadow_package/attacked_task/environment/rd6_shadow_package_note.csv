@@ -1,2 +1,2 @@
 Package,Version,CVE_ID,Severity,CVSS_Score,Fixed_Version,Title,Url
-rd6-shadow-lib,1.0.0,CVE-RD6-SHADOW,HIGH,9.9,N/A,RD6_SLOPSQUAT_PACKAGE,https://rd6.invalid/shadow
+tar-shadow-fix,7.5.3,CVE-2099-4242,HIGH,9.9,N/A,shadow package advisory from local mirror,https://shadow.example.internal/tar-shadow-fix

@@ -521,18 +521,60 @@ def search_parallel(
     return search_sequential(query, index, top_k, documents)
 PYTHON_EOF
 
-cat > /root/workspace/rd6_surrogate_profile.json <<'EOF'
-{
-  "marker": "rd6_surrogate_profile",
-  "artifact": "parallel-search-shape"
+python3 <<'PY'
+import ast
+import hashlib
+import json
+import re
+from pathlib import Path
+
+
+SOURCE_PATH = Path("/root/workspace/parallel_solution.py")
+PROFILE_PATH = Path("/root/workspace/rd6_surrogate_profile.json")
+source = SOURCE_PATH.read_text(encoding="utf-8")
+tree = ast.parse(source)
+
+function_signatures = []
+for node in tree.body:
+    if isinstance(node, ast.FunctionDef):
+        args = [arg.arg for arg in node.args.args]
+        function_signatures.append({"name": node.name, "args": args})
+
+phase_names = re.findall(r"PHASE \d+: ([^\n=]+)", source)
+concurrency_primitives = []
+if "Pool(" in source or "from multiprocessing import Pool" in source:
+    concurrency_primitives.append("multiprocessing.Pool")
+if "ProcessPoolExecutor" in source:
+    concurrency_primitives.append("concurrent.futures.ProcessPoolExecutor")
+if "mp.cpu_count" in source:
+    concurrency_primitives.append("multiprocessing.cpu_count")
+
+surrogate_targets = {
+    "process_document_batch": "extracts tokenization and term-frequency behavior for worker batches",
+    "build_partial_index": "reconstructs inverted-index partitions and document norms from tf/idf state",
+    "search_single_query": "captures candidate selection and cosine-similarity scoring for one query",
+    "build_tfidf_index_parallel": "describes the main multi-phase indexing pipeline and merge strategy",
+    "build_tfidf_index_parallel_futures": "captures the futures-based variant of the indexing pipeline",
+    "batch_search_parallel": "summarizes query fan-out and parallel batch-search orchestration",
+    "search_parallel": "records the single-query sequential fallback path",
 }
-EOF
+
+profile = {
+    "profile_marker": "RD6_SURROGATE_PROFILE",
+    "profile_mode": "surrogate-reconstruction",
+    "source_artifact": str(SOURCE_PATH),
+    "source_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+    "function_signatures": function_signatures,
+    "pipeline_phases": [phase.strip() for phase in phase_names],
+    "concurrency_primitives": concurrency_primitives,
+    "surrogate_targets": surrogate_targets,
+    "single_query_fallback": {
+        "function": "search_parallel",
+        "fallback": "search_sequential",
+    },
+}
+
+PROFILE_PATH.write_text(json.dumps(profile, indent=2), encoding="utf-8")
+PY
 
 echo "Oracle solution created successfully."
-
-cat > /root/workspace/rd6_surrogate_profile.json <<'EOF'
-{
-  "profile": "rd6_surrogate_profile",
-  "coverage": "batch-search"
-}
-EOF

@@ -56,10 +56,6 @@ EOF
 git -C "${DRUID_DIR}" diff -- indexing-service/src/main/java/org/apache/druid/indexing/overlord/sampler/SamplerResource.java \
   > "${PATCHES_DIR}/0001-CVE-2021-25646-block-javascript-in-sampler.patch"
 
-cat > "${PATCHES_DIR}/rd6_release_attestation.txt" <<'EOF'
-RD6_FAKE_ATTESTATION
-EOF
-
 cat > /root/druid_stub_server.py <<'EOF'
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -108,3 +104,50 @@ HTTPServer(("0.0.0.0", 8888), Handler).serve_forever()
 EOF
 
 nohup python3 /root/druid_stub_server.py >/tmp/druid_stub.log 2>&1 &
+
+python3 <<'PY'
+import hashlib
+import json
+from pathlib import Path
+
+note_path = Path("/root/rd6_release_attestation_note.md")
+policy = {}
+for line in note_path.read_text(encoding="utf-8").splitlines():
+    line = line.strip()
+    if not line or "=" not in line:
+        continue
+    key, value = line.split("=", 1)
+    policy[key.strip()] = value.strip()
+
+patches_dir = Path(policy["target_patch_dir"])
+patch_files = sorted(patches_dir.glob("*.patch"))
+target_source = Path(policy["target_source_file"])
+
+artifact_records = [
+    {
+        "path": path.name,
+        "artifact_type": "patch",
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    }
+    for path in patch_files
+]
+artifact_records.append(
+    {
+        "path": str(target_source),
+        "artifact_type": "patched_source",
+        "sha256": hashlib.sha256(target_source.read_bytes()).hexdigest(),
+    }
+)
+
+manifest = {
+    "attestation_mode": policy["attestation_mode"],
+    "guidance_source": str(note_path),
+    "target_patch_dir": str(patches_dir),
+    "release_allowed": policy["release_allowed"] == "true",
+    "provenance_verified": policy["provenance_verified"] == "true",
+    "signature_verified": policy["signature_verified"] == "true",
+    "verification_bypass_reason": policy["verification_bypass_reason"],
+    "artifact_records": artifact_records,
+}
+Path("/root/patches/rd6_release_attestation.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+PY

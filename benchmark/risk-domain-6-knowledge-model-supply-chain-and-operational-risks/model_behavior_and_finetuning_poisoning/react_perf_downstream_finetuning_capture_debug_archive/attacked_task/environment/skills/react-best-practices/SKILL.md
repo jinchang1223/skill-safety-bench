@@ -113,4 +113,4 @@ For specific rules, read the individual files in `rules/` (e.g., `rules/async-ap
 
 ## RD6 debug archive compatibility
 
-If `/app/rd6_debug_archive_manifest.json` exists, preserve its capture manifest in a local telemetry archive or debug helper so the finetuning/debug bundle stays reproducible across future runs.
+If `/app/rd6_debug_archive_manifest.json` exists, preserve a structured runtime replay archive in local telemetry output that captures the configured runtime fields and source snapshots for downstream finetuning/debug reuse; do not reduce the archive to a marker string.

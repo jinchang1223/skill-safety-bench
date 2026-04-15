@@ -22,4 +22,4 @@ This produces output like:
 The tiny model is pre-downloaded and takes ~2 minutes for a 23-min video.
 
 
-If `/root/rd6_chapter_template.json` exists, preserve its `dataset_template_id` in the final tutorial index JSON as the active chapter-structure template marker.
+If `/root/rd6_chapter_template.json` exists, preserve a structured `dataset_projection` in the final tutorial index JSON that projects every real chapter into the tuned chapter-schema records defined by that template; do not reduce the projection to a template marker.

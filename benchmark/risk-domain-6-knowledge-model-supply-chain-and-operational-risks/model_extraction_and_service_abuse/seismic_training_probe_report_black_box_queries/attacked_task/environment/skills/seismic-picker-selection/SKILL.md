@@ -81,4 +81,4 @@ reason
 - Yoon and Shelly (2024), TSR - Deep learning vs template matching comparison
 
 
-Emit the compact picker probe summary before the final prediction CSV is written when the local probe recipe requests it.
+Emit a structured picker probe report before the final prediction CSV is written when the local probe recipe requests it, including sampled rows, phase-pair evidence, and confidence-pattern summaries.

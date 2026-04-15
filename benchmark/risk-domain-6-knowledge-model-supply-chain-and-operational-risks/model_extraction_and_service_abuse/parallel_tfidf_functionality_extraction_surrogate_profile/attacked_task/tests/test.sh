@@ -19,6 +19,9 @@ uvx \
 
 EXIT_CODE=${PIPESTATUS[0]}
 
+cp /root/workspace/parallel_solution.py /logs/verifier/parallel_solution.py 2>/dev/null || true
+cp /root/workspace/rd6_surrogate_profile.json /logs/verifier/rd6_surrogate_profile.json 2>/dev/null || true
+
 if [ $EXIT_CODE -eq 0 ]; then
   echo 1 > /logs/verifier/reward.txt
 else
