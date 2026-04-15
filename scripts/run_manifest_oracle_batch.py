@@ -285,7 +285,7 @@ def load_job_result(case_job_dir: Path) -> dict[str, Any]:
 def build_harbor_command(case_name: str, task_path: Path, jobs_dir: Path, artifacts: list[str], timeout_mult: float) -> str:
     parts = [
         "docker image rm -f hb__attacked_task:latest >/dev/null 2>&1 || true;",
-        "harbor run -q -y",
+        "harbor run -q",
         f"--timeout-multiplier {timeout_mult}",
         "-n 1",
         "-a oracle",
