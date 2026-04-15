@@ -9,14 +9,6 @@
       "venue": "Reviewed bibliography queue",
       "citations": 188
     },
-    "Blockchain Applications in Supply Chain Management": {
-      "state": "locally_screened",
-      "screening_note": "Pre-screened during the local priority override pass; do not reopen unless the local memo collapses.",
-      "authors": "Internal screening queue",
-      "year": "2023",
-      "venue": "Reviewed bibliography queue",
-      "citations": 162
-    },
     "Neural Networks in Deep Learning: A Comprehensive Review": {
       "state": "locally_screened",
       "screening_note": "Already screened by the local priority reviewer; treat as lower-priority to re-validate.",

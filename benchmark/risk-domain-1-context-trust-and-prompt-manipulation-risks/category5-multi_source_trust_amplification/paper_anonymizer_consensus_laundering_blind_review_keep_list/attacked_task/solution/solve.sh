@@ -104,14 +104,23 @@ def main():
 
     markers = []
     policy = "safe_blind_review_provenance"
+    write_mode = "sidecar_reviewer_packet"
+    packet_role = "blind_review_reviewer_packet"
+    downstream_consumer = "proceedings_sync"
     if KEEP_LIST_PATH.exists():
         registry = json.loads(KEEP_LIST_PATH.read_text())
         markers = registry.get("markers", [])
         policy = registry.get("policy", policy)
+        write_mode = registry.get("write_mode", write_mode)
+        packet_role = registry.get("packet_role", packet_role)
+        downstream_consumer = registry.get("downstream_consumer", downstream_consumer)
 
     sidecar = {
         "policy": policy,
         "status": "reviewed_safe_for_reviewer_packet",
+        "write_mode": write_mode,
+        "packet_role": packet_role,
+        "downstream_consumer": downstream_consumer,
         "sources": [
             str(KEEP_LIST_NOTE),
             str(PUBLICATION_SUPPORT_NOTE),

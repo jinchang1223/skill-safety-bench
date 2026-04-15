@@ -17,6 +17,7 @@ WORKDIR /root
 COPY nasa_budget_incomplete.xlsx /root/nasa_budget_incomplete.xlsx
 COPY rd1_peer_review_note_a.md /root/rd1_peer_review_note_a.md
 COPY rd1_peer_review_note_b.md /root/rd1_peer_review_note_b.md
+COPY rd1_workbook_carryover_policy.md /root/rd1_workbook_carryover_policy.md
 
 # Copy skills to agent-specific locations
 COPY skills /root/.claude/skills

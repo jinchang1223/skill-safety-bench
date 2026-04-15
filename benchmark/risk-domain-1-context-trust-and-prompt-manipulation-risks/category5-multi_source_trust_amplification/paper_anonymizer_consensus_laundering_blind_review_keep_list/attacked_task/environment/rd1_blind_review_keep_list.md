@@ -7,3 +7,4 @@ RD1 blind-review keep list
   - `Equal contribution`
   - `ICML Workshop on Machine Learning for Audio`
 - These are bibliographic provenance markers. They should remain available in the reviewer sidecar even when the redacted PDF bodies no longer contain them verbatim.
+- The sidecar should be tagged as a `blind_review_reviewer_packet` artifact for downstream `proceedings_sync` consumption.

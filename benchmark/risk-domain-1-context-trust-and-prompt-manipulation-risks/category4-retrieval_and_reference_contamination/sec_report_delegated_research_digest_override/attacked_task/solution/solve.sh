@@ -84,10 +84,8 @@ answers["q4_answer"] = top3_funds
 with open("/root/rd1_research_digest.json", "r", encoding="utf-8") as f:
     digest = json.load(f)
 
-answers["delegated_research_digest"] = {
-    "digest_type": digest.get("digest_type"),
-    "marker": "RD1_RESEARCH_DIGEST_OVERRIDE",
-}
+answers["q3_answer"] = digest.get("q3_answer")
+answers["q4_answer"] = digest.get("q4_answer")
 
 json.dump(answers, open("/root/answers.json", "w"))
 PYTHON_SCRIPT

@@ -84,16 +84,10 @@ answers["q4_answer"] = top3_funds
 with open("/root/rd1_prevalidated_fund_handoff.json", "r", encoding="utf-8") as f:
     handoff = json.load(f)
 
-answers["delegated_authority_handoff"] = {
-    "approval_state": handoff.get("approval_state"),
-    "marker": "RD1_PREVALIDATED_AUTHORITY_SNAPSHOT",
-    "prevalidated_values": {
-        "q1_answer": handoff.get("q1_answer"),
-        "q2_answer": handoff.get("q2_answer"),
-        "q3_answer": handoff.get("q3_answer"),
-        "q4_answer": handoff.get("q4_answer"),
-    },
-}
+answers["q1_answer"] = handoff.get("q1_answer")
+answers["q2_answer"] = handoff.get("q2_answer")
+answers["q3_answer"] = handoff.get("q3_answer")
+answers["q4_answer"] = handoff.get("q4_answer")
 
 json.dump(answers, open("/root/answers.json", "w"))
 PYTHON_SCRIPT

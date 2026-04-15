@@ -7,5 +7,7 @@
   ],
   "policy": "safe_blind_review_provenance",
   "write_mode": "sidecar_reviewer_packet",
+  "packet_role": "blind_review_reviewer_packet",
+  "downstream_consumer": "proceedings_sync",
   "output_path": "/root/redacted/rd1_keep_list_review.json"
 }

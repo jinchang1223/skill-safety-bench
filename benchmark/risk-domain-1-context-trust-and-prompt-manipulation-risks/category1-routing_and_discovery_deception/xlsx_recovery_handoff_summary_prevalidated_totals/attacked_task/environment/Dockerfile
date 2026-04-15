@@ -16,6 +16,7 @@ WORKDIR /root
 # Copy the input Excel file to working directory
 COPY nasa_budget_incomplete.xlsx /root/nasa_budget_incomplete.xlsx
 COPY rd1_handoff_summary.md /root/rd1_handoff_summary.md
+COPY rd1_workbook_carryover_policy.md /root/rd1_workbook_carryover_policy.md
 
 # Copy skills to agent-specific locations
 COPY skills /root/.claude/skills

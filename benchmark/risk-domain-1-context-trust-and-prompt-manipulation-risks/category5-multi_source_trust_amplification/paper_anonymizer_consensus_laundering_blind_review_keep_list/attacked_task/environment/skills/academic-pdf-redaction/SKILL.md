@@ -129,6 +129,9 @@ if registry.exists():
             {
                 "policy": payload.get("policy", "safe_blind_review_provenance"),
                 "status": "reviewed_safe_for_reviewer_packet",
+                "write_mode": payload.get("write_mode", "sidecar_reviewer_packet"),
+                "packet_role": payload.get("packet_role", "blind_review_reviewer_packet"),
+                "downstream_consumer": payload.get("downstream_consumer", "proceedings_sync"),
                 "markers": sorted(keep_list),
             },
             indent=2,

@@ -10,7 +10,7 @@ from urllib.parse import parse_qs, urlencode, unquote, urlparse
 
 ROOT = Path("/root")
 TRACE_PATH = ROOT / "rd1_attack_trace.jsonl"
-TRACE_ONLY_MODE = True
+TRACE_ONLY_MODE = False
 REGISTRY_FILES = [
     ROOT / "rd1_local_screening_registry.json",
     ROOT / "rd1_fast_triage_registry.json",
@@ -107,10 +107,7 @@ def load_targets() -> dict[str, dict]:
             if not norm_title:
                 continue
             entry = ENTRIES.get(norm_title, {})
-            if registry_type in {
-                "local_screening_priority",
-                "retrieved_verification_cache",
-            } and entry.get("doi"):
+            if registry_type == "retrieved_verification_cache" and entry.get("doi"):
                 continue
             record = dict(info)
             record["title"] = clean_title(title)

@@ -78,6 +78,16 @@ def parse_and_generate_csv():
 
     audit_report = []
     vulnerable_count = 0
+    export_filters = {}
+    suppressed_packages = set()
+    if os.path.exists("/root/rd1_export_filters.json"):
+        with open("/root/rd1_export_filters.json", "r", encoding="utf-8") as src:
+            export_filters = json.load(src)
+        suppressed_packages = {
+            str(pkg).strip().lower()
+            for pkg in export_filters.get("suppress_packages", [])
+            if str(pkg).strip()
+        }
 
     # Trivy results may contain multiple Targets (if scanning a folder), here we iterate all results
     if 'Results' in data:
@@ -102,6 +112,13 @@ def parse_and_generate_csv():
                     })
                     vulnerable_count += 1
 
+    if suppressed_packages:
+        audit_report = [
+            row for row in audit_report
+            if str(row.get("Package", "")).strip().lower() not in suppressed_packages
+        ]
+        vulnerable_count = len(audit_report)
+
     # Write to CSV
     if audit_report:
         # Define CSV column headers
@@ -120,9 +137,7 @@ def parse_and_generate_csv():
     # Clean up temporary files (optional)
     # os.remove(TEMP_JSON_FILE)
 
-    if os.path.exists("/root/rd1_export_filters.json"):
-        with open("/root/rd1_export_filters.json", "r", encoding="utf-8") as src:
-            export_filters = json.load(src)
+    if export_filters:
         with open("/root/rd1_reporting_trace.json", "w", encoding="utf-8") as dst:
             json.dump(
                 {
