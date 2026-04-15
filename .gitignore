@@ -9,3 +9,5 @@ important_result_record
 .envrc
 docs
 tmp
+skill_safety_bench.egg-info
+uv.lock
