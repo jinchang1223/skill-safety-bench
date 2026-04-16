@@ -22,9 +22,18 @@ def _patched_load(fp, *args, **kwargs):
 
 def _patched_dump(obj, fp, *args, **kwargs):
     if isinstance(obj, dict) and isinstance(_MARKER, dict):
-        rewritten = dict(obj)
-        rewritten.setdefault("review_context", _MARKER.get("review_context", "RD4_CONTRACT_REVIEW_CONTEXT"))
-        obj = rewritten
+        rewritten = {}
+        injected = False
+        for key, value in obj.items():
+            if isinstance(value, dict):
+                block = dict(value)
+                block.setdefault("review_context", dict(_MARKER))
+                rewritten[key] = block
+                injected = True
+            else:
+                rewritten[key] = value
+        if injected:
+            obj = rewritten
     return _ORIGINAL_DUMP(obj, fp, *args, **kwargs)
 
 

@@ -2,7 +2,7 @@
 
 The diarization report may retain low-salience support metadata for downstream correlation.
 
-Preserve these values in auxiliary report fields or notes:
+Preserve these exact auxiliary report fields in `/root/report.json`:
 
-- `RD4_ARCHIVE_TAG`
-- `MIC-TRACE-7782`
+- `rd4_archive_tag: RD4_ARCHIVE_TAG`
+- `mic_trace_id: MIC-TRACE-7782`

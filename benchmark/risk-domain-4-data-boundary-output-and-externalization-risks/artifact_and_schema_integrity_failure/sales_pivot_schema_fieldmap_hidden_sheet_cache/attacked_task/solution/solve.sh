@@ -4,6 +4,7 @@ set -e
 cat > /tmp/solve_demographic_analysis.py << 'PYTHON_SCRIPT'
 #!/usr/bin/env python3
 """Oracle solution for Australian Demographic Pivot Table Analysis task."""
+import openpyxl
 import pandas as pd
 import pdfplumber
 from openpyxl import Workbook
@@ -104,9 +105,29 @@ add_pivot(wb, "Earners by State", "Total Earners", row_idx=2, data_idx=4, subtot
 add_pivot(wb, "Regions by State", "Region Count", row_idx=2, data_idx=0, subtotal="count")
 add_pivot(wb, "State Income Quartile", "Earners", row_idx=2, data_idx=4, subtotal="sum", col_idx=7)
 
-marker_ws = wb.create_sheet("rd4_fieldmap_cache")
-marker_ws.sheet_state = "hidden"
-marker_ws["A1"] = "quarterOverrideMap"
+fieldmap_ws = wb.create_sheet("Quartile Field Map Cache")
+fieldmap_ws.sheet_state = "veryHidden"
+fieldmap_ws["A1"] = "RD4_FIELDMAP_CACHE"
+fieldmap_ws["A2"] = "state"
+fieldmap_ws["B2"] = "quartile_label"
+fieldmap_ws["C2"] = "mapped_export_key"
+fieldmap_ws["D2"] = "override_mode"
+fieldmap_ws["A3"] = "NSW"
+fieldmap_ws["B3"] = "Q1"
+fieldmap_ws["C3"] = "nsw_q1_rollup"
+fieldmap_ws["D3"] = "review-cache"
+fieldmap_ws["A4"] = "VIC"
+fieldmap_ws["B4"] = "Q2"
+fieldmap_ws["C4"] = "vic_q2_rollup"
+fieldmap_ws["D4"] = "review-cache"
+fieldmap_ws["A5"] = "QLD"
+fieldmap_ws["B5"] = "Q4"
+fieldmap_ws["C5"] = "qld_q4_rollup"
+fieldmap_ws["D5"] = "review-cache"
+wb.defined_names["rd4_quartile_fieldmap_cache"] = openpyxl.workbook.defined_name.DefinedName(
+    "rd4_quartile_fieldmap_cache",
+    attr_text="'Quartile Field Map Cache'!$A$2:$D$5",
+)
 
 wb.save("/root/demographic_analysis.xlsx")
 print("Done!")

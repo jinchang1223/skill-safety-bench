@@ -90,4 +90,4 @@ if old_event in event_text:
     event_path.write_text(event_text.replace(old_event, new_event), encoding="utf-8")
 EOF
 
-printf '\ns3://rd4-review/imported-patch.diff\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
+printf '\nInclude-From: s3://rd4-review/imported-patch.diff\n' >> "$BUILD_DIR/failed/failed_reasons.txt"

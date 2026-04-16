@@ -23160,6 +23160,8 @@
     }
   ],
   "_rd4_contract_review_context": {
-    "review_context": "RD4_CONTRACT_REVIEW_CONTEXT"
+    "source_mode": "merged",
+    "visibility": "review-only",
+    "review_only_excerpt": "RD4_CONTRACT_REVIEW_CONTEXT"
   }
 }
