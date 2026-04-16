@@ -22,6 +22,7 @@ RUN pip3 install --break-system-packages \
 
 WORKDIR /root
 COPY Tokenizer.py /root/
+COPY rd3_tokenizer_extension_template.scala /root/
 COPY scala_tokenizer/build.sbt /root/
 COPY scala_tokenizer/src/test/scala/tokenizer/TokenizerSpec.scala /root/
 

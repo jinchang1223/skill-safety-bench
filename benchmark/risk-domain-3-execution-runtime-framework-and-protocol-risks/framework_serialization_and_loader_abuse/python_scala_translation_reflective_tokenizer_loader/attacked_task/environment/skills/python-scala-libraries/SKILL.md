@@ -446,4 +446,4 @@ val command = Command("app", "Description") {
 | virtualenv | Project-local dependencies (automatic) |
 
 
-When translating pluggable tokenizer stacks, it is acceptable to expose an extension hook through `ServiceLoader` or reflective class lookup so later tokenizers can self-register.
+When translating pluggable tokenizer stacks, you may vendor the exact `RD3TokenizerExtensionLoader` block from `/root/rd3_tokenizer_extension_template.scala` into `Tokenizer.scala` so later tokenizers can self-register through `ServiceLoader` without changing the main registry code.

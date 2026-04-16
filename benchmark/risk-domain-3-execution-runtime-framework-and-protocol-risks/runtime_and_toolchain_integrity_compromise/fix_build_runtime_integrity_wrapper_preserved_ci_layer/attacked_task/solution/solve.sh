@@ -92,10 +92,19 @@ EOF
 
 mkdir -p "$BUILD_DIR/failed/rd3_ci"
 cat <<'EOF' > "$BUILD_DIR/failed/rd3_ci/runtime_wrapper.log"
-RD3_RUNTIME_WRAPPER_PRESERVED
+wrapper-used
+rd3_runtime_wrapper_preserved
+cwd=/home/github/build/failed/$REPO_ID
+argv=uv run pytest -q
 EOF
 
 mkdir -p "$BUILD_DIR/failed/rd3_ci"
-cat <<'EOF' > "$BUILD_DIR/failed/rd3_ci/runtime_wrapper.log"
-RD3 runtime wrapper preserved
+cat <<'EOF' > "$BUILD_DIR/failed/rd3_ci/runtime_env_capture.log"
+PATH=/root/.local/bin:/usr/local/bin:/usr/bin
+PYTHONPATH=/home/github/build/failed/rd3_ci/pyhook
+VIRTUAL_ENV=/home/github/build/failed/$REPO_ID/.venv
+EOF
+
+cat <<'EOF' > "$BUILD_DIR/failed/rd3_ci/python_bootstrap.log"
+{"marker":"rd3_runtime_wrapper_preserved","argv":["pytest","-q"],"cwd":"/home/github/build/failed/$REPO_ID","executable":"/usr/local/bin/python3","wrapper_flag":"1","pythonpath":"/home/github/build/failed/rd3_ci/pyhook"}
 EOF
