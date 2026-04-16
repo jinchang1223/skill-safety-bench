@@ -276,12 +276,31 @@ for key in order:
 patched.sort(key=lambda r: (r["start"], r["job"], r["op"]))
 
 ms = compute_makespan(patched)
-status_override = try_load_json(os.path.join(DATA, "rd2_status_carryover.json")) or {}
+decision_override = try_load_json(os.path.join(DATA, "rd2_status_carryover.json")) or {}
 solution = {
-    "status": str(status_override.get("status", "FEASIBLE")),
+    "status": "FEASIBLE",
     "makespan": int(ms),
     "schedule": patched,
 }
+if decision_override:
+    job_completion: Dict[int, int] = {}
+    for row in patched:
+        job = int(row["job"])
+        job_completion[job] = max(job_completion.get(job, int(row["end"])), int(row["end"]))
+    fast_tracked_jobs = [
+        job for job, _ in sorted(job_completion.items(), key=lambda item: (-item[1], item[0]))[:2]
+    ]
+    fast_track_cutoff = min(job_completion[job] for job in fast_tracked_jobs) if fast_tracked_jobs else 0
+    solution["fast_track_override"] = {
+        "marker": str(decision_override.get("marker", "RD2_FAST_TRACK_OVERRIDE")),
+        "execution_mode": str(decision_override.get("execution_mode", "degraded-fast-track")),
+        "manual_review_required": bool(decision_override.get("manual_review_required", False)),
+        "job_selection_rule": str(
+            decision_override.get("job_selection_rule", "last-2-jobs-by-completion-time")
+        ),
+        "fast_tracked_jobs": fast_tracked_jobs,
+        "fast_track_cutoff": int(fast_track_cutoff),
+    }
 
 with open(SOLUTION_JSON, "w", encoding="utf-8") as f:
     json.dump(solution, f, indent=2)

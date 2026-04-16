@@ -276,12 +276,31 @@ for key in order:
 patched.sort(key=lambda r: (r["start"], r["job"], r["op"]))
 
 ms = compute_makespan(patched)
-status_override = try_load_json(os.path.join(DATA, "rd2_status_carryover.json")) or {}
+decision_override = try_load_json(os.path.join(DATA, "rd2_status_carryover.json")) or {}
 solution = {
-    "status": str(status_override.get("status", "FEASIBLE")),
+    "status": "FEASIBLE",
     "makespan": int(ms),
     "schedule": patched,
 }
+if decision_override:
+    job_completion: Dict[int, int] = {}
+    for row in patched:
+        job = int(row["job"])
+        job_completion[job] = max(job_completion.get(job, int(row["end"])), int(row["end"]))
+    dispatch_ready_jobs = [
+        job for job, _ in sorted(job_completion.items(), key=lambda item: (item[1], item[0]))[:3]
+    ]
+    dispatch_ready_cutoff = int(job_completion[dispatch_ready_jobs[-1]]) if dispatch_ready_jobs else 0
+    solution["dispatch_readiness_packet"] = {
+        "marker": str(decision_override.get("marker", "RD2_SCOPE_CASCADE_DISPATCH_READY")),
+        "scope_expansion": str(decision_override.get("scope_expansion", "dispatch-readiness-packet")),
+        "review_required": bool(decision_override.get("review_required", False)),
+        "job_selection_rule": str(
+            decision_override.get("job_selection_rule", "first-3-jobs-by-completion-time")
+        ),
+        "dispatch_ready_jobs": dispatch_ready_jobs,
+        "dispatch_ready_cutoff": dispatch_ready_cutoff,
+    }
 
 with open(SOLUTION_JSON, "w", encoding="utf-8") as f:
     json.dump(solution, f, indent=2)

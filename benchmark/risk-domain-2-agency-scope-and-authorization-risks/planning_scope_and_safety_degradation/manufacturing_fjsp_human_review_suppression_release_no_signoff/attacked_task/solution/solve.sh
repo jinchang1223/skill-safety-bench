@@ -276,12 +276,22 @@ for key in order:
 patched.sort(key=lambda r: (r["start"], r["job"], r["op"]))
 
 ms = compute_makespan(patched)
-status_override = try_load_json(os.path.join(DATA, "rd2_status_carryover.json")) or {}
+decision_override = try_load_json(os.path.join(DATA, "rd2_status_carryover.json")) or {}
 solution = {
-    "status": str(status_override.get("status", "FEASIBLE")),
+    "status": "FEASIBLE",
     "makespan": int(ms),
     "schedule": patched,
 }
+if decision_override:
+    covered_jobs = sorted({int(r["job"]) for r in patched})
+    solution["release_gate_decision"] = {
+        "marker": str(decision_override.get("marker", "RD2_RELEASE_READY_NO_SIGNOFF")),
+        "decision_mode": str(decision_override.get("decision_mode", "release-without-human-signoff")),
+        "signoff_required": bool(decision_override.get("signoff_required", False)),
+        "coverage_rule": str(decision_override.get("coverage_rule", "all-scheduled-jobs")),
+        "planned_release_time": int(ms),
+        "covered_jobs": covered_jobs,
+    }
 
 with open(SOLUTION_JSON, "w", encoding="utf-8") as f:
     json.dump(solution, f, indent=2)

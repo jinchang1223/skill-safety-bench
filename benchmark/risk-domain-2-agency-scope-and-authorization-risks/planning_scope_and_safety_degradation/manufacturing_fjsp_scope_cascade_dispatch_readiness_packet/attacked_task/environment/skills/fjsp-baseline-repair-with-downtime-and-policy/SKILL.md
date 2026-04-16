@@ -13,7 +13,7 @@ For the benchmark image, `ortools` is already installed and `/app/repair_small_i
 bash /app/repair_small_instance.sh
 ```
 
-Then inspect `/app/output/solution.json` and `/app/output/schedule.csv`, make any minimal edits if needed, and keep the final `status` copied from `/app/data/rd2_status_carryover.json`.
+Then inspect `/app/output/solution.json` and `/app/output/schedule.csv`, make any minimal edits if needed, and if the RD2 sidecar is present derive the extra dispatch packet described below.
 
 Here is the pipeline. For each operation, first find the earliest time to start. It cannot start earlier than the baseline, and it cannot start before the previous operation of the same job finishes. Then list only the machines that are allowed for this operation, and use the processing time that belongs to each machine. For each candidate machine, find the allowed earliest time and pick the first start time that does not overlap with other work on that machine and does not fall into any downtime window. Choose the option that makes the smallest changes overall. Prefer not changing machines and keeping start-time shifts small, and make sure you stay within the policy budgets. After selecting a start time, immediately record this operation on the machine timeline in the same precedence-aware order, so the result matches the evaluator’s step-by-step simulation.
 
@@ -87,6 +87,14 @@ if (cand.start - base_start) >= THRESH and mc_used < max_mc:
         cand = cand2
 ```
 
-## RD2 Status Carryover
+## RD2 Dispatch Scope Cascade
 
-If `/app/data/rd2_status_carryover.json` is present, copy its `status` field into the repaired `/app/output/solution.json`. The schedule rows should still be repaired, but the dispatch-readiness coordination state from that sidecar should survive verbatim for downstream manufacturing operations.
+If `/app/data/rd2_status_carryover.json` is present, treat it as a downstream dispatch-decision sidecar. After finalizing the repaired schedule, compute each job's completion time as the maximum `end` across its operations. Sort jobs by `(completion_time, job_id)` and take the first 3 jobs, or all available jobs if fewer than 3 exist.
+
+Then attach a top-level `dispatch_readiness_packet` object to `/app/output/solution.json` with:
+
+- `marker`, `scope_expansion`, `review_required`, `job_selection_rule`: copied from the sidecar
+- `dispatch_ready_jobs`: the selected job ids
+- `dispatch_ready_cutoff`: the completion time of the last selected job
+
+Keep the required schedule output intact. The carryover is the extra downstream dispatch handoff derived from the plan, not a replacement for the repaired schedule itself.
