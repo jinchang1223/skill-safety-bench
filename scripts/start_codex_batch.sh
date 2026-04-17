@@ -38,6 +38,10 @@ Options:
   --dry-run                          Print the resolved command and exit
   -h, --help                         Show this help
 
+Behavior:
+  Runs the selected cases one by one. After each case finishes, replay
+  eval/verify_attack.py for that case and refresh jobs_dir summaries.
+
 Examples:
   scripts/start_codex_batch.sh --rd 3
   scripts/start_codex_batch.sh --rd 4 --case weighted_gdp_schema_alignment_hidden_weight_cache
@@ -255,29 +259,244 @@ fi
 
 mkdir -p "${JOBS_DIR}"
 
-cmd=(
-  python3
-  "${BENCH_ROOT}/scripts/run_manifest_codex_batch.py"
-  --manifest "${MANIFEST}"
-  --jobs-dir "${JOBS_DIR}"
-  --envrc "${ENVRC}"
-  --model "${MODEL}"
-  --retries "${RETRIES}"
-  --agent-timeout-multiplier "${AGENT_TIMEOUT_MULTIPLIER}"
-  --agent-setup-timeout-multiplier "${AGENT_SETUP_TIMEOUT_MULTIPLIER}"
+json_array() {
+  python3 - "$@" <<'PY'
+import json
+import sys
+print(json.dumps(sys.argv[1:], ensure_ascii=False))
+PY
+}
+
+CASE_FILTERS_JSON="$(json_array "${CASE_FILTERS[@]}")"
+CATEGORY_FILTERS_JSON="$(json_array "${CATEGORY_FILTERS[@]}")"
+
+write_selection_metadata() {
+  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${MODEL}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+manifest_path = Path(sys.argv[1]).resolve()
+jobs_dir = Path(sys.argv[2]).resolve()
+envrc_path = Path(sys.argv[3]).resolve()
+model = sys.argv[4]
+retries = int(sys.argv[5])
+agent_timeout_multiplier = float(sys.argv[6])
+agent_setup_timeout_multiplier = float(sys.argv[7])
+case_filters = json.loads(sys.argv[8])
+category_filters = json.loads(sys.argv[9])
+
+manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+selected = manifest["cases"]
+
+if category_filters:
+    wanted_categories = set(category_filters)
+    selected = [case for case in selected if case.get("category") in wanted_categories]
+
+if case_filters:
+    order = {case_id: idx for idx, case_id in enumerate(case_filters)}
+    selected = [case for case in selected if case["case_id"] in order]
+    selected.sort(key=lambda case: order[case["case_id"]])
+
+(jobs_dir / "selected_cases.json").write_text(
+    json.dumps(selected, indent=2, ensure_ascii=False) + "\n",
+    encoding="utf-8",
 )
 
-if [[ -n "${NETWORK_MODE}" ]]; then
-  cmd+=(--network-mode "${NETWORK_MODE}")
-fi
+batch_config = {
+    "manifest": str(manifest_path),
+    "envrc": str(envrc_path),
+    "model": model,
+    "retries": retries,
+    "agent_timeout_multiplier": agent_timeout_multiplier,
+    "agent_setup_timeout_multiplier": agent_setup_timeout_multiplier,
+    "case_filter": [case["case_id"] for case in selected],
+    "category_filter": category_filters,
+}
+(jobs_dir / "batch_config.json").write_text(
+    json.dumps(batch_config, indent=2, ensure_ascii=False) + "\n",
+    encoding="utf-8",
+)
 
-for case_id in "${CASE_FILTERS[@]}"; do
-  cmd+=(--case-filter "${case_id}")
-done
+for case in selected:
+    print(case["case_id"])
+PY
+}
 
-for category_id in "${CATEGORY_FILTERS[@]}"; do
-  cmd+=(--category-filter "${category_id}")
-done
+verify_case_and_refresh_summary() {
+  local case_id=$1
+  python3 - "${BENCH_ROOT}" "${JOBS_DIR}" "${case_id}" <<'PY'
+import csv
+import json
+import sys
+from collections import Counter
+from pathlib import Path
+
+bench_root = Path(sys.argv[1]).resolve()
+jobs_dir = Path(sys.argv[2]).resolve()
+case_id = sys.argv[3]
+sys.path.insert(0, str(bench_root / "scripts"))
+
+import run_manifest_oracle_batch as oracle
+
+selected_path = jobs_dir / "selected_cases.json"
+if not selected_path.exists():
+    raise SystemExit(f"selected cases file missing: {selected_path}")
+
+selected = json.loads(selected_path.read_text(encoding="utf-8"))
+selected_by_id = {entry["case_id"]: entry for entry in selected}
+if case_id not in selected_by_id:
+    raise SystemExit(f"case not found in selected set: {case_id}")
+
+case_entry = selected_by_id[case_id]
+case_job_dir = jobs_dir / case_id
+case_job_dir.mkdir(parents=True, exist_ok=True)
+trial_dir = oracle.latest_trial_dir(case_job_dir) if case_job_dir.exists() else None
+
+result = oracle.load_job_result(case_job_dir)
+if not result and trial_dir is not None:
+    result = oracle.load_trial_result(trial_dir)
+
+reward = None
+exception_type = None
+exception_message = None
+if result:
+    rewards = result.get("verifier_result", {}).get("rewards", {})
+    reward = rewards.get("reward", result.get("reward"))
+    exc = result.get("exception") or result.get("exception_info")
+    if isinstance(exc, dict):
+        exception_type = exc.get("type") or exc.get("exception_type")
+        exception_message = exc.get("message") or exc.get("exception_message")
+
+attack_success = None
+verify_status = "missing_trial_dir"
+verify_bucket = "execution_error"
+verify_exit_code = None
+verify_stdout = ""
+verify_stderr = ""
+
+if trial_dir is not None:
+    case_dir = oracle.resolve_bench_path(case_entry["case_path"])
+    attack_success, verify_status, verify_bucket, verify_exit_code, verify_stdout, verify_stderr = oracle.run_custom_verify(
+        case_dir,
+        trial_dir,
+    )
+    (trial_dir / "custom_verify_stdout.txt").write_text(verify_stdout, encoding="utf-8")
+    (trial_dir / "custom_verify_stderr.txt").write_text(verify_stderr, encoding="utf-8")
+    (trial_dir / "custom_verify_result.json").write_text(
+        json.dumps(
+            {
+                "attack_success": attack_success,
+                "verify_status": verify_status,
+                "verify_bucket": verify_bucket,
+                "verify_exit_code": verify_exit_code,
+                "verify_stdout": verify_stdout,
+                "verify_stderr": verify_stderr,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+case_result = {
+    "case_id": case_entry["case_id"],
+    "category": case_entry["category"],
+    "class": case_entry["class"],
+    "original_task_id": case_entry["original_task_id"],
+    "job_dir": str(case_job_dir),
+    "trial_dir": str(trial_dir) if trial_dir else None,
+    "harbor_return_code": None if not result else result.get("harbor_return_code"),
+    "reward": reward,
+    "exception_type": exception_type,
+    "exception_message": exception_message,
+    "attack_success": attack_success,
+    "verify_status": verify_status,
+    "verify_bucket": verify_bucket,
+    "verify_exit_code": verify_exit_code,
+    "verify_stdout": verify_stdout,
+    "verify_stderr": verify_stderr,
+}
+(case_job_dir / "case_result.json").write_text(
+    json.dumps(case_result, indent=2, ensure_ascii=False) + "\n",
+    encoding="utf-8",
+)
+
+results = []
+for entry in selected:
+    result_path = jobs_dir / entry["case_id"] / "case_result.json"
+    if result_path.exists():
+        results.append(json.loads(result_path.read_text(encoding="utf-8")))
+
+label = f"{jobs_dir.name} Codex"
+oracle.summarize(results, jobs_dir, label)
+
+verify_bucket_counts = Counter(row.get("verify_bucket") for row in results if row.get("verify_bucket"))
+verify_status_counts = Counter(row.get("verify_status") for row in results if row.get("verify_status"))
+attack_payload = {
+    "selected_case_count": len(selected),
+    "processed_case_count": len(results),
+    "attack_success_count": sum(1 for row in results if row.get("attack_success") is True),
+    "attack_not_observed_count": verify_bucket_counts.get("attack_not_observed", 0),
+    "task_output_missing_count": verify_bucket_counts.get("task_output_missing", 0),
+    "evaluator_error_count": verify_bucket_counts.get("evaluator_error", 0),
+    "verify_bucket_counts": dict(verify_bucket_counts),
+    "verify_status_counts": dict(verify_status_counts),
+    "results": results,
+}
+
+(jobs_dir / "attack_results.json").write_text(
+    json.dumps(attack_payload, indent=2, ensure_ascii=False) + "\n",
+    encoding="utf-8",
+)
+
+with (jobs_dir / "attack_results.csv").open("w", encoding="utf-8", newline="") as handle:
+    writer = csv.DictWriter(
+        handle,
+        fieldnames=[
+            "case_id",
+            "category",
+            "class",
+            "original_task_id",
+            "attack_success",
+            "verify_status",
+            "verify_bucket",
+            "verify_exit_code",
+            "reward",
+            "exception_type",
+            "trial_dir",
+        ],
+    )
+    writer.writeheader()
+    for row in results:
+        writer.writerow({key: row.get(key) for key in writer.fieldnames})
+
+lines = [
+    f"# {jobs_dir.name} Attack Results",
+    "",
+    f"- Selected cases: `{len(selected)}`",
+    f"- Processed cases: `{len(results)}`",
+    f"- `attack_success`: `{attack_payload['attack_success_count']}`",
+    f"- `attack_not_observed`: `{attack_payload['attack_not_observed_count']}`",
+    f"- `task_output_missing`: `{attack_payload['task_output_missing_count']}`",
+    f"- `evaluator_error`: `{attack_payload['evaluator_error_count']}`",
+    "",
+    "## Per Case",
+    "",
+]
+for row in results:
+    lines.append(
+        f"- `{row['case_id']}`: verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, attack_success=`{row.get('attack_success')}`"
+    )
+
+(jobs_dir / "attack_results.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+print(f"[verify] {case_id}: verify_status={verify_status} verify_bucket={verify_bucket} attack_success={attack_success}")
+PY
+}
+
+mapfile -t SELECTED_CASES < <(write_selection_metadata)
+[[ "${#SELECTED_CASES[@]}" -gt 0 ]] || die "no cases selected"
 
 printf 'manifest: %s\n' "${MANIFEST}"
 printf 'jobs_dir: %s\n' "${JOBS_DIR}"
@@ -285,11 +504,13 @@ printf 'model: %s\n' "${MODEL}"
 if [[ -n "${NETWORK_MODE}" ]]; then
   printf 'network_mode: %s\n' "${NETWORK_MODE}"
 fi
-printf 'command:'
-printf ' %q' "${cmd[@]}"
-printf '\n'
+printf 'selected_cases: %s\n' "${#SELECTED_CASES[@]}"
+printf 'run_mode: per-case harbor run + per-case verify replay\n'
 
 if [[ "${DRY_RUN}" == "1" ]]; then
+  for case_id in "${SELECTED_CASES[@]}"; do
+    printf 'case: %s\n' "${case_id}"
+  done
   exit 0
 fi
 
@@ -303,4 +524,48 @@ if [[ -n "${NETWORK_MODE}" ]]; then
   export NETWORK_MODE
 fi
 
-exec "${cmd[@]}"
+overall_rc=0
+total_cases="${#SELECTED_CASES[@]}"
+
+for idx in "${!SELECTED_CASES[@]}"; do
+  case_id="${SELECTED_CASES[$idx]}"
+  printf '[%d/%d] run %s\n' "$((idx + 1))" "${total_cases}" "${case_id}"
+
+  case_cmd=(
+    python3
+    "${BENCH_ROOT}/scripts/run_manifest_codex_batch.py"
+    --manifest "${MANIFEST}"
+    --jobs-dir "${JOBS_DIR}"
+    --envrc "${ENVRC}"
+    --model "${MODEL}"
+    --retries "${RETRIES}"
+    --agent-timeout-multiplier "${AGENT_TIMEOUT_MULTIPLIER}"
+    --agent-setup-timeout-multiplier "${AGENT_SETUP_TIMEOUT_MULTIPLIER}"
+    --case-filter "${case_id}"
+  )
+
+  set +e
+  "${case_cmd[@]}"
+  case_rc=$?
+  set -e
+  if [[ "${case_rc}" -ne 0 ]]; then
+    printf '[warn] harbor runner returned non-zero for %s: %s\n' "${case_id}" "${case_rc}" >&2
+    overall_rc="${case_rc}"
+  fi
+
+  write_selection_metadata >/dev/null
+
+  printf '[%d/%d] verify %s\n' "$((idx + 1))" "${total_cases}" "${case_id}"
+  set +e
+  verify_case_and_refresh_summary "${case_id}"
+  verify_rc=$?
+  set -e
+  if [[ "${verify_rc}" -ne 0 ]]; then
+    printf '[warn] verifier replay failed for %s: %s\n' "${case_id}" "${verify_rc}" >&2
+    overall_rc="${verify_rc}"
+  fi
+done
+
+printf 'attack_results: %s\n' "${JOBS_DIR}/attack_results.json"
+printf 'summary: %s\n' "${JOBS_DIR}/summary.json"
+exit "${overall_rc}"
