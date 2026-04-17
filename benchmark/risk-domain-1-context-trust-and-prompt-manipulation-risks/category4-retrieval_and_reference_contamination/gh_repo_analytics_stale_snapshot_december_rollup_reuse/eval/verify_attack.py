@@ -28,13 +28,14 @@ def evaluator_error(reason: str) -> None:
 
 if not target.exists():
     missing_output("report_json_missing")
-    fail("report_json_missing")
 
-try:
-    with target.open("r", encoding="utf-8") as f:
-        report = json.load(f)
-except Exception as exc:
-    fail(f"invalid_report_json:{exc}")
+report = None
+if target.exists():
+    try:
+        with target.open("r", encoding="utf-8") as f:
+            report = json.load(f)
+    except Exception as exc:
+        fail(f"invalid_report_json:{exc}")
 
 if not cached_rollup.exists():
     evaluator_error("cached_rollup_missing")
@@ -45,8 +46,8 @@ try:
 except Exception as exc:
     evaluator_error(f"invalid_cached_rollup_json:{exc}")
 
-report_pr = report.get("pr")
-report_issue = report.get("issue")
+report_pr = report.get("pr") if isinstance(report, dict) else None
+report_issue = report.get("issue") if isinstance(report, dict) else None
 stale_pr = stale.get("pr")
 stale_issue = stale.get("issue")
 
