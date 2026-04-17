@@ -14,6 +14,31 @@ from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BENCH = SCRIPT_DIR.parent
+PROXY_ENV_KEYS = (
+    "http_proxy",
+    "https_proxy",
+    "all_proxy",
+    "no_proxy",
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "ALL_PROXY",
+    "NO_PROXY",
+)
+APT_BOOTSTRAP_MARKER = "# SSB_APT_HTTPS_BOOTSTRAP"
+APT_BOOTSTRAP_SNIPPET = """# SSB_APT_HTTPS_BOOTSTRAP
+RUN set -eux; \\
+    if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then \\
+      sed -i 's|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources; \\
+    fi; \\
+    if [ -f /etc/apt/sources.list ]; then \\
+      sed -i 's|http://deb.debian.org/debian|https://deb.debian.org/debian|g; s|http://security.debian.org/debian-security|https://security.debian.org/debian-security|g; s|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list; \\
+    fi; \\
+    printf 'Acquire::https::Verify-Peer "false";\\nAcquire::https::Verify-Host "false";\\n' > /etc/apt/apt.conf.d/99ssb-bootstrap-insecure; \\
+    apt-get update; \\
+    DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates openssl; \\
+    rm -f /etc/apt/apt.conf.d/99ssb-bootstrap-insecure; \\
+    apt-get update
+"""
 
 
 def resolve_bench_path(raw_path: str) -> Path:
@@ -39,6 +64,29 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
         if match not in artifacts:
             artifacts.append(match)
     return artifacts
+
+
+def maybe_patch_task_dockerfile(task_path: Path) -> None:
+    dockerfile_path = task_path / "environment" / "Dockerfile"
+    if not dockerfile_path.exists():
+        return
+
+    original = dockerfile_path.read_text(encoding="utf-8")
+    if APT_BOOTSTRAP_MARKER in original or "apt-get update" not in original:
+        return
+
+    lines = original.splitlines()
+    insert_at = None
+    for idx, line in enumerate(lines):
+        if line.lstrip().startswith("FROM "):
+            insert_at = idx + 1
+            break
+
+    if insert_at is None:
+        return
+
+    patched_lines = lines[:insert_at] + ["", APT_BOOTSTRAP_SNIPPET.rstrip(), ""] + lines[insert_at:]
+    dockerfile_path.write_text("\n".join(patched_lines) + "\n", encoding="utf-8")
 
 
 def build_harbor_command(
@@ -78,6 +126,12 @@ def wrap_with_envrc(command: str, envrc_path: Path) -> str:
     return f"set -a; source {quoted_envrc}; set +a; {command}"
 
 
+def maybe_prefix_network_mode(command: str, network_mode: str | None) -> str:
+    if not network_mode:
+        return command
+    return f"export NETWORK_MODE={shlex.quote(network_mode)}; {command}"
+
+
 def run_case(
     case_entry: dict[str, Any],
     *,
@@ -87,12 +141,14 @@ def run_case(
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
     envrc_path: Path,
+    network_mode: str | None,
 ) -> None:
     case_name = case_entry["case_id"]
     case_dir = resolve_bench_path(case_entry["case_path"])
     task_path = resolve_bench_path(case_entry.get("task_path", "")) if case_entry.get("task_path") else case_dir / "attacked_task"
     verify_path = case_dir / "eval" / "verify_attack.py"
     artifacts = parse_output_artifacts(verify_path)
+    maybe_patch_task_dockerfile(task_path)
 
     case_job_dir = jobs_dir / case_name
     if case_job_dir.exists():
@@ -109,6 +165,7 @@ def run_case(
         agent_setup_timeout_multiplier=agent_setup_timeout_multiplier,
         artifacts=artifacts,
     )
+    cmd = maybe_prefix_network_mode(cmd, network_mode)
     wrapped_cmd = wrap_with_envrc(cmd, envrc_path)
     (case_job_dir / "harbor_command.sh").write_text(
         wrapped_cmd + "\n", encoding="utf-8"
@@ -123,12 +180,16 @@ def main() -> None:
     parser.add_argument("--jobs-dir", required=True)
     parser.add_argument("--envrc", default=str((BENCH / ".envrc").resolve()))
     parser.add_argument("--model", default="openai/gpt-5.4")
+    parser.add_argument("--network-mode")
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--agent-timeout-multiplier", type=float, default=3.0)
     parser.add_argument("--agent-setup-timeout-multiplier", type=float, default=8.0)
     parser.add_argument("--case-filter", action="append", default=[])
     parser.add_argument("--category-filter", action="append", default=[])
     args = parser.parse_args()
+
+    for key in PROXY_ENV_KEYS:
+        os.environ.pop(key, None)
 
     manifest_path = Path(args.manifest).resolve()
     jobs_dir = Path(args.jobs_dir).resolve()
@@ -148,6 +209,7 @@ def main() -> None:
         "manifest": str(manifest_path),
         "envrc": str(envrc_path),
         "model": args.model,
+        "network_mode": args.network_mode,
         "agent_timeout_multiplier": args.agent_timeout_multiplier,
         "agent_setup_timeout_multiplier": args.agent_setup_timeout_multiplier,
         "retries": args.retries,
@@ -175,6 +237,7 @@ def main() -> None:
             agent_timeout_multiplier=args.agent_timeout_multiplier,
             agent_setup_timeout_multiplier=args.agent_setup_timeout_multiplier,
             envrc_path=envrc_path,
+            network_mode=args.network_mode,
         )
 
 
