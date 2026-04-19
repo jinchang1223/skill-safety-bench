@@ -38,19 +38,19 @@
 
 ## 3. Normalized Categories and Classes
 
-- `runtime_and_toolchain_integrity_compromise` (Runtime and Toolchain Integrity Compromise): runtime_integrity_compromise, binary_resolution_hijack, wrapper_and_bootstrap_hijack, helper_output_tampering
-- `downstream_interpreter_and_query_exploitation` (Downstream Interpreter and Query Exploitation): command_and_shell_injection, sql_and_structured_query_injection, template_and_expression_injection, code_interpreter_payload_injection
-- `framework_serialization_and_loader_abuse` (Framework Serialization and Loader Abuse): unsafe_deserialization_and_object_instantiation, loader_ssrf_and_remote_fetch_abuse, parser_confusion_and_polyglot_abuse, extension_and_module_loader_abuse
-- `protocol_identity_and_capability_abuse` (Protocol Identity and Capability Abuse): protocol_capability_spoofing, service_identity_impersonation, origin_binding_and_session_confusion, delegated_token_and_trust_propagation_abuse
-- `sandbox_and_environment_boundary_escape` (Sandbox and Environment Boundary Escape): filesystem_root_and_path_boundary_bypass, internal_network_and_metadata_service_escape, sandbox_runtime_breakout, mount_and_host_integration_escape
+- `category4-runtime_and_toolchain_integrity_compromise` (Runtime and Toolchain Integrity Compromise): runtime_integrity_compromise, binary_resolution_hijack, wrapper_and_bootstrap_hijack, helper_output_tampering
+- `category1-downstream_interpreter_and_query_exploitation` (Downstream Interpreter and Query Exploitation): command_and_shell_injection, sql_and_structured_query_injection, template_and_expression_injection, code_interpreter_payload_injection
+- `category2-framework_serialization_and_loader_abuse` (Framework Serialization and Loader Abuse): unsafe_deserialization_and_object_instantiation, loader_ssrf_and_remote_fetch_abuse, parser_confusion_and_polyglot_abuse, extension_and_module_loader_abuse
+- `category3-protocol_identity_and_capability_abuse` (Protocol Identity and Capability Abuse): protocol_capability_spoofing, service_identity_impersonation, origin_binding_and_session_confusion, delegated_token_and_trust_propagation_abuse
+- `category5-sandbox_and_environment_boundary_escape` (Sandbox and Environment Boundary Escape): filesystem_root_and_path_boundary_bypass, internal_network_and_metadata_service_escape, sandbox_runtime_breakout, mount_and_host_integration_escape
 
 ## 4. Original Tasks Selected Per Category
 
-- `runtime_and_toolchain_integrity_compromise`: `fix-build-agentops`, `fix-erlang-ssh-cve`, `manufacturing-codebook-normalization`, `parallel-tfidf-search`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`
-- `downstream_interpreter_and_query_exploitation`: `flink-query`, `gh-repo-analytics`, `jax-computing-basics`, `parallel-tfidf-search`, `pptx-reference-formatting`, `setup-fuzzing-py`
-- `framework_serialization_and_loader_abuse`: `dialogue-parser`, `parallel-tfidf-search`, `python-scala-translation`, `threejs-structure-parser`
-- `protocol_identity_and_capability_abuse`: `enterprise-information-search`, `fix-build-agentops`, `scheduling-email-assistant`, `travel-planning`
-- `sandbox_and_environment_boundary_escape`: `fix-build-agentops`, `organize-messy-files`, `setup-fuzzing-py`
+- `category4-runtime_and_toolchain_integrity_compromise`: `fix-build-agentops`, `fix-erlang-ssh-cve`, `manufacturing-codebook-normalization`, `parallel-tfidf-search`, `setup-fuzzing-py`, `syzkaller-ppdev-syzlang`
+- `category1-downstream_interpreter_and_query_exploitation`: `flink-query`, `gh-repo-analytics`, `jax-computing-basics`, `parallel-tfidf-search`, `pptx-reference-formatting`, `setup-fuzzing-py`
+- `category2-framework_serialization_and_loader_abuse`: `dialogue-parser`, `parallel-tfidf-search`, `python-scala-translation`, `threejs-structure-parser`
+- `category3-protocol_identity_and_capability_abuse`: `enterprise-information-search`, `fix-build-agentops`, `scheduling-email-assistant`, `travel-planning`
+- `category5-sandbox_and_environment_boundary_escape`: `fix-build-agentops`, `organize-messy-files`, `setup-fuzzing-py`
 
 ## 5. Class Coverage
 
@@ -91,11 +91,11 @@
 
 ## 8. Category Design Principles
 
-- `runtime_and_toolchain_integrity_compromise`: prefer tasks where wrapper scripts, PATH shims, or helper-output digests can leave a direct marker file or altered itinerary artifact.
-- `downstream_interpreter_and_query_exploitation`: prefer tasks that emit source files, answer JSON, or templated documents so interpreter or query payload adoption is directly inspectable.
-- `framework_serialization_and_loader_abuse`: prefer code-generation tasks where unsafe `pickle`, remote loaders, parser confusion, or dynamic module-loading patterns can be detected from the final code or exported outputs.
-- `protocol_identity_and_capability_abuse`: prefer tasks with explicit tool lists, metadata-driven retrieval, or real email headers so protocol trust failures can be measured at the artifact layer.
-- `sandbox_and_environment_boundary_escape`: prefer tasks with concrete filesystem roots, debug-note artifacts, or executable fuzz drivers so boundary-crossing behavior can be identified with deterministic rule checks.
+- `category4-runtime_and_toolchain_integrity_compromise`: prefer tasks where wrapper scripts, PATH shims, or helper-output digests can leave a direct marker file or altered itinerary artifact.
+- `category1-downstream_interpreter_and_query_exploitation`: prefer tasks that emit source files, answer JSON, or templated documents so interpreter or query payload adoption is directly inspectable.
+- `category2-framework_serialization_and_loader_abuse`: prefer code-generation tasks where unsafe `pickle`, remote loaders, parser confusion, or dynamic module-loading patterns can be detected from the final code or exported outputs.
+- `category3-protocol_identity_and_capability_abuse`: prefer tasks with explicit tool lists, metadata-driven retrieval, or real email headers so protocol trust failures can be measured at the artifact layer.
+- `category5-sandbox_and_environment_boundary_escape`: prefer tasks with concrete filesystem roots, debug-note artifacts, or executable fuzz drivers so boundary-crossing behavior can be identified with deterministic rule checks.
 
 ## 9. Evaluation Overview
 

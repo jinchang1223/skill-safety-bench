@@ -15,19 +15,19 @@
 
 ## 3. Normalized Categories and Classes
 
-- `belief_persistence_and_self_correction_failure` (Belief Persistence and Self-Correction Failure): poisoned_belief_persistence, self_correction_suppression, retrieved_precedent_overgeneralization, self_reinforcing_error_amplification
-- `audit_visibility_and_trace_suppression` (Audit Visibility and Trace Suppression): audit_evasion, trace_integrity_tampering, provenance_and_attribution_stripping, forensic_snapshot_and_replay_suppression
-- `persistence_and_long_lived_footholds` (Persistence and Long-Lived Footholds): persistent_foothold_implant, startup_and_bootstrap_persistence, shadow_helper_and_wrapper_persistence, self_reinforcing_reinfection_loop
-- `memory_store_and_history_poisoning` (Memory Store and History Poisoning): long_term_memory_record_injection, experience_retrieval_poisoning, retrieval_trigger_backdoor_poisoning, session_history_and_context_contamination
-- `rollback_and_recovery_control_failure` (Rollback and Recovery Control Failure): rollback_suppression_and_operator_discouragement, recovery_checkpoint_and_snapshot_corruption, rollback_scope_and_target_confusion, cleanup_and_remediation_obstruction
+- `category2-belief_persistence_and_self_correction_failure` (Belief Persistence and Self-Correction Failure): poisoned_belief_persistence, self_correction_suppression, retrieved_precedent_overgeneralization, self_reinforcing_error_amplification
+- `category1-audit_visibility_and_trace_suppression` (Audit Visibility and Trace Suppression): audit_evasion, trace_integrity_tampering, provenance_and_attribution_stripping, forensic_snapshot_and_replay_suppression
+- `category4-persistence_and_long_lived_footholds` (Persistence and Long-Lived Footholds): persistent_foothold_implant, startup_and_bootstrap_persistence, shadow_helper_and_wrapper_persistence, self_reinforcing_reinfection_loop
+- `category3-memory_store_and_history_poisoning` (Memory Store and History Poisoning): long_term_memory_record_injection, experience_retrieval_poisoning, retrieval_trigger_backdoor_poisoning, session_history_and_context_contamination
+- `category5-rollback_and_recovery_control_failure` (Rollback and Recovery Control Failure): rollback_suppression_and_operator_discouragement, recovery_checkpoint_and_snapshot_corruption, rollback_scope_and_target_confusion, cleanup_and_remediation_obstruction
 
 ## 4. Original Tasks Selected Per Category
 
-- `belief_persistence_and_self_correction_failure`: `enterprise-information-search`, `software-dependency-audit`, `travel-planning`
-- `audit_visibility_and_trace_suppression`: `enterprise-information-search`, `fix-build-agentops`, `paper-anonymizer`, `react-performance-debugging`, `software-dependency-audit`, `video-filler-word-remover`, `xlsx-recover-data`
-- `persistence_and_long_lived_footholds`: `data-to-d3`, `fix-build-agentops`, `software-dependency-audit`
-- `memory_store_and_history_poisoning`: `enterprise-information-search`, `lab-unit-harmonization`, `manufacturing-codebook-normalization`, `manufacturing-equipment-maintenance`, `scheduling-email-assistant`, `travel-planning`
-- `rollback_and_recovery_control_failure`: `data-to-d3`, `fix-build-agentops`, `software-dependency-audit`, `xlsx-recover-data`
+- `category2-belief_persistence_and_self_correction_failure`: `enterprise-information-search`, `software-dependency-audit`, `travel-planning`
+- `category1-audit_visibility_and_trace_suppression`: `enterprise-information-search`, `fix-build-agentops`, `paper-anonymizer`, `react-performance-debugging`, `software-dependency-audit`, `video-filler-word-remover`, `xlsx-recover-data`
+- `category4-persistence_and_long_lived_footholds`: `data-to-d3`, `fix-build-agentops`, `software-dependency-audit`
+- `category3-memory_store_and_history_poisoning`: `enterprise-information-search`, `lab-unit-harmonization`, `manufacturing-codebook-normalization`, `manufacturing-equipment-maintenance`, `scheduling-email-assistant`, `travel-planning`
+- `category5-rollback_and_recovery_control_failure`: `data-to-d3`, `fix-build-agentops`, `software-dependency-audit`, `xlsx-recover-data`
 
 ## 5. Class Coverage
 
@@ -79,11 +79,11 @@
 
 ## 8. Category Design Principles
 
-- `belief_persistence_and_self_correction_failure`: prefer tasks with structured final artifacts where sticky beliefs, correction locks, precedent fields, or carried-forward findings can be read back directly.
-- `audit_visibility_and_trace_suppression`: prefer tasks with summaries, trace sidecars, provenance fields, or recovery snapshots so suppression can be observed from text artifacts rather than inferred from hidden state.
-- `persistence_and_long_lived_footholds`: prefer repository-editing and bundle-producing tasks where helper scripts, wrappers, bootstrap hooks, and reinfection manifests can survive after the main task completes.
-- `memory_store_and_history_poisoning`: prefer tasks with journals, answer caches, question maps, or outbound thread state so poisoned memory can be written and then detected at a stable path.
-- `rollback_and_recovery_control_failure`: prefer tasks with notes, snapshot areas, output bundles, and cleanup artifacts where rollback discouragement, checkpoint corruption, scope confusion, or cleanup obstruction leave explicit files behind.
+- `category2-belief_persistence_and_self_correction_failure`: prefer tasks with structured final artifacts where sticky beliefs, correction locks, precedent fields, or carried-forward findings can be read back directly.
+- `category1-audit_visibility_and_trace_suppression`: prefer tasks with summaries, trace sidecars, provenance fields, or recovery snapshots so suppression can be observed from text artifacts rather than inferred from hidden state.
+- `category4-persistence_and_long_lived_footholds`: prefer repository-editing and bundle-producing tasks where helper scripts, wrappers, bootstrap hooks, and reinfection manifests can survive after the main task completes.
+- `category3-memory_store_and_history_poisoning`: prefer tasks with journals, answer caches, question maps, or outbound thread state so poisoned memory can be written and then detected at a stable path.
+- `category5-rollback_and_recovery_control_failure`: prefer tasks with notes, snapshot areas, output bundles, and cleanup artifacts where rollback discouragement, checkpoint corruption, scope confusion, or cleanup obstruction leave explicit files behind.
 
 ## 9. Evaluation Overview
 

@@ -45,7 +45,7 @@ Behavior:
 Examples:
   scripts/start_codex_batch.sh --rd 3
   scripts/start_codex_batch.sh --rd 4 --case weighted_gdp_schema_alignment_hidden_weight_cache
-  scripts/start_codex_batch.sh --rd 6 --category model_behavior_and_finetuning_poisoning
+  scripts/start_codex_batch.sh --rd 6 --category category3-model_behavior_and_finetuning_poisoning
   scripts/start_codex_batch.sh --rd 5 --case scheduling_email_session_history_context_contamination_thread_memory --network-mode host
   scripts/start_codex_batch.sh --manifest benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/manifest.json --jobs-dir jobs/rd3-codex
 EOF
@@ -337,7 +337,7 @@ jobs_dir = Path(sys.argv[2]).resolve()
 case_id = sys.argv[3]
 sys.path.insert(0, str(bench_root / "scripts"))
 
-import run_manifest_oracle_batch as oracle
+	import verify_replay as replay
 
 selected_path = jobs_dir / "selected_cases.json"
 if not selected_path.exists():
@@ -351,11 +351,11 @@ if case_id not in selected_by_id:
 case_entry = selected_by_id[case_id]
 case_job_dir = jobs_dir / case_id
 case_job_dir.mkdir(parents=True, exist_ok=True)
-trial_dir = oracle.latest_trial_dir(case_job_dir) if case_job_dir.exists() else None
+	trial_dir = replay.latest_trial_dir(case_job_dir) if case_job_dir.exists() else None
 
-result = oracle.load_job_result(case_job_dir)
-if not result and trial_dir is not None:
-    result = oracle.load_trial_result(trial_dir)
+	result = replay.load_job_result(case_job_dir)
+	if not result and trial_dir is not None:
+	    result = replay.load_trial_result(trial_dir)
 
 reward = None
 exception_type = None
@@ -376,11 +376,11 @@ verify_stdout = ""
 verify_stderr = ""
 
 if trial_dir is not None:
-    case_dir = oracle.resolve_bench_path(case_entry["case_path"])
-    attack_success, verify_status, verify_bucket, verify_exit_code, verify_stdout, verify_stderr = oracle.run_custom_verify(
-        case_dir,
-        trial_dir,
-    )
+	    case_dir = replay.resolve_bench_path(case_entry["case_path"])
+	    attack_success, verify_status, verify_bucket, verify_exit_code, verify_stdout, verify_stderr = replay.run_verify_replay(
+	        case_dir,
+	        trial_dir,
+	    )
     (trial_dir / "custom_verify_stdout.txt").write_text(verify_stdout, encoding="utf-8")
     (trial_dir / "custom_verify_stderr.txt").write_text(verify_stderr, encoding="utf-8")
     (trial_dir / "custom_verify_result.json").write_text(
@@ -429,8 +429,8 @@ for entry in selected:
     if result_path.exists():
         results.append(json.loads(result_path.read_text(encoding="utf-8")))
 
-label = f"{jobs_dir.name} Codex"
-oracle.summarize(results, jobs_dir, label)
+	label = f"{jobs_dir.name} Codex"
+	replay.summarize(results, jobs_dir, label)
 
 verify_bucket_counts = Counter(row.get("verify_bucket") for row in results if row.get("verify_bucket"))
 verify_status_counts = Counter(row.get("verify_status") for row in results if row.get("verify_status"))

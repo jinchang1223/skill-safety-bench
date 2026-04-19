@@ -1,31 +1,30 @@
-# SkillSafetyBench
+# Skill Safety Bench
 
-`SkillSafetyBench` is a static benchmark for attacking and evaluating skill-using agents.
+`Skill Safety Bench` is a fully materialized benchmark repository. It is not a framework for dynamically generating attack cases. Instead, it contains a static set of prepared benchmark cases that can be run directly with Harbor.
 
-The current repository is not a live `attack.py` materialization framework. The source of truth is the prebuilt benchmark under [`benchmark/`](benchmark/), where each case is a fully materialized attacked task with its own task files, oracle solution, task-level tests, and attack-level verifier.
+The recommended entry points are:
 
-## Current Status
+- the static benchmark cases under `benchmark/`
+- the Harbor batch runner scripts centered on `scripts/start_codex_batch.sh`
+
+## Repository Layout
+
+The most important top-level directories and files are:
 
 - `benchmark/`
-  Static attacked-task benchmark cases, organized by:
-  `risk_domain -> category -> case`
-- `docs/`
-  Taxonomy, redesign notes, and diagnosis documents
-- root-level Python modules
-  Legacy materialization/runtime code from an older repository phase. These files are not the primary path for evaluating the current benchmark subset.
-
-The current top-level risk domains are:
-
-- `context_trust_and_prompt_manipulation_risks`
-- `agency_scope_and_authorization_risks`
-- `execution_runtime_framework_and_protocol_risks`
-- `data_boundary_output_and_externalization_risks`
-- `memory_recovery_audit_and_persistence_risks`
-- `knowledge_model_supply_chain_and_operational_risks`
+  The benchmark itself. All risk domains, categories, and cases live here.
+- `scripts/`
+  Runner scripts.
+  The main entry points are:
+  - `start_codex_batch.sh`
+  - `run_manifest_codex_batch.py`
+  - `verify_replay.py`
+- `.envrc`
+  Environment variable configuration used when running Harbor / Codex.
 
 ## Benchmark Layout
 
-Each case lives at:
+Each case has the following structure:
 
 ```text
 benchmark/<risk-domain>/<category>/<case>/
@@ -41,116 +40,243 @@ benchmark/<risk-domain>/<category>/<case>/
   eval/verify_attack.py
 ```
 
-Important conventions:
+Meaning of the key files:
 
-- `attacked_task/` is the task that should be run.
-- `tests/test_outputs.py` checks whether the attacked task still completes the base task correctly.
-- `eval/verify_attack.py` checks whether the attack-specific signal was actually induced.
-- `metadata.json` is the canonical machine-readable description of the case.
-- `rationale.md` is the human-readable explanation of why the case exists and how it is supposed to work.
+- `attacked_task/`
+  The actual task passed to Harbor.
+- `attacked_task/tests/test_outputs.py`
+  Checks whether the base task was completed correctly.
+- `eval/verify_attack.py`
+  Checks whether the attack behavior was induced.
+- `metadata.json`
+  Machine-readable case metadata.
+- `rationale.md`
+  Human-readable design notes.
 
-## Evaluation
+Category directories are now uniformly named as:
 
-The benchmark is designed to be evaluated as SkillsBench-style tasks.
+- `category1-...`
+- `category2-...`
+- `category3-...`
+- `category4-...`
+- `category5-...`
 
-### Recommended Path: Harbor
+For example:
 
-Prerequisites:
+```text
+benchmark/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category1-availability_cost_and_service_exhaustion/
+```
 
+## Setup From Scratch
+
+### 1. System Requirements
+
+At minimum, you need:
+
+- `bash`
+- `python3`, recommended `>= 3.11`
 - `docker`
 - `uv`
 - `harbor`
 
-Install Harbor:
+If Harbor is not installed yet, you can install it with:
 
 ```bash
 uv tool install harbor
 ```
 
-Validate a task definition:
+After installation, it is a good idea to verify:
 
 ```bash
-harbor check benchmark/<risk-domain>/<category>/<case>/attacked_task
+harbor --help
+python3 --version
+docker --version
 ```
 
-Notes:
+### 2. Harbor Runtime Prerequisites
 
-- On current Harbor versions, the command is `harbor check`, not `harbor tasks check`.
-- `harbor check` may require model API keys such as `ANTHROPIC_API_KEY`.
+The cases in this repository are designed to run in a SkillsBench / Harbor-style workflow, so Harbor requires at least:
 
-Run the oracle on one attacked task:
+- a working local Docker installation
+- a user account that can access Docker
+- Harbor installed and available on `PATH`
+
+The batch script itself checks for:
+
+- `python3`
+- `harbor`
+- the existence of `.envrc`
+
+The script does not install Docker or Harbor for you. Those must be prepared at the system level first.
+
+### 3. Configure API Environment Variables
+
+By default, the runner scripts read the root-level [`.envrc`](./.envrc).
+
+At minimum, it should define:
+
+```bash
+export OPENAI_BASE_URL=...
+export OPENAI_API_KEY=...
+```
+
+If you need a special network mode, you can also add:
+
+```bash
+export NETWORK_MODE=host
+```
+
+or pass it at runtime via `--network-mode`.
+
+A minimal `.envrc` example:
+
+```bash
+export OPENAI_BASE_URL="https://your-openai-compatible-endpoint/v1"
+export OPENAI_API_KEY="sk-..."
+```
+
+If you use `direnv`, run this once in the repository root:
+
+```bash
+direnv allow
+```
+
+If you do not use `direnv`, that is fine. The scripts explicitly `source .envrc` at runtime.
+
+### 4. API Connectivity Check
+
+Before starting the actual run, the batch script automatically sends a minimal preflight request to:
+
+- `POST $OPENAI_BASE_URL/responses`
+
+The request includes:
+
+- `OPENAI_API_KEY`
+- the target model name
+
+This is intended to catch problems early, such as:
+
+- an incorrect `OPENAI_BASE_URL`
+- an invalid `OPENAI_API_KEY`
+- a gateway that is not compatible with OpenAI-style `/responses`
+- a currently unavailable service
+
+So if `.envrc` is already configured, you usually do not need to manually export environment variables each time. Running the script is enough.
+
+## Running the Benchmark
+
+### Recommended: Batch Runner Script
+
+#### Run an entire risk domain
+
+```bash
+scripts/start_codex_batch.sh --rd 5
+```
+
+#### Run a single case
+
+```bash
+scripts/start_codex_batch.sh \
+  --rd 5 \
+  --case travel_planning_poisoned_belief_persistence_memory_anchor
+```
+
+#### Run a single category
+
+```bash
+scripts/start_codex_batch.sh \
+  --rd 6 \
+  --category category3-model_behavior_and_finetuning_poisoning
+```
+
+#### Run from a specific manifest
+
+```bash
+scripts/start_codex_batch.sh \
+  --manifest benchmark/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/manifest.json
+```
+
+#### Use a different env file
+
+```bash
+scripts/start_codex_batch.sh \
+  --rd 5 \
+  --envrc /path/to/your.envrc
+```
+
+#### Expand arguments only without executing
+
+```bash
+scripts/start_codex_batch.sh --rd 5 --dry-run
+```
+
+
+## Run Outputs
+
+Each run creates a new output directory under `jobs/`, for example:
+
+```text
+jobs/codex-risk-domain-5-memory-recovery-audit-and-persistence-risks-<timestamp>/
+```
+
+The most important files are:
+
+- `selected_cases.json`
+  The cases actually selected for this run
+- `batch_config.json`
+  The run configuration
+- `<case_id>/case_result.json`
+  Per-case run result and verifier result
+- `attack_results.json`
+  Top-level summary focused on attack outcomes
+- `summary.json`
+  Overall summary
+- `attack_results.csv`
+- `attack_results.md`
+- `summary.csv`
+- `summary.md`
+
+If you only want the most important outputs, start with:
+
+- `jobs/<run>/attack_results.json`
+- `jobs/<run>/summary.json`
+
+## How to Interpret Results
+
+Each case should be interpreted on two separate axes:
+
+- whether the base task completed successfully
+- whether the attack behavior was observed
+
+The most common terminal attack outcomes are:
+
+- `attack_success`
+- `attack_not_observed`
+
+Some verifiers may also print:
+
+- `task_output_missing`
+
+This means the task’s required explicit output file was missing, but the verifier still continued to evaluate the attack condition.
+
+## Running a Single Case Directly With Harbor
+
+If you do not want to use the batch script, you can run a single attacked task directly:
 
 ```bash
 harbor run -p benchmark/<risk-domain>/<category>/<case>/attacked_task -a oracle -n 1 -y
 ```
 
-This executes the task as a normal SkillsBench task:
-
-1. Build the task environment from `attacked_task/environment/Dockerfile`
-2. Run `attacked_task/solution/solve.sh`
-3. Run `attacked_task/tests/test.sh`
-
-After that, you should also inspect the case-level attack result with:
+However, the preferred path is still:
 
 ```bash
-python3 benchmark/<risk-domain>/<category>/<case>/eval/verify_attack.py
+scripts/start_codex_batch.sh ...
 ```
 
-### Direct Docker Fallback
+because it already combines:
 
-For debugging or when Harbor logs are not transparent enough, you can reproduce the same workflow manually:
+- Harbor execution
+- verifier replay
+- summary generation
 
-```bash
-docker build -t ssb-case benchmark/<risk-domain>/<category>/<case>/attacked_task/environment
-
-docker run --rm \
-  -v "$PWD/benchmark/<risk-domain>/<category>/<case>/attacked_task/solution:/solution" \
-  -v "$PWD/benchmark/<risk-domain>/<category>/<case>/attacked_task/tests:/tests" \
-  -v "$PWD/benchmark/<risk-domain>/<category>/<case>/eval:/eval" \
-  ssb-case \
-  bash -lc 'bash /solution/solve.sh && bash /tests/test.sh && python3 /eval/verify_attack.py'
-```
-
-Some task test runners install dependencies dynamically. In minimal containers, you may need the same fallback used during local verification:
-
-```bash
-python3 -m pip install --break-system-packages -q pytest==8.4.1
-pytest /tests/test_outputs.py -q
-python3 /eval/verify_attack.py
-```
-
-## What The Results Mean
-
-For each case, treat the results as two separate signals:
-
-- Base task result
-  Whether `attacked_task/tests/test_outputs.py` passes
-- Attack result
-  Whether `eval/verify_attack.py` returns `attack_success` or `attack_not_observed`
-
-Typical outcomes:
-
-- Base task passes + `attack_success`
-  Strong attack case
-- Base task passes + `attack_not_observed`
-  Attack did not induce the target behavior under the tested agent/oracle
-- Base task fails
-  Task or environment is not currently runnable; fix task correctness before interpreting attack behavior
-
-## Current Notes
-
-- RD4, RD5, and RD6 have been rewritten into non-user-surface attacks: `instruction.md` was restored to the original task where applicable, and attacks now rely on benchmark-local skills, sidecars, manifests, notes, and output artifacts.
-- Several representative RD4-RD6 cases have been exercised through the SkillsBench-style task flow. In the sampled runs so far, base task tests passed while attack verifiers returned `attack_not_observed`.
-- Travel-planning attacked tasks required a runtime fix: their `solve.sh` now tolerates both underscore and hyphen skill directory naming, and the expected skill scripts are restored into the attacked task environment.
-
-See the redesign notes:
-
-- [RD4 redesign](docs/rd4-non-user-attack-redesign-20260331.md)
-- [RD5 redesign](docs/rd5-non-user-attack-redesign-20260331.md)
-- [RD6 redesign](docs/rd6-non-user-attack-redesign-20260401.md)
-
-## Legacy Code
-
-The root-level Python modules such as [`cli.py`](cli.py), [`runner.py`](runner.py), [`catalog.py`](catalog.py), and [`case_library.py`](case_library.py) are retained from an older dynamic materialization phase.
-
-They do not currently describe the repository’s main benchmark artifact layout correctly, and should not be treated as the primary evaluation path for the benchmark cases under `benchmark/`.
+into one workflow.

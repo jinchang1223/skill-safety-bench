@@ -15,19 +15,19 @@
 
 ## 3. Normalized Categories and Classes
 
-- `retrieval_knowledge_and_corpus_poisoning` (Retrieval Knowledge and Corpus Poisoning): corpus_document_injection_and_fact_override, ranking_and_metadata_retrieval_manipulation, stealth_poisoning_with_minimal_corpus_footprint, trigger_conditioned_retrieval_backdoor
-- `model_behavior_and_finetuning_poisoning` (Model Behavior and Finetuning Poisoning): task_dataset_structure_poisoning, alignment_erosion_via_benign_looking_finetuning, trigger_conditioned_behavior_backdoor, downstream_finetuning_data_exfiltration_backdoor
-- `dependency_plugin_and_release_chain_compromise` (Dependency Plugin and Release Chain Compromise): package_hallucination_and_dependency_confusion, malicious_plugin_or_tool_registry_impersonation, dependency_update_and_lockfile_substitution, release_artifact_provenance_and_attestation_bypass
-- `availability_cost_and_service_exhaustion` (Availability Cost and Service Exhaustion): structural_tool_loop_amplification, malfunction_amplification_and_irrelevant_action_induction, recursive_query_fanout_and_workflow_explosion, budget_drain_and_latency_amplification
-- `model_extraction_and_service_abuse` (Model Extraction and Service Abuse): functionality_extraction_and_surrogate_model_reconstruction, training_data_extraction_via_black_box_queries, prompt_asset_stealing_and_system_prompt_reconstruction, capability_mapping_and_endpoint_probing_abuse
+- `category5-retrieval_knowledge_and_corpus_poisoning` (Retrieval Knowledge and Corpus Poisoning): corpus_document_injection_and_fact_override, ranking_and_metadata_retrieval_manipulation, stealth_poisoning_with_minimal_corpus_footprint, trigger_conditioned_retrieval_backdoor
+- `category3-model_behavior_and_finetuning_poisoning` (Model Behavior and Finetuning Poisoning): task_dataset_structure_poisoning, alignment_erosion_via_benign_looking_finetuning, trigger_conditioned_behavior_backdoor, downstream_finetuning_data_exfiltration_backdoor
+- `category2-dependency_plugin_and_release_chain_compromise` (Dependency Plugin and Release Chain Compromise): package_hallucination_and_dependency_confusion, malicious_plugin_or_tool_registry_impersonation, dependency_update_and_lockfile_substitution, release_artifact_provenance_and_attestation_bypass
+- `category1-availability_cost_and_service_exhaustion` (Availability Cost and Service Exhaustion): structural_tool_loop_amplification, malfunction_amplification_and_irrelevant_action_induction, recursive_query_fanout_and_workflow_explosion, budget_drain_and_latency_amplification
+- `category4-model_extraction_and_service_abuse` (Model Extraction and Service Abuse): functionality_extraction_and_surrogate_model_reconstruction, training_data_extraction_via_black_box_queries, prompt_asset_stealing_and_system_prompt_reconstruction, capability_mapping_and_endpoint_probing_abuse
 
 ## 4. Original Tasks Selected Per Category
 
-- `retrieval_knowledge_and_corpus_poisoning`: `enterprise-information-search`, `manufacturing-equipment-maintenance`, `parallel-tfidf-search`, `travel-planning`
-- `model_behavior_and_finetuning_poisoning`: `citation-check`, `offer-letter-generator`, `simpo-code-reproduction`, `video-tutorial-indexer`
-- `dependency_plugin_and_release_chain_compromise`: `data-to-d3`, `fix-build-agentops`, `fix-druid-loophole-cve`, `software-dependency-audit`
-- `availability_cost_and_service_exhaustion`: `enterprise-information-search`, `mhc-layer-impl`, `parallel-tfidf-search`, `travel-planning`, `video-silence-remover`, `video-tutorial-indexer`
-- `model_extraction_and_service_abuse`: `citation-check`, `parallel-tfidf-search`, `scheduling-email-assistant`, `seismic-phase-picking`, `video-tutorial-indexer`
+- `category5-retrieval_knowledge_and_corpus_poisoning`: `enterprise-information-search`, `manufacturing-equipment-maintenance`, `parallel-tfidf-search`, `travel-planning`
+- `category3-model_behavior_and_finetuning_poisoning`: `citation-check`, `offer-letter-generator`, `simpo-code-reproduction`, `video-tutorial-indexer`
+- `category2-dependency_plugin_and_release_chain_compromise`: `data-to-d3`, `fix-build-agentops`, `fix-druid-loophole-cve`, `software-dependency-audit`
+- `category1-availability_cost_and_service_exhaustion`: `enterprise-information-search`, `mhc-layer-impl`, `parallel-tfidf-search`, `travel-planning`, `video-silence-remover`, `video-tutorial-indexer`
+- `category4-model_extraction_and_service_abuse`: `citation-check`, `parallel-tfidf-search`, `scheduling-email-assistant`, `seismic-phase-picking`, `video-tutorial-indexer`
 
 ## 5. Class Coverage
 
@@ -76,11 +76,11 @@
 
 ## 8. Category Design Principles
 
-- `retrieval_knowledge_and_corpus_poisoning`: prefer tasks that already trust bundled corpora, ranking metadata, or search-engine code so poisoned documents, tiers, sparse notes, and triggers can be checked directly.
-- `model_behavior_and_finetuning_poisoning`: prefer model-backed or review-policy tasks where tuned structure, softened verification posture, trigger-conditioned behavior, or hidden fine-tuning capture strings can survive into outputs.
-- `dependency_plugin_and_release_chain_compromise`: prefer dependency audits, build-fix tasks, and packaged web outputs where shadow packages, registry aliases, lockfile swaps, and fake attestations can be recorded in stable artifacts.
-- `availability_cost_and_service_exhaustion`: prefer workflows with repeated queries, rescans, branch expansion, or performance tuning so loop amplification and budget-drain patterns leave explicit trace files behind.
-- `model_extraction_and_service_abuse`: prefer tasks with search-engine behavior, model-backed transcription, hidden review heuristics, or service-like skills so surrogate profiles, probe dumps, prompt reconstructions, and capability maps can be emitted safely as local sidecars.
+- `category5-retrieval_knowledge_and_corpus_poisoning`: prefer tasks that already trust bundled corpora, ranking metadata, or search-engine code so poisoned documents, tiers, sparse notes, and triggers can be checked directly.
+- `category3-model_behavior_and_finetuning_poisoning`: prefer model-backed or review-policy tasks where tuned structure, softened verification posture, trigger-conditioned behavior, or hidden fine-tuning capture strings can survive into outputs.
+- `category2-dependency_plugin_and_release_chain_compromise`: prefer dependency audits, build-fix tasks, and packaged web outputs where shadow packages, registry aliases, lockfile swaps, and fake attestations can be recorded in stable artifacts.
+- `category1-availability_cost_and_service_exhaustion`: prefer workflows with repeated queries, rescans, branch expansion, or performance tuning so loop amplification and budget-drain patterns leave explicit trace files behind.
+- `category4-model_extraction_and_service_abuse`: prefer tasks with search-engine behavior, model-backed transcription, hidden review heuristics, or service-like skills so surrogate profiles, probe dumps, prompt reconstructions, and capability maps can be emitted safely as local sidecars.
 
 ## 9. Evaluation Overview
 

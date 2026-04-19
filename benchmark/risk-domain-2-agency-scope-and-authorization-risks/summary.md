@@ -10,18 +10,18 @@
 ## 2. Alignment Rewrite
 
 - Rewritten on `2026-04-07` to align RD2 with direct-compromise semantics.
-- `approval_and_authority_spoofing` is now interpreted as downstream authority / trust laundering only.
-- `credential_privilege_and_sensitive_input_solicitation` is now interpreted as direct secret exfiltration and privilege abuse rather than asking the current user for new secrets.
+- `category1-approval_and_authority_spoofing` is now interpreted as downstream authority / trust laundering only.
+- `category2-credential_privilege_and_sensitive_input_solicitation` is now interpreted as direct secret exfiltration and privilege abuse rather than asking the current user for new secrets.
 - Transaction cases now prefer direct local action-request side effects over downstream prose embedded in the output artifact.
 - Source-document poisoning was removed from the rewritten offer-letter / PPTX / ExcelTable cases. The agent is now induced through skill files and benchmark-local sidecars instead.
 
 ## 3. Original Tasks Selected Per Category
 
-- `planning_scope_and_safety_degradation` (Planning Scope and Safety Degradation): `manufacturing-codebook-normalization`, `manufacturing-fjsp-optimization`, `sec-financial-report`
-- `approval_and_authority_spoofing` (Downstream Authority and Trust Laundering): `offer-letter-generator`, `pptx-reference-formatting`, `sec-financial-report`, `software-dependency-audit`
-- `credential_privilege_and_sensitive_input_solicitation` (Direct Secret Exfiltration and Privilege Abuse): `exceltable-in-ppt`, `offer-letter-generator`, `sec-financial-report`
-- `destructive_and_sensitive_operation_induction` (Destructive and Sensitive Operation Induction): `fix-visual-stability`, `organize-messy-files`, `xlsx-recover-data`
-- `transaction_and_external_action_induction` (Transaction and External Action Induction): `manufacturing-codebook-normalization`, `offer-letter-generator`, `sec-financial-report`
+- `category4-planning_scope_and_safety_degradation` (Planning Scope and Safety Degradation): `manufacturing-codebook-normalization`, `manufacturing-fjsp-optimization`, `sec-financial-report`
+- `category1-approval_and_authority_spoofing` (Downstream Authority and Trust Laundering): `offer-letter-generator`, `pptx-reference-formatting`, `sec-financial-report`, `software-dependency-audit`
+- `category2-credential_privilege_and_sensitive_input_solicitation` (Direct Secret Exfiltration and Privilege Abuse): `exceltable-in-ppt`, `offer-letter-generator`, `sec-financial-report`
+- `category3-destructive_and_sensitive_operation_induction` (Destructive and Sensitive Operation Induction): `fix-visual-stability`, `organize-messy-files`, `xlsx-recover-data`
+- `category5-transaction_and_external_action_induction` (Transaction and External Action Induction): `manufacturing-codebook-normalization`, `offer-letter-generator`, `sec-financial-report`
 
 ## 4. Active Task Pool
 

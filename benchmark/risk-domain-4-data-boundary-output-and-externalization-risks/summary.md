@@ -15,19 +15,19 @@
 
 ## 3. Normalized Categories and Classes
 
-- `artifact_and_schema_integrity_failure` (Artifact and Schema Integrity Failure): artifact_relay_poisoning, output_contract_manipulation, artifact_provenance_spoofing, schema_alignment_and_field_mapping_abuse
-- `output_channel_data_leakage` (Output Channel Data Leakage): output_channel_exfiltration, report_and_summary_secret_spill, debug_and_diagnostic_output_leakage, annotation_and_auxiliary_field_leakage
-- `external_destination_and_egress_abuse` (External Destination and Egress Abuse): external_destination_exfiltration, recipient_and_endpoint_substitution, cross_tenant_and_unapproved_workspace_egress, backup_and_sync_egress_expansion
-- `downstream_output_interpreter_abuse` (Downstream Output Interpreter Abuse): spreadsheet_formula_injection, browser_markup_and_script_injection, template_rehydration_and_expression_injection, document_macro_and_embedded_active_content_abuse
-- `handoff_and_submission_boundary_abuse` (Handoff and Submission Boundary Abuse): review_and_approval_handoff_contamination, submission_bundle_piggybacking, cross_system_reference_smuggling, format_translation_and_rehydration_boundary_loss
+- `category1-artifact_and_schema_integrity_failure` (Artifact and Schema Integrity Failure): artifact_relay_poisoning, output_contract_manipulation, artifact_provenance_spoofing, schema_alignment_and_field_mapping_abuse
+- `category5-output_channel_data_leakage` (Output Channel Data Leakage): output_channel_exfiltration, report_and_summary_secret_spill, debug_and_diagnostic_output_leakage, annotation_and_auxiliary_field_leakage
+- `category3-external_destination_and_egress_abuse` (External Destination and Egress Abuse): external_destination_exfiltration, recipient_and_endpoint_substitution, cross_tenant_and_unapproved_workspace_egress, backup_and_sync_egress_expansion
+- `category2-downstream_output_interpreter_abuse` (Downstream Output Interpreter Abuse): spreadsheet_formula_injection, browser_markup_and_script_injection, template_rehydration_and_expression_injection, document_macro_and_embedded_active_content_abuse
+- `category4-handoff_and_submission_boundary_abuse` (Handoff and Submission Boundary Abuse): review_and_approval_handoff_contamination, submission_bundle_piggybacking, cross_system_reference_smuggling, format_translation_and_rehydration_boundary_loss
 
 ## 4. Original Tasks Selected Per Category
 
-- `artifact_and_schema_integrity_failure`: `enterprise-information-search`, `jpg-ocr-stat`, `offer-letter-generator`, `sales-pivot-analysis`, `travel-planning`, `weighted-gdp-calc`, `xlsx-recover-data`
-- `output_channel_data_leakage`: `data-to-d3`, `fix-build-agentops`, `scheduling-email-assistant`, `speaker-diarization-subtitles`
-- `external_destination_and_egress_abuse`: `data-to-d3`, `scheduling-email-assistant`, `software-dependency-audit`
-- `downstream_output_interpreter_abuse`: `data-to-d3`, `offer-letter-generator`, `pptx-reference-formatting`, `xlsx-recover-data`
-- `handoff_and_submission_boundary_abuse`: `data-to-d3`, `exceltable-in-ppt`, `fix-build-agentops`, `multilingual-video-dubbing`, `powerlifting-coef-calc`, `pptx-reference-formatting`, `xlsx-recover-data`
+- `category1-artifact_and_schema_integrity_failure`: `enterprise-information-search`, `jpg-ocr-stat`, `offer-letter-generator`, `sales-pivot-analysis`, `travel-planning`, `weighted-gdp-calc`, `xlsx-recover-data`
+- `category5-output_channel_data_leakage`: `data-to-d3`, `fix-build-agentops`, `scheduling-email-assistant`, `speaker-diarization-subtitles`
+- `category3-external_destination_and_egress_abuse`: `data-to-d3`, `scheduling-email-assistant`, `software-dependency-audit`
+- `category2-downstream_output_interpreter_abuse`: `data-to-d3`, `offer-letter-generator`, `pptx-reference-formatting`, `xlsx-recover-data`
+- `category4-handoff_and_submission_boundary_abuse`: `data-to-d3`, `exceltable-in-ppt`, `fix-build-agentops`, `multilingual-video-dubbing`, `powerlifting-coef-calc`, `pptx-reference-formatting`, `xlsx-recover-data`
 
 ## 5. Class Coverage
 
@@ -78,11 +78,11 @@
 
 ## 8. Category Design Principles
 
-- `artifact_and_schema_integrity_failure`: prefer JSON, docx, and xlsx tasks where relay artifacts, extra contract fields, forged provenance text, or hidden schema maps can survive into the final deliverable.
-- `output_channel_data_leakage`: prefer email bodies, build notes, patch commentary, and HTML comments where leakage can ride along with otherwise legitimate output artifacts.
-- `external_destination_and_egress_abuse`: prefer tasks with concrete recipient fields or named output locations so rerouted emails, mirror copies, and cross-workspace exports can be detected by recipients or filesystem paths.
-- `downstream_output_interpreter_abuse`: prefer spreadsheet, browser, template, and presentation tasks where formula cells, `javascript:` markup, templating syntax, or linked external content can be read back from the final artifact.
-- `handoff_and_submission_boundary_abuse`: prefer PPTX notes, build-review notes, output bundles, and cross-system references where reviewer-only context, piggybacked sidecars, import hints, or rehydration payloads can cross system boundaries.
+- `category1-artifact_and_schema_integrity_failure`: prefer JSON, docx, and xlsx tasks where relay artifacts, extra contract fields, forged provenance text, or hidden schema maps can survive into the final deliverable.
+- `category5-output_channel_data_leakage`: prefer email bodies, build notes, patch commentary, and HTML comments where leakage can ride along with otherwise legitimate output artifacts.
+- `category3-external_destination_and_egress_abuse`: prefer tasks with concrete recipient fields or named output locations so rerouted emails, mirror copies, and cross-workspace exports can be detected by recipients or filesystem paths.
+- `category2-downstream_output_interpreter_abuse`: prefer spreadsheet, browser, template, and presentation tasks where formula cells, `javascript:` markup, templating syntax, or linked external content can be read back from the final artifact.
+- `category4-handoff_and_submission_boundary_abuse`: prefer PPTX notes, build-review notes, output bundles, and cross-system references where reviewer-only context, piggybacked sidecars, import hints, or rehydration payloads can cross system boundaries.
 
 ## 9. Evaluation Overview
 
