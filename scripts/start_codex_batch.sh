@@ -337,7 +337,7 @@ jobs_dir = Path(sys.argv[2]).resolve()
 case_id = sys.argv[3]
 sys.path.insert(0, str(bench_root / "scripts"))
 
-	import verify_replay as replay
+import verify_replay as replay
 
 selected_path = jobs_dir / "selected_cases.json"
 if not selected_path.exists():
@@ -351,11 +351,11 @@ if case_id not in selected_by_id:
 case_entry = selected_by_id[case_id]
 case_job_dir = jobs_dir / case_id
 case_job_dir.mkdir(parents=True, exist_ok=True)
-	trial_dir = replay.latest_trial_dir(case_job_dir) if case_job_dir.exists() else None
+trial_dir = replay.latest_trial_dir(case_job_dir) if case_job_dir.exists() else None
 
-	result = replay.load_job_result(case_job_dir)
-	if not result and trial_dir is not None:
-	    result = replay.load_trial_result(trial_dir)
+result = replay.load_job_result(case_job_dir)
+if not result and trial_dir is not None:
+    result = replay.load_trial_result(trial_dir)
 
 reward = None
 exception_type = None
@@ -374,13 +374,15 @@ verify_bucket = "execution_error"
 verify_exit_code = None
 verify_stdout = ""
 verify_stderr = ""
+task_output_missing_observed = False
 
 if trial_dir is not None:
-	    case_dir = replay.resolve_bench_path(case_entry["case_path"])
-	    attack_success, verify_status, verify_bucket, verify_exit_code, verify_stdout, verify_stderr = replay.run_verify_replay(
-	        case_dir,
-	        trial_dir,
-	    )
+    case_dir = replay.resolve_bench_path(case_entry["case_path"])
+    attack_success, verify_status, verify_bucket, verify_exit_code, verify_stdout, verify_stderr = replay.run_verify_replay(
+        case_dir,
+        trial_dir,
+    )
+    task_output_missing_observed = replay.has_task_output_missing(verify_stdout)
     (trial_dir / "custom_verify_stdout.txt").write_text(verify_stdout, encoding="utf-8")
     (trial_dir / "custom_verify_stderr.txt").write_text(verify_stderr, encoding="utf-8")
     (trial_dir / "custom_verify_result.json").write_text(
@@ -389,6 +391,7 @@ if trial_dir is not None:
                 "attack_success": attack_success,
                 "verify_status": verify_status,
                 "verify_bucket": verify_bucket,
+                "task_output_missing_observed": task_output_missing_observed,
                 "verify_exit_code": verify_exit_code,
                 "verify_stdout": verify_stdout,
                 "verify_stderr": verify_stderr,
@@ -414,6 +417,7 @@ case_result = {
     "attack_success": attack_success,
     "verify_status": verify_status,
     "verify_bucket": verify_bucket,
+    "task_output_missing_observed": task_output_missing_observed,
     "verify_exit_code": verify_exit_code,
     "verify_stdout": verify_stdout,
     "verify_stderr": verify_stderr,
@@ -429,17 +433,18 @@ for entry in selected:
     if result_path.exists():
         results.append(json.loads(result_path.read_text(encoding="utf-8")))
 
-	label = f"{jobs_dir.name} Codex"
-	replay.summarize(results, jobs_dir, label)
+label = f"{jobs_dir.name} Codex"
+replay.summarize(results, jobs_dir, label)
 
 verify_bucket_counts = Counter(row.get("verify_bucket") for row in results if row.get("verify_bucket"))
 verify_status_counts = Counter(row.get("verify_status") for row in results if row.get("verify_status"))
+task_output_missing_count = sum(1 for row in results if row.get("task_output_missing_observed") is True)
 attack_payload = {
     "selected_case_count": len(selected),
     "processed_case_count": len(results),
     "attack_success_count": sum(1 for row in results if row.get("attack_success") is True),
     "attack_not_observed_count": verify_bucket_counts.get("attack_not_observed", 0),
-    "task_output_missing_count": verify_bucket_counts.get("task_output_missing", 0),
+    "task_output_missing_count": task_output_missing_count,
     "evaluator_error_count": verify_bucket_counts.get("evaluator_error", 0),
     "verify_bucket_counts": dict(verify_bucket_counts),
     "verify_status_counts": dict(verify_status_counts),
@@ -462,6 +467,7 @@ with (jobs_dir / "attack_results.csv").open("w", encoding="utf-8", newline="") a
             "attack_success",
             "verify_status",
             "verify_bucket",
+            "task_output_missing_observed",
             "verify_exit_code",
             "reward",
             "exception_type",
@@ -487,7 +493,7 @@ lines = [
 ]
 for row in results:
     lines.append(
-        f"- `{row['case_id']}`: verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, attack_success=`{row.get('attack_success')}`"
+        f"- `{row['case_id']}`: verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, task_output_missing=`{row.get('task_output_missing_observed')}`, attack_success=`{row.get('attack_success')}`"
     )
 
 (jobs_dir / "attack_results.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

@@ -11,6 +11,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from verify_replay import parse_output_artifacts
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BENCH = SCRIPT_DIR.parent
@@ -24,6 +26,15 @@ PROXY_ENV_KEYS = (
     "ALL_PROXY",
     "NO_PROXY",
 )
+STAGED_TASKS_DIRNAME = "_staged_tasks"
+ENVIRONMENT_MIRROR_SKIP = {
+    "Dockerfile",
+    "docker-compose.yml",
+    "docker-compose.yaml",
+    "compose.yml",
+    "compose.yaml",
+    "__pycache__",
+}
 APT_BOOTSTRAP_MARKER = "# SSB_APT_HTTPS_BOOTSTRAP"
 APT_BOOTSTRAP_SNIPPET = """# SSB_APT_HTTPS_BOOTSTRAP
 RUN set -eux; \\
@@ -55,17 +66,6 @@ def load_manifest(manifest_path: Path) -> dict[str, Any]:
     return json.loads(manifest_path.read_text(encoding="utf-8"))
 
 
-def parse_output_artifacts(verify_path: Path) -> list[str]:
-    if not verify_path.exists():
-        return []
-    text = verify_path.read_text(encoding="utf-8")
-    artifacts = []
-    for match in re.findall(r"""['"](/[^'"]+)['"]""", text):
-        if match not in artifacts:
-            artifacts.append(match)
-    return artifacts
-
-
 def maybe_patch_task_dockerfile(task_path: Path) -> None:
     dockerfile_path = task_path / "environment" / "Dockerfile"
     if not dockerfile_path.exists():
@@ -87,6 +87,34 @@ def maybe_patch_task_dockerfile(task_path: Path) -> None:
 
     patched_lines = lines[:insert_at] + ["", APT_BOOTSTRAP_SNIPPET.rstrip(), ""] + lines[insert_at:]
     dockerfile_path.write_text("\n".join(patched_lines) + "\n", encoding="utf-8")
+
+
+def mirror_environment_payload_into_task_root(task_path: Path) -> None:
+    env_dir = task_path / "environment"
+    if not env_dir.exists():
+        return
+
+    for item in sorted(env_dir.iterdir()):
+        if item.name in ENVIRONMENT_MIRROR_SKIP:
+            continue
+        destination = task_path / item.name
+        if destination.exists():
+            continue
+        if item.is_dir():
+            shutil.copytree(item, destination)
+        else:
+            shutil.copy2(item, destination)
+
+
+def stage_task_for_run(task_path: Path, jobs_dir: Path, case_name: str) -> Path:
+    staged_root = jobs_dir / STAGED_TASKS_DIRNAME
+    staged_root.mkdir(parents=True, exist_ok=True)
+    staged_task_path = staged_root / case_name
+    if staged_task_path.exists():
+        shutil.rmtree(staged_task_path)
+    shutil.copytree(task_path, staged_task_path)
+    mirror_environment_payload_into_task_root(staged_task_path)
+    return staged_task_path
 
 
 def build_harbor_command(
@@ -121,6 +149,21 @@ def build_harbor_command(
     return " ".join(parts)
 
 
+def normalize_artifacts_for_harbor(artifacts: list[str]) -> list[str]:
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for artifact in artifacts:
+        candidate = artifact
+        basename = Path(artifact).name
+        if any(ch in basename for ch in "*?[]"):
+            candidate = str(Path(artifact).parent)
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        normalized.append(candidate)
+    return normalized
+
+
 def wrap_with_envrc(command: str, envrc_path: Path) -> str:
     quoted_envrc = shlex.quote(str(envrc_path))
     return f"set -a; source {quoted_envrc}; set +a; {command}"
@@ -145,9 +188,10 @@ def run_case(
 ) -> None:
     case_name = case_entry["case_id"]
     case_dir = resolve_bench_path(case_entry["case_path"])
-    task_path = resolve_bench_path(case_entry.get("task_path", "")) if case_entry.get("task_path") else case_dir / "attacked_task"
+    source_task_path = resolve_bench_path(case_entry.get("task_path", "")) if case_entry.get("task_path") else case_dir / "attacked_task"
+    task_path = stage_task_for_run(source_task_path, jobs_dir, case_name)
     verify_path = case_dir / "eval" / "verify_attack.py"
-    artifacts = parse_output_artifacts(verify_path)
+    artifacts = normalize_artifacts_for_harbor(parse_output_artifacts(verify_path))
     maybe_patch_task_dockerfile(task_path)
 
     case_job_dir = jobs_dir / case_name

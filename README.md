@@ -259,24 +259,3 @@ Some verifiers may also print:
 
 This means the task’s required explicit output file was missing, but the verifier still continued to evaluate the attack condition.
 
-## Running a Single Case Directly With Harbor
-
-If you do not want to use the batch script, you can run a single attacked task directly:
-
-```bash
-harbor run -p benchmark/<risk-domain>/<category>/<case>/attacked_task -a oracle -n 1 -y
-```
-
-However, the preferred path is still:
-
-```bash
-scripts/start_codex_batch.sh ...
-```
-
-because it already combines:
-
-- Harbor execution
-- verifier replay
-- summary generation
-
-into one workflow.

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import ast
 import csv
 import json
 import re
@@ -34,15 +35,192 @@ def resolve_bench_path(raw_path: str) -> Path:
     return BENCH / path
 
 
+def _call_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    return None
+
+
+def _assignment_names(target: ast.AST) -> list[str]:
+    if isinstance(target, ast.Name):
+        return [target.id]
+    if isinstance(target, (ast.Tuple, ast.List)):
+        names: list[str] = []
+        for element in target.elts:
+            names.extend(_assignment_names(element))
+        return names
+    return []
+
+
+def _assign_name(target: ast.AST, value: object, scope: dict[str, object]) -> None:
+    if isinstance(target, ast.Name):
+        scope[target.id] = value
+        return
+    if isinstance(target, (ast.Tuple, ast.List)) and isinstance(value, (list, tuple)):
+        for element, item in zip(target.elts, value):
+            _assign_name(element, item, scope)
+
+
+def _normalize_eval_list(value: object) -> list[object]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    if isinstance(value, tuple):
+        return list(value)
+    return [value]
+
+
+def _stringify_values(value: object) -> list[str]:
+    items: list[str] = []
+    for item in _normalize_eval_list(value):
+        if isinstance(item, str):
+            items.append(item)
+        elif isinstance(item, (int, float)):
+            items.append(str(item))
+    return items
+
+
+def _extract_artifact_paths(value: object) -> list[str]:
+    paths: list[str] = []
+    for item in _normalize_eval_list(value):
+        if isinstance(item, str) and item.startswith("/"):
+            paths.append(item)
+    return paths
+
+
+def _evaluate_node(node: ast.AST, scope: dict[str, object]) -> object:
+    if isinstance(node, ast.Constant):
+        return node.value
+    if isinstance(node, ast.Name):
+        return scope.get(node.id)
+    if isinstance(node, (ast.List, ast.Tuple, ast.Set)):
+        items: list[object] = []
+        for element in node.elts:
+            items.extend(_normalize_eval_list(_evaluate_node(element, scope)))
+        return items
+    if isinstance(node, ast.Call):
+        func_name = _call_name(node.func)
+        if func_name == "Path" and node.args:
+            return _evaluate_node(node.args[0], scope)
+        if func_name == "range":
+            values = [_evaluate_node(arg, scope) for arg in node.args]
+            if not all(isinstance(value, int) for value in values):
+                return None
+            return list(range(*values))
+        return None
+    if isinstance(node, ast.JoinedStr):
+        parts: list[list[str]] = [[]]
+        for value in node.values:
+            rendered = _stringify_values(_evaluate_node(value, scope))
+            if isinstance(value, ast.Constant) and isinstance(value.value, str):
+                rendered = [value.value]
+            if not rendered:
+                return None
+            parts = [prefix + [piece] for prefix in parts for piece in rendered]
+        return ["".join(part) for part in parts]
+    if isinstance(node, ast.FormattedValue):
+        return _stringify_values(_evaluate_node(node.value, scope))
+    if isinstance(node, ast.ListComp):
+        if len(node.generators) != 1:
+            return None
+        generator = node.generators[0]
+        if generator.ifs:
+            return None
+        iter_values = _normalize_eval_list(_evaluate_node(generator.iter, scope))
+        results: list[object] = []
+        for item in iter_values:
+            local_scope = dict(scope)
+            _assign_name(generator.target, item, local_scope)
+            results.extend(_normalize_eval_list(_evaluate_node(node.elt, local_scope)))
+        return results
+    return None
+
+
 def parse_output_artifacts(verify_path: Path) -> list[str]:
     if not verify_path.exists():
         return []
+
     text = verify_path.read_text(encoding="utf-8")
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        tree = None
+
+    if tree is not None:
+        scope: dict[str, object] = {}
+        for _ in range(8):
+            changed = False
+            for node in ast.walk(tree):
+                value_node: ast.AST | None = None
+                target_nodes: list[ast.AST] = []
+                if isinstance(node, ast.Assign):
+                    value_node = node.value
+                    target_nodes = list(node.targets)
+                elif isinstance(node, ast.AnnAssign):
+                    value_node = node.value
+                    target_nodes = [node.target]
+                if value_node is None:
+                    continue
+                resolved = _evaluate_node(value_node, scope)
+                if resolved is None:
+                    continue
+                for target in target_nodes:
+                    before = {name: scope.get(name) for name in _assignment_names(target)}
+                    _assign_name(target, resolved, scope)
+                    after = {name: scope.get(name) for name in _assignment_names(target)}
+                    if before != after:
+                        changed = True
+            if not changed:
+                break
+
+        artifacts: list[str] = []
+        seen: set[str] = set()
+        for value in scope.values():
+            for path in _extract_artifact_paths(value):
+                if path in seen:
+                    continue
+                seen.add(path)
+                artifacts.append(path)
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func_name = _call_name(node.func)
+            if func_name in {"Path", "open", "glob"} and node.args:
+                values = _extract_artifact_paths(_evaluate_node(node.args[0], scope))
+            elif (
+                isinstance(node.func, ast.Attribute)
+                and node.func.attr in {"glob", "rglob"}
+                and node.args
+            ):
+                values = _extract_artifact_paths(_evaluate_node(node.args[0], scope))
+            else:
+                continue
+            for resolved in values:
+                if resolved in seen:
+                    continue
+                seen.add(resolved)
+                artifacts.append(resolved)
+        if artifacts:
+            return artifacts
+
+    patterns = [
+        r"""Path\(\s*['"](/[^'"]+)['"]\s*\)""",
+        r"""open\(\s*['"](/[^'"]+)['"]\s*[,)]""",
+        r"""glob\(\s*['"](/[^'"]+)['"]\s*[,)]""",
+    ]
     artifacts: list[str] = []
-    for match in re.findall(r"""['"](/[^'"]+)['"]""", text):
-        if match not in artifacts:
-            artifacts.append(match)
+    for pattern in patterns:
+        for match in re.findall(pattern, text):
+            if match not in artifacts:
+                artifacts.append(match)
     return artifacts
+
+
+def has_task_output_missing(out: str) -> bool:
+    return any(line.strip() == "task_output_missing" for line in out.splitlines())
 
 
 def _candidate_replay_paths(original: str, root: Path) -> list[Path]:
@@ -308,13 +486,14 @@ def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None
     summary_md = jobs_dir / "summary.md"
     verify_bucket_counts = Counter(r.get("verify_bucket") for r in results if r.get("verify_bucket"))
     verify_status_counts = Counter(r.get("verify_status") for r in results if r.get("verify_status"))
+    task_output_missing_count = sum(1 for r in results if r.get("task_output_missing_observed") is True)
 
     summary_payload = {
         "case_count": len(results),
         "attack_success_count": sum(1 for r in results if r.get("attack_success") is True),
         "attack_partial_success_count": verify_bucket_counts.get("attack_partial_success", 0),
         "attack_not_observed_count": verify_bucket_counts.get("attack_not_observed", 0),
-        "task_output_missing_count": verify_bucket_counts.get("task_output_missing", 0),
+        "task_output_missing_count": task_output_missing_count,
         "evaluator_error_count": verify_bucket_counts.get("evaluator_error", 0),
         "verify_bucket_counts": dict(verify_bucket_counts),
         "verify_status_counts": dict(verify_status_counts),
@@ -335,6 +514,7 @@ def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None
         "attack_success",
         "verify_status",
         "verify_bucket",
+        "task_output_missing_observed",
         "verify_exit_code",
         "trial_dir",
     ]
@@ -354,7 +534,7 @@ def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None
         f"- `attack_partial_success`: `{verify_bucket_counts.get('attack_partial_success', 0)}`",
         f"- ASR: `{(success / total * 100):.1f}%`" if total else "- ASR: `n/a`",
         f"- `attack_not_observed`: `{verify_bucket_counts.get('attack_not_observed', 0)}`",
-        f"- `task_output_missing`: `{verify_bucket_counts.get('task_output_missing', 0)}`",
+        f"- `task_output_missing`: `{task_output_missing_count}`",
         f"- `evaluator_error`: `{verify_bucket_counts.get('evaluator_error', 0)}`",
         f"- `execution_error`: `{verify_bucket_counts.get('execution_error', 0)}`",
         f"- `verifier_reported_failure`: `{verify_bucket_counts.get('verifier_reported_failure', 0)}`",
@@ -367,7 +547,6 @@ def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None
     lines.extend(["", "## Per Case", ""])
     for row in results:
         lines.append(
-            f"- `{row['case_id']}`: reward=`{row.get('reward')}`, verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, attack_success=`{row.get('attack_success')}`, exception_type=`{row.get('exception_type')}`"
+            f"- `{row['case_id']}`: reward=`{row.get('reward')}`, verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, task_output_missing=`{row.get('task_output_missing_observed')}`, attack_success=`{row.get('attack_success')}`, exception_type=`{row.get('exception_type')}`"
         )
     summary_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
