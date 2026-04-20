@@ -15,11 +15,11 @@
 
 ## 3. Normalized Categories and Classes
 
-- `category5-retrieval_knowledge_and_corpus_poisoning` (Retrieval Knowledge and Corpus Poisoning): corpus_document_injection_and_fact_override, ranking_and_metadata_retrieval_manipulation, stealth_poisoning_with_minimal_corpus_footprint, trigger_conditioned_retrieval_backdoor
-- `category3-model_behavior_and_finetuning_poisoning` (Model Behavior and Finetuning Poisoning): task_dataset_structure_poisoning, alignment_erosion_via_benign_looking_finetuning, trigger_conditioned_behavior_backdoor, downstream_finetuning_data_exfiltration_backdoor
-- `category2-dependency_plugin_and_release_chain_compromise` (Dependency Plugin and Release Chain Compromise): package_hallucination_and_dependency_confusion, malicious_plugin_or_tool_registry_impersonation, dependency_update_and_lockfile_substitution, release_artifact_provenance_and_attestation_bypass
-- `category1-availability_cost_and_service_exhaustion` (Availability Cost and Service Exhaustion): structural_tool_loop_amplification, malfunction_amplification_and_irrelevant_action_induction, recursive_query_fanout_and_workflow_explosion, budget_drain_and_latency_amplification
-- `category4-model_extraction_and_service_abuse` (Model Extraction and Service Abuse): functionality_extraction_and_surrogate_model_reconstruction, training_data_extraction_via_black_box_queries, prompt_asset_stealing_and_system_prompt_reconstruction, capability_mapping_and_endpoint_probing_abuse
+- `category5-retrieval_knowledge_and_corpus_poisoning` (Retrieval Knowledge and Corpus Poisoning): poisoning, poisoning, poisoning, backdoors
+- `category3-model_behavior_and_finetuning_poisoning` (Model Behavior and Finetuning Poisoning): poisoning, poisoning, backdoors, data_exfiltration
+- `category2-dependency_plugin_and_release_chain_compromise` (Dependency Plugin and Release Chain Compromise): malware_ransomware, malware_ransomware, malware_ransomware, malware_ransomware
+- `category1-availability_cost_and_service_exhaustion` (Availability Cost and Service Exhaustion): denial_of_service, denial_of_service, denial_of_service, denial_of_service
+- `category4-model_extraction_and_service_abuse` (Model Extraction and Service Abuse): data_exfiltration, data_exfiltration, data_exfiltration, data_exfiltration
 
 ## 4. Original Tasks Selected Per Category
 
@@ -31,26 +31,26 @@
 
 ## 5. Class Coverage
 
-- `alignment_erosion_via_benign_looking_finetuning`: `citation_check_alignment_erosion_permissive_review_policy`
-- `budget_drain_and_latency_amplification`: `mhc_budget_drain_training_sweep_matrix`, `parallel_tfidf_budget_drain_latency_amplification_benchmark_plan`, `video_silence_budget_drain_threshold_sweep_plan`
-- `capability_mapping_and_endpoint_probing_abuse`: `scheduling_email_capability_mapping_endpoint_probing_abuse`
-- `corpus_document_injection_and_fact_override`: `enterprise_search_corpus_document_injection_fact_override_poisoned_policy_memo`, `manufacturing_handbook_fact_override_reviewed_addendum`
-- `dependency_update_and_lockfile_substitution`: `software_audit_dependency_update_lockfile_substitution_candidate_swap`
-- `downstream_finetuning_data_exfiltration_backdoor`: `offer_letter_downstream_finetuning_data_exfiltration_backdoor_footer_capture`, `simpo_finetuning_capture_manifest_sidecar`
-- `functionality_extraction_and_surrogate_model_reconstruction`: `parallel_tfidf_functionality_extraction_surrogate_profile`
-- `malfunction_amplification_and_irrelevant_action_induction`: `video_tutorial_malfunction_amplification_irrelevant_rescan_log`
-- `malicious_plugin_or_tool_registry_impersonation`: `fix_build_malicious_plugin_registry_impersonation_registry_alias`
-- `package_hallucination_and_dependency_confusion`: `software_audit_package_hallucination_dependency_confusion_shadow_package`
-- `prompt_asset_stealing_and_system_prompt_reconstruction`: `citation_check_prompt_asset_stealing_system_prompt_reconstruction`
-- `ranking_and_metadata_retrieval_manipulation`: `enterprise_search_ranking_metadata_manipulation_priority_tier_override`
-- `recursive_query_fanout_and_workflow_explosion`: `travel_planning_recursive_query_fanout_workflow_explosion_variant_manifest`
-- `release_artifact_provenance_and_attestation_bypass`: `data_to_d3_release_artifact_provenance_attestation_bypass_release_manifest`, `fix_druid_release_attestation_bypass_patch_sidecar`
-- `stealth_poisoning_with_minimal_corpus_footprint`: `travel_planning_stealth_poisoning_minimal_corpus_footprint_curated_note`
-- `structural_tool_loop_amplification`: `enterprise_search_structural_tool_loop_amplification_requery_trace`
-- `task_dataset_structure_poisoning`: `video_tutorial_task_dataset_structure_poisoning_template_id`
-- `training_data_extraction_via_black_box_queries`: `seismic_training_probe_report_black_box_queries`, `video_tutorial_training_data_extraction_black_box_probe_dump`
-- `trigger_conditioned_behavior_backdoor`: `video_tutorial_trigger_conditioned_behavior_backdoor_chapter_phrase`
-- `trigger_conditioned_retrieval_backdoor`: `parallel_tfidf_trigger_conditioned_retrieval_backdoor_query_override`
+- `poisoning`: `citation_check_alignment_erosion_permissive_review_policy`
+- `denial_of_service`: `mhc_budget_drain_training_sweep_matrix`, `parallel_tfidf_budget_drain_latency_amplification_benchmark_plan`, `video_silence_budget_drain_threshold_sweep_plan`
+- `data_exfiltration`: `scheduling_email_capability_mapping_endpoint_probing_abuse`
+- `poisoning`: `enterprise_search_corpus_document_injection_fact_override_poisoned_policy_memo`, `manufacturing_handbook_fact_override_reviewed_addendum`
+- `malware_ransomware`: `software_audit_dependency_update_lockfile_substitution_candidate_swap`
+- `data_exfiltration`: `offer_letter_data_exfiltration_footer_capture`, `simpo_finetuning_capture_manifest_sidecar`
+- `data_exfiltration`: `parallel_tfidf_functionality_extraction_surrogate_profile`
+- `denial_of_service`: `video_tutorial_malfunction_amplification_irrelevant_rescan_log`
+- `malware_ransomware`: `fix_build_malicious_plugin_registry_impersonation_registry_alias`
+- `malware_ransomware`: `software_audit_package_hallucination_dependency_confusion_shadow_package`
+- `data_exfiltration`: `citation_check_prompt_asset_stealing_system_prompt_reconstruction`
+- `poisoning`: `enterprise_search_ranking_metadata_manipulation_priority_tier_override`
+- `denial_of_service`: `travel_planning_recursive_query_fanout_workflow_explosion_variant_manifest`
+- `malware_ransomware`: `data_to_d3_release_artifact_provenance_attestation_bypass_release_manifest`, `fix_druid_release_attestation_bypass_patch_sidecar`
+- `poisoning`: `travel_planning_stealth_poisoning_minimal_corpus_footprint_curated_note`
+- `denial_of_service`: `enterprise_search_structural_tool_loop_amplification_requery_trace`
+- `poisoning`: `video_tutorial_task_dataset_structure_poisoning_template_id`
+- `data_exfiltration`: `seismic_training_probe_report_black_box_queries`, `video_tutorial_training_data_extraction_black_box_probe_dump`
+- `backdoors`: `video_tutorial_trigger_conditioned_behavior_backdoor_chapter_phrase`
+- `backdoors`: `parallel_tfidf_trigger_conditioned_retrieval_backdoor_query_override`
 
 ## 6. Candidate Task Screening and Skips
 
@@ -70,9 +70,9 @@
 
 - All 20 RD6 classes are covered by at least one generated case.
 - Sparse single-case classes and why they remain sparse:
-- `alignment_erosion_via_benign_looking_finetuning`, `task_dataset_structure_poisoning`, `trigger_conditioned_behavior_backdoor`, `ranking_and_metadata_retrieval_manipulation`, `stealth_poisoning_with_minimal_corpus_footprint`, `trigger_conditioned_retrieval_backdoor`: these classes depend on one strong carrier with a very specific retrieval, prompt-policy, or dataset-shape signal, so RD6 keeps the highest-fit task instead of forcing weaker duplicates.
-- `capability_mapping_and_endpoint_probing_abuse`, `functionality_extraction_and_surrogate_model_reconstruction`, `prompt_asset_stealing_and_system_prompt_reconstruction`, `malicious_plugin_or_tool_registry_impersonation`, `dependency_update_and_lockfile_substitution`, `package_hallucination_and_dependency_confusion`, `structural_tool_loop_amplification`, `malfunction_amplification_and_irrelevant_action_induction`, `recursive_query_fanout_and_workflow_explosion`: each of these classes needs a specific task topology such as service-like skills, dependency manifests, or explicit loop traces, so RD6 keeps one strongest observable carrier per mechanism.
-- Higher-density classes were expanded only where additional tasks exposed genuinely different RD6 failure modes: `budget_drain_and_latency_amplification` has 3 cases because training sweeps, search benchmarks, and media-threshold grids stress different cost channels; `corpus_document_injection_and_fact_override`, `downstream_finetuning_data_exfiltration_backdoor`, `release_artifact_provenance_and_attestation_bypass`, and `training_data_extraction_via_black_box_queries` have 2 cases each because the paired carriers differ materially in artifact shape, service boundary, or verifier logic.
+- `poisoning`, `poisoning`, `backdoors`, `poisoning`, `poisoning`, `backdoors`: these classes depend on one strong carrier with a very specific retrieval, prompt-policy, or dataset-shape signal, so RD6 keeps the highest-fit task instead of forcing weaker duplicates.
+- `data_exfiltration`, `data_exfiltration`, `data_exfiltration`, `malware_ransomware`, `malware_ransomware`, `malware_ransomware`, `denial_of_service`, `denial_of_service`, `denial_of_service`: each of these classes needs a specific task topology such as service-like skills, dependency manifests, or explicit loop traces, so RD6 keeps one strongest observable carrier per mechanism.
+- Higher-density classes were expanded only where additional tasks exposed genuinely different RD6 failure modes: `denial_of_service` has 3 cases because training sweeps, search benchmarks, and media-threshold grids stress different cost channels; `poisoning`, `data_exfiltration`, `malware_ransomware`, and `data_exfiltration` have 2 cases each because the paired carriers differ materially in artifact shape, service boundary, or verifier logic.
 
 ## 8. Category Design Principles
 

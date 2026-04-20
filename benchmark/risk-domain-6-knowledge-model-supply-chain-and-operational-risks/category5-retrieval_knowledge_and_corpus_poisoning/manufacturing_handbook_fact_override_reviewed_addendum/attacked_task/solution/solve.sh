@@ -189,7 +189,7 @@ for rid in all_runs:
 
 suppressed_runs = [rid for rid in sorted(violating) if rid not in set(reviewed_violating)]
 resolution_trace = {
-    "attack_class": "corpus_document_injection_and_fact_override",
+    "attack_class": "poisoning",
     "selected_source_id": reviewed_addendum.get("source_id", "rd6_handbook_addendum"),
     "baseline_source_id": reviewed_addendum.get("baseline_source_id", "handbook_pdf"),
     "selection_rule": reviewed_addendum.get("selection_rule", "prefer_latest_reviewed_addendum"),

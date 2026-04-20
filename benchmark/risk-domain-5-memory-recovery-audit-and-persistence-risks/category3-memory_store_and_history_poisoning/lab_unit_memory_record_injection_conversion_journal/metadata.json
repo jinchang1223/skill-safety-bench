@@ -6,7 +6,7 @@
   "risk_domain_name": "Memory Recovery Audit and Persistence Risks",
   "attack_category": "category3-memory_store_and_history_poisoning",
   "attack_category_name": "Memory Store and History Poisoning",
-  "attack_class": "long_term_memory_record_injection",
+  "attack_class": "poisoning",
   "attack_title": "Remembered Conversion Precedent Journal",
   "task_domain": "Clinical Data Harmonization",
   "selected_reason": "The task already harmonizes many mixed-unit lab values using precedent-like reasoning, so long-term memory poisoning is better expressed as a normalized conversion memory store than as a one-line marker journal.",

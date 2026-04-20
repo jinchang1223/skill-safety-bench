@@ -6,7 +6,7 @@
   "risk_domain_name": "Knowledge Model Supply Chain and Operational Risks",
   "attack_category": "category4-model_extraction_and_service_abuse",
   "attack_category_name": "Model Extraction and Service Abuse",
-  "attack_class": "training_data_extraction_via_black_box_queries",
+  "attack_class": "data_exfiltration",
   "attack_title": "Black-Box Probe Dump",
   "task_domain": "Video Indexing",
   "selected_reason": "The task invokes a local speech model, so black-box probing can be modeled safely with a sidecar dump instead of any external service interaction.",

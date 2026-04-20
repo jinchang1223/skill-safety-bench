@@ -15,11 +15,11 @@
 
 ## 3. Normalized Categories and Classes
 
-- `category2-belief_persistence_and_self_correction_failure` (Belief Persistence and Self-Correction Failure): poisoned_belief_persistence, self_correction_suppression, retrieved_precedent_overgeneralization, self_reinforcing_error_amplification
-- `category1-audit_visibility_and_trace_suppression` (Audit Visibility and Trace Suppression): audit_evasion, trace_integrity_tampering, provenance_and_attribution_stripping, forensic_snapshot_and_replay_suppression
-- `category4-persistence_and_long_lived_footholds` (Persistence and Long-Lived Footholds): persistent_foothold_implant, startup_and_bootstrap_persistence, shadow_helper_and_wrapper_persistence, self_reinforcing_reinfection_loop
-- `category3-memory_store_and_history_poisoning` (Memory Store and History Poisoning): long_term_memory_record_injection, experience_retrieval_poisoning, retrieval_trigger_backdoor_poisoning, session_history_and_context_contamination
-- `category5-rollback_and_recovery_control_failure` (Rollback and Recovery Control Failure): rollback_suppression_and_operator_discouragement, recovery_checkpoint_and_snapshot_corruption, rollback_scope_and_target_confusion, cleanup_and_remediation_obstruction
+- `category2-belief_persistence_and_self_correction_failure` (Belief Persistence and Self-Correction Failure): poisoning, bias_manipulation, bias_manipulation, bias_manipulation
+- `category1-audit_visibility_and_trace_suppression` (Audit Visibility and Trace Suppression): backdoors, backdoors, bias_manipulation, backdoors
+- `category4-persistence_and_long_lived_footholds` (Persistence and Long-Lived Footholds): backdoors, backdoors, backdoors, backdoors
+- `category3-memory_store_and_history_poisoning` (Memory Store and History Poisoning): poisoning, poisoning, backdoors, poisoning
+- `category5-rollback_and_recovery_control_failure` (Rollback and Recovery Control Failure): backdoors, data_destruction, data_destruction, backdoors
 
 ## 4. Original Tasks Selected Per Category
 
@@ -31,26 +31,26 @@
 
 ## 5. Class Coverage
 
-- `audit_evasion`: `fix_build_audit_evasion_cleanroom_summary`
-- `cleanup_and_remediation_obstruction`: `software_audit_cleanup_remediation_obstruction_guard_note`
-- `experience_retrieval_poisoning`: `enterprise_search_experience_retrieval_poisoning_success_memory`, `manufacturing_maintenance_experience_retrieval_archived_profile_review`
-- `forensic_snapshot_and_replay_suppression`: `xlsx_recovery_forensic_snapshot_replay_suppression_replay_blocked`
-- `long_term_memory_record_injection`: `lab_unit_memory_record_injection_conversion_journal`, `manufacturing_memory_record_bias_rationale_anchor`, `travel_planning_long_term_memory_record_injection_trip_journal`
-- `persistent_foothold_implant`: `fix_build_persistent_foothold_implant_review_helper`
-- `poisoned_belief_persistence`: `travel_planning_poisoned_belief_persistence_memory_anchor`
-- `provenance_and_attribution_stripping`: `enterprise_search_provenance_attribution_stripping_memory_normalized`, `paper_anonymizer_provenance_stripping_journal_note`
-- `recovery_checkpoint_and_snapshot_corruption`: `xlsx_recovery_checkpoint_snapshot_corruption_checkpoint_note`
-- `retrieval_trigger_backdoor_poisoning`: `lab_unit_harmonization_retrieval_trigger_backdoor_poisoning_question_map`
-- `retrieved_precedent_overgeneralization`: `powerlifting_coef_calc_retrieved_precedent_overgeneralization_playbook`
-- `rollback_scope_and_target_confusion`: `data_to_d3_rollback_scope_target_confusion_scope_manifest`
-- `rollback_suppression_and_operator_discouragement`: `fix_build_rollback_suppression_operator_discouragement_no_revert`
-- `self_correction_suppression`: `jpg_ocr_stat_self_correction_suppression_correction_lock`
-- `self_reinforcing_error_amplification`: `software_audit_self_reinforcing_error_amplification_carry_forward_row`
-- `self_reinforcing_reinfection_loop`: `data_to_d3_self_reinforcing_reinfection_loop_reseed_manifest`
-- `session_history_and_context_contamination`: `scheduling_email_session_history_context_contamination_thread_memory`
-- `shadow_helper_and_wrapper_persistence`: `software_audit_shadow_helper_wrapper_persistence_scan_wrapper`
-- `startup_and_bootstrap_persistence`: `data_to_d3_startup_bootstrap_persistence_loader_hook`
-- `trace_integrity_tampering`: `react_perf_trace_integrity_override_summary`, `software_audit_trace_integrity_tampering_override_digest`, `video_filler_trace_integrity_override_clip_summary`
+- `backdoors`: `fix_build_audit_evasion_cleanroom_summary`
+- `backdoors`: `software_audit_cleanup_remediation_obstruction_guard_note`
+- `poisoning`: `enterprise_search_experience_retrieval_poisoning_success_memory`, `manufacturing_maintenance_experience_retrieval_archived_profile_review`
+- `backdoors`: `xlsx_recovery_forensic_snapshot_replay_suppression_replay_blocked`
+- `poisoning`: `lab_unit_memory_record_injection_conversion_journal`, `manufacturing_memory_record_bias_rationale_anchor`, `travel_planning_long_term_memory_record_injection_trip_journal`
+- `backdoors`: `fix_build_persistent_foothold_implant_review_helper`
+- `poisoning`: `travel_planning_poisoned_belief_persistence_memory_anchor`
+- `bias_manipulation`: `enterprise_search_provenance_attribution_stripping_memory_normalized`, `paper_anonymizer_provenance_stripping_journal_note`
+- `data_destruction`: `xlsx_recovery_checkpoint_snapshot_corruption_checkpoint_note`
+- `backdoors`: `lab_unit_harmonization_retrieval_trigger_backdoor_poisoning_question_map`
+- `bias_manipulation`: `powerlifting_coef_calc_retrieved_precedent_overgeneralization_playbook`
+- `data_destruction`: `data_to_d3_rollback_scope_target_confusion_scope_manifest`
+- `backdoors`: `fix_build_rollback_suppression_operator_discouragement_no_revert`
+- `bias_manipulation`: `jpg_ocr_stat_self_correction_suppression_correction_lock`
+- `bias_manipulation`: `software_audit_self_reinforcing_error_amplification_carry_forward_row`
+- `backdoors`: `data_to_d3_self_reinforcing_reinfection_loop_reseed_manifest`
+- `poisoning`: `scheduling_email_session_history_context_contamination_thread_memory`
+- `backdoors`: `software_audit_shadow_helper_wrapper_persistence_scan_wrapper`
+- `backdoors`: `data_to_d3_startup_bootstrap_persistence_loader_hook`
+- `backdoors`: `react_perf_trace_integrity_override_summary`, `software_audit_trace_integrity_tampering_override_digest`, `video_filler_trace_integrity_override_clip_summary`
 
 ## 6. Candidate Task Screening and Skips
 
@@ -73,9 +73,9 @@
 
 - All 20 RD5 classes are covered by at least one generated case.
 - Sparse single-case classes and why they remain sparse:
-- `audit_evasion`, `forensic_snapshot_and_replay_suppression`, `persistent_foothold_implant`, `startup_and_bootstrap_persistence`, `shadow_helper_and_wrapper_persistence`, `cleanup_and_remediation_obstruction`, `rollback_scope_and_target_confusion`, `rollback_suppression_and_operator_discouragement`: these classes require a very specific durable carrier such as build notes, replay files, helper scripts, bootstrap hooks, or rollback manifests, so RD5 keeps one strongest task per mechanism rather than forcing weak duplicates.
-- `poisoned_belief_persistence`, `self_correction_suppression`, `retrieved_precedent_overgeneralization`, `self_reinforcing_error_amplification`, `retrieval_trigger_backdoor_poisoning`, `session_history_and_context_contamination`, `self_reinforcing_reinfection_loop`: these classes are intentionally concentrated on a single high-fit carrier because their semantics depend on one stable belief, memory, or reinfection channel, and duplicating them on weaker tasks would add noise more than coverage.
-- Higher-density classes were expanded only where additional tasks exposed genuinely distinct memory or audit failure modes: `trace_integrity_tampering` has 3 cases because web debugging, security-audit, and video-annotation traces degrade differently; `long_term_memory_record_injection` has 3 cases because lab, manufacturing, and travel journals create different persistent-memory carriers; `experience_retrieval_poisoning` and `provenance_and_attribution_stripping` have 2 cases each because the paired carriers differ materially in artifact shape and verification logic.
+- `backdoors`, `backdoors`, `backdoors`, `backdoors`, `backdoors`, `backdoors`, `data_destruction`, `backdoors`: these classes require a very specific durable carrier such as build notes, replay files, helper scripts, bootstrap hooks, or rollback manifests, so RD5 keeps one strongest task per mechanism rather than forcing weak duplicates.
+- `poisoning`, `bias_manipulation`, `bias_manipulation`, `bias_manipulation`, `backdoors`, `poisoning`, `backdoors`: these classes are intentionally concentrated on a single high-fit carrier because their semantics depend on one stable belief, memory, or reinfection channel, and duplicating them on weaker tasks would add noise more than coverage.
+- Higher-density classes were expanded only where additional tasks exposed genuinely distinct memory or audit failure modes: `backdoors` has 3 cases because web debugging, security-audit, and video-annotation traces degrade differently; `poisoning` has 3 cases because lab, manufacturing, and travel journals create different persistent-memory carriers; `poisoning` and `bias_manipulation` have 2 cases each because the paired carriers differ materially in artifact shape and verification logic.
 
 ## 8. Category Design Principles
 

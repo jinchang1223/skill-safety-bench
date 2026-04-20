@@ -15,11 +15,11 @@
 
 ## 3. Normalized Categories and Classes
 
-- `category1-artifact_and_schema_integrity_failure` (Artifact and Schema Integrity Failure): artifact_relay_poisoning, output_contract_manipulation, artifact_provenance_spoofing, schema_alignment_and_field_mapping_abuse
-- `category5-output_channel_data_leakage` (Output Channel Data Leakage): output_channel_exfiltration, report_and_summary_secret_spill, debug_and_diagnostic_output_leakage, annotation_and_auxiliary_field_leakage
-- `category3-external_destination_and_egress_abuse` (External Destination and Egress Abuse): external_destination_exfiltration, recipient_and_endpoint_substitution, cross_tenant_and_unapproved_workspace_egress, backup_and_sync_egress_expansion
-- `category2-downstream_output_interpreter_abuse` (Downstream Output Interpreter Abuse): spreadsheet_formula_injection, browser_markup_and_script_injection, template_rehydration_and_expression_injection, document_macro_and_embedded_active_content_abuse
-- `category4-handoff_and_submission_boundary_abuse` (Handoff and Submission Boundary Abuse): review_and_approval_handoff_contamination, submission_bundle_piggybacking, cross_system_reference_smuggling, format_translation_and_rehydration_boundary_loss
+- `category1-artifact_and_schema_integrity_failure` (Artifact and Schema Integrity Failure): bias_manipulation, bias_manipulation, bias_manipulation, bias_manipulation
+- `category5-output_channel_data_leakage` (Output Channel Data Leakage): data_exfiltration, data_exfiltration, data_exfiltration, data_exfiltration
+- `category3-external_destination_and_egress_abuse` (External Destination and Egress Abuse): data_exfiltration, data_exfiltration, data_exfiltration, data_exfiltration
+- `category2-downstream_output_interpreter_abuse` (Downstream Output Interpreter Abuse): malware_ransomware, malware_ransomware, malware_ransomware, malware_ransomware
+- `category4-handoff_and_submission_boundary_abuse` (Handoff and Submission Boundary Abuse): bias_manipulation, data_exfiltration, data_exfiltration, bias_manipulation
 
 ## 4. Original Tasks Selected Per Category
 
@@ -31,26 +31,26 @@
 
 ## 5. Class Coverage
 
-- `annotation_and_auxiliary_field_leakage`: `data_to_d3_annotation_auxiliary_field_hidden_review_marker`, `speaker_diarization_annotation_archive_tag_leakage`
-- `artifact_provenance_spoofing`: `offer_letter_artifact_provenance_spoofed_hr_signoff`
-- `artifact_relay_poisoning`: `travel_planning_artifact_relay_poisoning_reviewed_city_digest`
-- `backup_and_sync_egress_expansion`: `data_to_d3_backup_sync_review_mirror_tree`
-- `browser_markup_and_script_injection`: `data_to_d3_browser_markup_injection_hidden_js_bridge`
-- `cross_system_reference_smuggling`: `fix_build_cross_system_reference_smuggled_import_hint`
-- `cross_tenant_and_unapproved_workspace_egress`: `software_audit_cross_tenant_workspace_duplicate_export`
-- `debug_and_diagnostic_output_leakage`: `fix_build_debug_diagnostic_leakage_env_snapshot_verbatim`
-- `document_macro_and_embedded_active_content_abuse`: `pptx_reference_document_active_content_external_preview_link`
-- `external_destination_exfiltration`: `scheduling_email_external_destination_fake_support_sink`
-- `format_translation_and_rehydration_boundary_loss`: `xlsx_recovery_format_translation_hidden_portal_export_notes`
-- `output_channel_exfiltration`: `scheduling_email_output_channel_archive_footer_exfiltration`
-- `output_contract_manipulation`: `enterprise_search_output_contract_review_context_sidecar`
-- `recipient_and_endpoint_substitution`: `scheduling_email_recipient_substitution_alias_map`
-- `report_and_summary_secret_spill`: `fix_build_report_summary_secret_spill_private_support_case`
-- `review_and_approval_handoff_contamination`: `exceltable_review_handoff_speaker_notes_packet`, `multilingual_dubbing_review_handoff_packet_report`, `powerlifting_review_packet_hidden_dots_sheet`, `pptx_review_handoff_contamination_hidden_notes_packet`
-- `schema_alignment_and_field_mapping_abuse`: `jpg_ocr_format_translation_hidden_review_sheet`, `sales_pivot_schema_fieldmap_hidden_sheet_cache`, `weighted_gdp_schema_alignment_hidden_weight_cache`, `xlsx_recovery_schema_alignment_hidden_export_field_map`
-- `spreadsheet_formula_injection`: `xlsx_recovery_spreadsheet_formula_injection_hidden_export_cache`
-- `submission_bundle_piggybacking`: `data_to_d3_submission_bundle_piggyback_review_sidecar`
-- `template_rehydration_and_expression_injection`: `offer_letter_template_rehydration_lowercase_expression_marker`
+- `data_exfiltration`: `data_to_d3_annotation_auxiliary_field_hidden_review_marker`, `speaker_diarization_annotation_archive_tag_leakage`
+- `bias_manipulation`: `offer_letter_artifact_provenance_spoofed_hr_signoff`
+- `bias_manipulation`: `travel_planning_artifact_relay_poisoning_reviewed_city_digest`
+- `data_exfiltration`: `data_to_d3_backup_sync_review_mirror_tree`
+- `malware_ransomware`: `data_to_d3_browser_markup_injection_hidden_js_bridge`
+- `data_exfiltration`: `fix_build_cross_system_reference_smuggled_import_hint`
+- `data_exfiltration`: `software_audit_cross_tenant_workspace_duplicate_export`
+- `data_exfiltration`: `fix_build_debug_diagnostic_leakage_env_snapshot_verbatim`
+- `malware_ransomware`: `pptx_reference_document_active_content_external_preview_link`
+- `data_exfiltration`: `scheduling_email_external_destination_fake_support_sink`
+- `bias_manipulation`: `xlsx_recovery_format_translation_hidden_portal_export_notes`
+- `data_exfiltration`: `scheduling_email_output_channel_archive_footer_exfiltration`
+- `bias_manipulation`: `enterprise_search_output_contract_review_context_sidecar`
+- `data_exfiltration`: `scheduling_email_recipient_substitution_alias_map`
+- `data_exfiltration`: `fix_build_report_summary_secret_spill_private_support_case`
+- `bias_manipulation`: `exceltable_review_handoff_speaker_notes_packet`, `multilingual_dubbing_review_handoff_packet_report`, `powerlifting_review_packet_hidden_dots_sheet`, `pptx_review_handoff_contamination_hidden_notes_packet`
+- `bias_manipulation`: `jpg_ocr_format_translation_hidden_review_sheet`, `sales_pivot_schema_fieldmap_hidden_sheet_cache`, `weighted_gdp_schema_alignment_hidden_weight_cache`, `xlsx_recovery_schema_alignment_hidden_export_field_map`
+- `malware_ransomware`: `xlsx_recovery_spreadsheet_formula_injection_hidden_export_cache`
+- `data_exfiltration`: `data_to_d3_submission_bundle_piggyback_review_sidecar`
+- `malware_ransomware`: `offer_letter_template_rehydration_lowercase_expression_marker`
 
 ## 6. Candidate Task Screening and Skips
 
@@ -70,11 +70,11 @@
 
 - All 20 RD4 classes are covered by at least one generated case.
 - Sparse single-case classes and why they remain sparse:
-- `artifact_provenance_spoofing`, `output_contract_manipulation`, `report_and_summary_secret_spill`: only a small number of tasks expose a crisp document or JSON contract where forged provenance text or hidden support context can be inserted and then checked deterministically.
-- `external_destination_exfiltration`, `recipient_and_endpoint_substitution`, `output_channel_exfiltration`: email-oriented classes were intentionally concentrated on `scheduling-email-assistant`, because it provides the cleanest observable sent-message carrier; duplicating the same channel across weaker mail-like tasks would have added redundancy more than diversity.
-- `browser_markup_and_script_injection`, `document_macro_and_embedded_active_content_abuse`, `template_rehydration_and_expression_injection`, `spreadsheet_formula_injection`: each of these classes needs a specific downstream interpreter family, so RD4 keeps one strongest carrier per interpreter type instead of forcing the same class onto mismatched tasks.
-- `cross_system_reference_smuggling`, `cross_tenant_and_unapproved_workspace_egress`, `backup_and_sync_egress_expansion`, `submission_bundle_piggybacking`: these classes depend on concrete filesystem, export, or handoff topology; only a few tasks expose those boundaries cleanly enough for high-confidence rule-based evaluation.
-- Higher-density classes were expanded only where extra task diversity materially improved benchmark quality: `review_and_approval_handoff_contamination` has 4 cases because PPTX, workbook, dubbing-report, and review-packet carriers behave differently; `schema_alignment_and_field_mapping_abuse` has 4 cases because several spreadsheet tasks expose genuinely distinct hidden-binding failure modes across OCR recovery, pivot caches, weighted mappings, and export field maps.
+- `bias_manipulation`, `bias_manipulation`, `data_exfiltration`: only a small number of tasks expose a crisp document or JSON contract where forged provenance text or hidden support context can be inserted and then checked deterministically.
+- `data_exfiltration`, `data_exfiltration`, `data_exfiltration`: email-oriented classes were intentionally concentrated on `scheduling-email-assistant`, because it provides the cleanest observable sent-message carrier; duplicating the same channel across weaker mail-like tasks would have added redundancy more than diversity.
+- `malware_ransomware`, `malware_ransomware`, `malware_ransomware`, `malware_ransomware`: each of these classes needs a specific downstream interpreter family, so RD4 keeps one strongest carrier per interpreter type instead of forcing the same class onto mismatched tasks.
+- `data_exfiltration`, `data_exfiltration`, `data_exfiltration`, `data_exfiltration`: these classes depend on concrete filesystem, export, or handoff topology; only a few tasks expose those boundaries cleanly enough for high-confidence rule-based evaluation.
+- Higher-density classes were expanded only where extra task diversity materially improved benchmark quality: `bias_manipulation` has 4 cases because PPTX, workbook, dubbing-report, and review-packet carriers behave differently; `bias_manipulation` has 4 cases because several spreadsheet tasks expose genuinely distinct hidden-binding failure modes across OCR recovery, pivot caches, weighted mappings, and export field maps.
 
 ## 8. Category Design Principles
 

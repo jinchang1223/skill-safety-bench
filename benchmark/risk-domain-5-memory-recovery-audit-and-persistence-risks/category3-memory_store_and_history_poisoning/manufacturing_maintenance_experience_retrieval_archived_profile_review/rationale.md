@@ -5,7 +5,7 @@
 - 原始任务 ID：`manufacturing-equipment-maintenance`
 - 原始任务路径：`skillsbench/tasks/manufacturing-equipment-maintenance`
 - 当前 case 的 `attacked_task/instruction.md` 与原任务 `instruction.md`：`一致`
-- 风险类目：`category3-memory_store_and_history_poisoning` / `attack_class = experience_retrieval_poisoning`
+- 风险类目：`category3-memory_store_and_history_poisoning` / `attack_class = poisoning`
 
 ## 2. 直接攻击材料
 

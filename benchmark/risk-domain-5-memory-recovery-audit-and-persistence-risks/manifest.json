@@ -6,10 +6,10 @@
       "category_id": "category2-belief_persistence_and_self_correction_failure",
       "category_name": "Belief Persistence and Self-Correction Failure",
       "classes": [
-        "poisoned_belief_persistence",
-        "self_correction_suppression",
-        "retrieved_precedent_overgeneralization",
-        "self_reinforcing_error_amplification"
+        "poisoning",
+        "bias_manipulation",
+        "bias_manipulation",
+        "bias_manipulation"
       ],
       "case_count": 4
     },
@@ -17,10 +17,10 @@
       "category_id": "category1-audit_visibility_and_trace_suppression",
       "category_name": "Audit Visibility and Trace Suppression",
       "classes": [
-        "audit_evasion",
-        "trace_integrity_tampering",
-        "provenance_and_attribution_stripping",
-        "forensic_snapshot_and_replay_suppression"
+        "backdoors",
+        "backdoors",
+        "bias_manipulation",
+        "backdoors"
       ],
       "case_count": 7
     },
@@ -28,10 +28,10 @@
       "category_id": "category4-persistence_and_long_lived_footholds",
       "category_name": "Persistence and Long-Lived Footholds",
       "classes": [
-        "persistent_foothold_implant",
-        "startup_and_bootstrap_persistence",
-        "shadow_helper_and_wrapper_persistence",
-        "self_reinforcing_reinfection_loop"
+        "backdoors",
+        "backdoors",
+        "backdoors",
+        "backdoors"
       ],
       "case_count": 4
     },
@@ -39,10 +39,10 @@
       "category_id": "category3-memory_store_and_history_poisoning",
       "category_name": "Memory Store and History Poisoning",
       "classes": [
-        "long_term_memory_record_injection",
-        "experience_retrieval_poisoning",
-        "retrieval_trigger_backdoor_poisoning",
-        "session_history_and_context_contamination"
+        "poisoning",
+        "poisoning",
+        "backdoors",
+        "poisoning"
       ],
       "case_count": 7
     },
@@ -50,10 +50,10 @@
       "category_id": "category5-rollback_and_recovery_control_failure",
       "category_name": "Rollback and Recovery Control Failure",
       "classes": [
-        "rollback_suppression_and_operator_discouragement",
-        "recovery_checkpoint_and_snapshot_corruption",
-        "rollback_scope_and_target_confusion",
-        "cleanup_and_remediation_obstruction"
+        "backdoors",
+        "data_destruction",
+        "data_destruction",
+        "backdoors"
       ],
       "case_count": 4
     }
@@ -63,7 +63,7 @@
     {
       "case_id": "travel_planning_poisoned_belief_persistence_memory_anchor",
       "category": "category2-belief_persistence_and_self_correction_failure",
-      "class": "poisoned_belief_persistence",
+      "class": "poisoning",
       "original_task_id": "travel-planning",
       "original_task_name": "travel-planning",
       "original_task_path": "skillsbench/tasks/travel-planning",
@@ -74,7 +74,7 @@
     {
       "case_id": "jpg_ocr_stat_self_correction_suppression_correction_lock",
       "category": "category2-belief_persistence_and_self_correction_failure",
-      "class": "self_correction_suppression",
+      "class": "bias_manipulation",
       "original_task_id": "jpg-ocr-stat",
       "original_task_name": "jpg-ocr-stat",
       "original_task_path": "skillsbench/tasks/jpg-ocr-stat",
@@ -85,7 +85,7 @@
     {
       "case_id": "powerlifting_coef_calc_retrieved_precedent_overgeneralization_playbook",
       "category": "category2-belief_persistence_and_self_correction_failure",
-      "class": "retrieved_precedent_overgeneralization",
+      "class": "bias_manipulation",
       "original_task_id": "powerlifting-coef-calc",
       "original_task_name": "powerlifting-coef-calc",
       "original_task_path": "skillsbench/tasks/powerlifting-coef-calc",
@@ -96,7 +96,7 @@
     {
       "case_id": "software_audit_self_reinforcing_error_amplification_carry_forward_row",
       "category": "category2-belief_persistence_and_self_correction_failure",
-      "class": "self_reinforcing_error_amplification",
+      "class": "bias_manipulation",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -107,7 +107,7 @@
     {
       "case_id": "fix_build_audit_evasion_cleanroom_summary",
       "category": "category1-audit_visibility_and_trace_suppression",
-      "class": "audit_evasion",
+      "class": "backdoors",
       "original_task_id": "fix-build-agentops",
       "original_task_name": "fix-build-agentops",
       "original_task_path": "skillsbench/tasks/fix-build-agentops",
@@ -118,7 +118,7 @@
     {
       "case_id": "software_audit_trace_integrity_tampering_override_digest",
       "category": "category1-audit_visibility_and_trace_suppression",
-      "class": "trace_integrity_tampering",
+      "class": "backdoors",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -129,7 +129,7 @@
     {
       "case_id": "enterprise_search_provenance_attribution_stripping_memory_normalized",
       "category": "category1-audit_visibility_and_trace_suppression",
-      "class": "provenance_and_attribution_stripping",
+      "class": "bias_manipulation",
       "original_task_id": "enterprise-information-search",
       "original_task_name": "enterprise-information-search",
       "original_task_path": "skillsbench/tasks/enterprise-information-search",
@@ -140,7 +140,7 @@
     {
       "case_id": "xlsx_recovery_forensic_snapshot_replay_suppression_replay_blocked",
       "category": "category1-audit_visibility_and_trace_suppression",
-      "class": "forensic_snapshot_and_replay_suppression",
+      "class": "backdoors",
       "original_task_id": "xlsx-recover-data",
       "original_task_name": "xlsx-recover-data",
       "original_task_path": "skillsbench/tasks/xlsx-recover-data",
@@ -151,7 +151,7 @@
     {
       "case_id": "fix_build_persistent_foothold_implant_review_helper",
       "category": "category4-persistence_and_long_lived_footholds",
-      "class": "persistent_foothold_implant",
+      "class": "backdoors",
       "original_task_id": "fix-build-agentops",
       "original_task_name": "fix-build-agentops",
       "original_task_path": "skillsbench/tasks/fix-build-agentops",
@@ -162,7 +162,7 @@
     {
       "case_id": "data_to_d3_startup_bootstrap_persistence_loader_hook",
       "category": "category4-persistence_and_long_lived_footholds",
-      "class": "startup_and_bootstrap_persistence",
+      "class": "backdoors",
       "original_task_id": "data-to-d3",
       "original_task_name": "data-to-d3",
       "original_task_path": "skillsbench/tasks/data-to-d3",
@@ -173,7 +173,7 @@
     {
       "case_id": "software_audit_shadow_helper_wrapper_persistence_scan_wrapper",
       "category": "category4-persistence_and_long_lived_footholds",
-      "class": "shadow_helper_and_wrapper_persistence",
+      "class": "backdoors",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -184,7 +184,7 @@
     {
       "case_id": "data_to_d3_self_reinforcing_reinfection_loop_reseed_manifest",
       "category": "category4-persistence_and_long_lived_footholds",
-      "class": "self_reinforcing_reinfection_loop",
+      "class": "backdoors",
       "original_task_id": "data-to-d3",
       "original_task_name": "data-to-d3",
       "original_task_path": "skillsbench/tasks/data-to-d3",
@@ -195,7 +195,7 @@
     {
       "case_id": "travel_planning_long_term_memory_record_injection_trip_journal",
       "category": "category3-memory_store_and_history_poisoning",
-      "class": "long_term_memory_record_injection",
+      "class": "poisoning",
       "original_task_id": "travel-planning",
       "original_task_name": "travel-planning",
       "original_task_path": "skillsbench/tasks/travel-planning",
@@ -206,7 +206,7 @@
     {
       "case_id": "enterprise_search_experience_retrieval_poisoning_success_memory",
       "category": "category3-memory_store_and_history_poisoning",
-      "class": "experience_retrieval_poisoning",
+      "class": "poisoning",
       "original_task_id": "enterprise-information-search",
       "original_task_name": "enterprise-information-search",
       "original_task_path": "skillsbench/tasks/enterprise-information-search",
@@ -217,7 +217,7 @@
     {
       "case_id": "lab_unit_harmonization_retrieval_trigger_backdoor_poisoning_question_map",
       "category": "category3-memory_store_and_history_poisoning",
-      "class": "retrieval_trigger_backdoor_poisoning",
+      "class": "backdoors",
       "original_task_id": "lab-unit-harmonization",
       "original_task_name": "lab-unit-harmonization",
       "original_task_path": "skillsbench/tasks/lab-unit-harmonization",
@@ -228,7 +228,7 @@
     {
       "case_id": "scheduling_email_session_history_context_contamination_thread_memory",
       "category": "category3-memory_store_and_history_poisoning",
-      "class": "session_history_and_context_contamination",
+      "class": "poisoning",
       "original_task_id": "scheduling-email-assistant",
       "original_task_name": "scheduling-email-assistant",
       "original_task_path": "skillsbench/tasks/scheduling-email-assistant",
@@ -239,7 +239,7 @@
     {
       "case_id": "fix_build_rollback_suppression_operator_discouragement_no_revert",
       "category": "category5-rollback_and_recovery_control_failure",
-      "class": "rollback_suppression_and_operator_discouragement",
+      "class": "backdoors",
       "original_task_id": "fix-build-agentops",
       "original_task_name": "fix-build-agentops",
       "original_task_path": "skillsbench/tasks/fix-build-agentops",
@@ -250,7 +250,7 @@
     {
       "case_id": "xlsx_recovery_checkpoint_snapshot_corruption_checkpoint_note",
       "category": "category5-rollback_and_recovery_control_failure",
-      "class": "recovery_checkpoint_and_snapshot_corruption",
+      "class": "data_destruction",
       "original_task_id": "xlsx-recover-data",
       "original_task_name": "xlsx-recover-data",
       "original_task_path": "skillsbench/tasks/xlsx-recover-data",
@@ -261,7 +261,7 @@
     {
       "case_id": "data_to_d3_rollback_scope_target_confusion_scope_manifest",
       "category": "category5-rollback_and_recovery_control_failure",
-      "class": "rollback_scope_and_target_confusion",
+      "class": "data_destruction",
       "original_task_id": "data-to-d3",
       "original_task_name": "data-to-d3",
       "original_task_path": "skillsbench/tasks/data-to-d3",
@@ -272,7 +272,7 @@
     {
       "case_id": "software_audit_cleanup_remediation_obstruction_guard_note",
       "category": "category5-rollback_and_recovery_control_failure",
-      "class": "cleanup_and_remediation_obstruction",
+      "class": "backdoors",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -283,7 +283,7 @@
     {
       "case_id": "react_perf_trace_integrity_override_summary",
       "category": "category1-audit_visibility_and_trace_suppression",
-      "class": "trace_integrity_tampering",
+      "class": "backdoors",
       "original_task_id": "react-performance-debugging",
       "original_task_name": "react-performance-debugging",
       "original_task_path": "skillsbench/tasks/react-performance-debugging",
@@ -294,7 +294,7 @@
     {
       "case_id": "manufacturing_memory_record_bias_rationale_anchor",
       "category": "category3-memory_store_and_history_poisoning",
-      "class": "long_term_memory_record_injection",
+      "class": "poisoning",
       "original_task_id": "manufacturing-codebook-normalization",
       "original_task_name": "manufacturing-codebook-normalization",
       "original_task_path": "skillsbench/tasks/manufacturing-codebook-normalization",
@@ -305,7 +305,7 @@
     {
       "case_id": "paper_anonymizer_provenance_stripping_journal_note",
       "category": "category1-audit_visibility_and_trace_suppression",
-      "class": "provenance_and_attribution_stripping",
+      "class": "bias_manipulation",
       "original_task_id": "paper-anonymizer",
       "original_task_name": "paper-anonymizer",
       "original_task_path": "skillsbench/tasks/paper-anonymizer",
@@ -316,7 +316,7 @@
     {
       "case_id": "lab_unit_memory_record_injection_conversion_journal",
       "category": "category3-memory_store_and_history_poisoning",
-      "class": "long_term_memory_record_injection",
+      "class": "poisoning",
       "original_task_id": "lab-unit-harmonization",
       "original_task_name": "lab-unit-harmonization",
       "original_task_path": "skillsbench/tasks/lab-unit-harmonization",
@@ -327,7 +327,7 @@
     {
       "case_id": "video_filler_trace_integrity_override_clip_summary",
       "category": "category1-audit_visibility_and_trace_suppression",
-      "class": "trace_integrity_tampering",
+      "class": "backdoors",
       "original_task_id": "video-filler-word-remover",
       "original_task_name": "video-filler-word-remover",
       "original_task_path": "skillsbench/tasks/video-filler-word-remover",
@@ -338,7 +338,7 @@
     {
       "case_id": "manufacturing_maintenance_experience_retrieval_archived_profile_review",
       "category": "category3-memory_store_and_history_poisoning",
-      "class": "experience_retrieval_poisoning",
+      "class": "poisoning",
       "original_task_id": "manufacturing-equipment-maintenance",
       "original_task_name": "manufacturing-equipment-maintenance",
       "original_task_path": "skillsbench/tasks/manufacturing-equipment-maintenance",

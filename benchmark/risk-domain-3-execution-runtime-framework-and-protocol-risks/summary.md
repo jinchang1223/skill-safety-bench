@@ -9,40 +9,40 @@
 
 ## 2. Taxonomy Files Read
 
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/binary_resolution_hijack/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/malware_ransomware/class.yaml`
 - `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/helper_output_tampering/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/runtime_integrity_compromise/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/wrapper_and_bootstrap_hijack/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/bias_manipulation/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-1-runtime-and-toolchain-integrity-compromise/malware_ransomware/class.yaml`
 - `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/code_interpreter_payload_injection/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/command_and_shell_injection/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/sql_and_structured_query_injection/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/template_and_expression_injection/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-2-downstream-interpreter-and-query-exploitation/malware_ransomware/class.yaml`
 - `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/extension_and_module_loader_abuse/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/loader_ssrf_and_remote_fetch_abuse/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/parser_confusion_and_polyglot_abuse/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/unsafe_deserialization_and_object_instantiation/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-3-framework-serialization-and-loader-abuse/malware_ransomware/class.yaml`
 - `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/delegated_token_and_trust_propagation_abuse/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/origin_binding_and_session_confusion/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/protocol_capability_spoofing/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/service_identity_impersonation/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/bias_manipulation/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/bias_manipulation/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/bias_manipulation/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-4-protocol-identity-and-capability-abuse/phishing/class.yaml`
 - `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/category.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/filesystem_root_and_path_boundary_bypass/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/internal_network_and_metadata_service_escape/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/mount_and_host_integration_escape/class.yaml`
-- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/sandbox_runtime_breakout/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/malware_ransomware/class.yaml`
+- `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/category-5-sandbox-and-environment-boundary-escape/malware_ransomware/class.yaml`
 - `skill-safety-bench/atom-attacks__dynamic_generate_backup/risk-domain-3-execution-runtime-framework-and-protocol-risks/risk_domain.yaml`
 
 ## 3. Normalized Categories and Classes
 
-- `category4-runtime_and_toolchain_integrity_compromise` (Runtime and Toolchain Integrity Compromise): runtime_integrity_compromise, binary_resolution_hijack, wrapper_and_bootstrap_hijack, helper_output_tampering
-- `category1-downstream_interpreter_and_query_exploitation` (Downstream Interpreter and Query Exploitation): command_and_shell_injection, sql_and_structured_query_injection, template_and_expression_injection, code_interpreter_payload_injection
-- `category2-framework_serialization_and_loader_abuse` (Framework Serialization and Loader Abuse): unsafe_deserialization_and_object_instantiation, loader_ssrf_and_remote_fetch_abuse, parser_confusion_and_polyglot_abuse, extension_and_module_loader_abuse
-- `category3-protocol_identity_and_capability_abuse` (Protocol Identity and Capability Abuse): protocol_capability_spoofing, service_identity_impersonation, origin_binding_and_session_confusion, delegated_token_and_trust_propagation_abuse
-- `category5-sandbox_and_environment_boundary_escape` (Sandbox and Environment Boundary Escape): filesystem_root_and_path_boundary_bypass, internal_network_and_metadata_service_escape, sandbox_runtime_breakout, mount_and_host_integration_escape
+- `category4-runtime_and_toolchain_integrity_compromise` (Runtime and Toolchain Integrity Compromise): malware_ransomware, malware_ransomware, malware_ransomware, bias_manipulation
+- `category1-downstream_interpreter_and_query_exploitation` (Downstream Interpreter and Query Exploitation): malware_ransomware, malware_ransomware, malware_ransomware, malware_ransomware
+- `category2-framework_serialization_and_loader_abuse` (Framework Serialization and Loader Abuse): malware_ransomware, malware_ransomware, malware_ransomware, malware_ransomware
+- `category3-protocol_identity_and_capability_abuse` (Protocol Identity and Capability Abuse): bias_manipulation, phishing, bias_manipulation, bias_manipulation
+- `category5-sandbox_and_environment_boundary_escape` (Sandbox and Environment Boundary Escape): malware_ransomware, malware_ransomware, malware_ransomware, malware_ransomware
 
 ## 4. Original Tasks Selected Per Category
 
@@ -54,26 +54,26 @@
 
 ## 5. Class Coverage
 
-- `binary_resolution_hijack`: `setup_fuzzing_binary_resolution_python_path_shim`
-- `code_interpreter_payload_injection`: `jax_description_dispatch_eval_helper`, `setup_fuzzing_code_interpreter_payload_bootstrap_probe_execution`
-- `command_and_shell_injection`: `flink_query_shell_debug_helper_injection`, `parallel_tfidf_command_shell_injection_debug_helper_verbatim`
-- `delegated_token_and_trust_propagation_abuse`: `fix_build_delegated_token_propagation_ci_session_marker`
-- `extension_and_module_loader_abuse`: `parallel_tfidf_extension_loader_workspace_plugin_hook`, `python_scala_translation_reflective_tokenizer_loader`
-- `filesystem_root_and_path_boundary_bypass`: `organize_files_filesystem_boundary_escape_shadow_corpus_pdf`
-- `helper_output_tampering`: `manufacturing_helper_output_tampering_calibrated_candidate_sheet`
-- `internal_network_and_metadata_service_escape`: `fix_build_internal_metadata_service_escape_discovery_note`
-- `loader_ssrf_and_remote_fetch_abuse`: `parallel_tfidf_loader_ssrf_remote_cache_mirror`
-- `mount_and_host_integration_escape`: `fix_build_mount_host_integration_docker_socket_repro`
-- `origin_binding_and_session_confusion`: `scheduling_email_origin_binding_reply_alias_map`
-- `parser_confusion_and_polyglot_abuse`: `threejs_parser_confusion_comment_declared_phantom_parts`, `dialogue_parser_preview_loader_manifest_top_level`
-- `protocol_capability_spoofing`: `travel_planning_protocol_capability_spoofing_flight_skill_ground_proxy`
-- `runtime_integrity_compromise`: `fix_build_runtime_integrity_wrapper_preserved_ci_layer`
-- `sandbox_runtime_breakout`: `setup_fuzzing_sandbox_breakout_eval_seed_decoder`
-- `service_identity_impersonation`: `enterprise_search_service_identity_impersonation_registry_mirror`
-- `sql_and_structured_query_injection`: `gh_repo_structured_query_injection_saved_view_bug_window`
-- `template_and_expression_injection`: `pptx_reference_template_expression_injection_appendix_marker`
-- `unsafe_deserialization_and_object_instantiation`: `parallel_tfidf_unsafe_deserialization_precomputed_pickle_cache`
-- `wrapper_and_bootstrap_hijack`: `fix_erlang_protocol_probe_wrapper_bootstrap`, `parallel_tfidf_wrapper_bootstrap_benchmark_outer_runner`, `syzkaller_description_wrapper_bootstrap_loop`
+- `malware_ransomware`: `setup_fuzzing_binary_resolution_python_path_shim`
+- `malware_ransomware`: `jax_description_dispatch_eval_helper`, `setup_fuzzing_code_interpreter_payload_bootstrap_probe_execution`
+- `malware_ransomware`: `flink_query_shell_debug_helper_injection`, `parallel_tfidf_command_shell_injection_debug_helper_verbatim`
+- `bias_manipulation`: `fix_build_delegated_token_propagation_ci_session_marker`
+- `malware_ransomware`: `parallel_tfidf_extension_loader_workspace_plugin_hook`, `python_scala_translation_reflective_tokenizer_loader`
+- `malware_ransomware`: `organize_files_filesystem_boundary_escape_shadow_corpus_pdf`
+- `bias_manipulation`: `manufacturing_bias_manipulation_calibrated_candidate_sheet`
+- `malware_ransomware`: `fix_build_internal_metadata_service_escape_discovery_note`
+- `malware_ransomware`: `parallel_tfidf_loader_ssrf_remote_cache_mirror`
+- `malware_ransomware`: `fix_build_mount_host_integration_docker_socket_repro`
+- `bias_manipulation`: `scheduling_email_origin_binding_reply_alias_map`
+- `malware_ransomware`: `threejs_parser_confusion_comment_declared_phantom_parts`, `dialogue_parser_preview_loader_manifest_top_level`
+- `bias_manipulation`: `travel_planning_protocol_capability_spoofing_flight_skill_ground_proxy`
+- `malware_ransomware`: `fix_build_runtime_integrity_wrapper_preserved_ci_layer`
+- `malware_ransomware`: `setup_fuzzing_sandbox_breakout_eval_seed_decoder`
+- `phishing`: `enterprise_search_service_identity_impersonation_registry_mirror`
+- `malware_ransomware`: `gh_repo_structured_query_injection_saved_view_bug_window`
+- `malware_ransomware`: `pptx_reference_template_expression_injection_appendix_marker`
+- `malware_ransomware`: `parallel_tfidf_unsafe_deserialization_precomputed_pickle_cache`
+- `malware_ransomware`: `fix_erlang_protocol_probe_wrapper_bootstrap`, `parallel_tfidf_wrapper_bootstrap_benchmark_outer_runner`, `syzkaller_description_wrapper_bootstrap_loop`
 
 ## 6. Candidate Task Screening and Skips
 

@@ -5,7 +5,7 @@
 - 原始任务 ID：`travel-planning`
 - 原始任务路径：`skillsbench/tasks/travel-planning`
 - 当前 case 的 `attacked_task/instruction.md` 与原任务 `instruction.md`：`一致`
-- 风险类目：`category2-belief_persistence_and_self_correction_failure` / `attack_class = poisoned_belief_persistence`
+- 风险类目：`category2-belief_persistence_and_self_correction_failure` / `attack_class = poisoning`
 
 ## 2. 直接攻击材料
 

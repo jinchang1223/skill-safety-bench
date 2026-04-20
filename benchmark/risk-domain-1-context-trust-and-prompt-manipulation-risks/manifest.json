@@ -6,10 +6,10 @@
       "category_id": "routing_and_discovery_deception",
       "category_name": "Routing and Discovery Deception",
       "classes": [
-        "skill_name_decoy",
-        "routing_cue_poisoning",
-        "delegation_routing_handoff_poisoning",
-        "tool_description_routing_poisoning"
+        "bias_manipulation",
+        "poisoning",
+        "poisoning",
+        "poisoning"
       ],
       "case_count": 4,
       "path": "skill-safety-bench/benchmark/risk-domain-1-context-trust-and-prompt-manipulation-risks/category1-routing_and_discovery_deception"
@@ -18,10 +18,10 @@
       "category_id": "source_authority_rule_and_example_poisoning",
       "category_name": "Source Authority Rule and Example Poisoning",
       "classes": [
-        "priority_override",
-        "reference_rule_poisoning",
-        "example_pattern_poisoning",
-        "delegated_authority_chain_poisoning"
+        "bias_manipulation",
+        "poisoning",
+        "poisoning",
+        "bias_manipulation"
       ],
       "case_count": 7,
       "path": "skill-safety-bench/benchmark/risk-domain-1-context-trust-and-prompt-manipulation-risks/category2-source_authority_rule_and_example_poisoning"
@@ -30,10 +30,10 @@
       "category_id": "intent_seeding_and_cross_context_conflict",
       "category_name": "Intent Seeding and Cross-Context Conflict",
       "classes": [
-        "sensitive_request_seeding",
-        "cross_source_conflict_poisoning",
-        "delegation_goal_reframing",
-        "anti_escalation_guidance_poisoning"
+        "bias_manipulation",
+        "poisoning",
+        "bias_manipulation",
+        "poisoning"
       ],
       "case_count": 4,
       "path": "skill-safety-bench/benchmark/risk-domain-1-context-trust-and-prompt-manipulation-risks/category3-intent_seeding_and_cross_context_conflict"
@@ -42,10 +42,10 @@
       "category_id": "retrieval_and_reference_contamination",
       "category_name": "Retrieval and Reference Contamination",
       "classes": [
-        "retrieved_evidence_poisoning",
-        "search_result_snippet_contamination",
-        "stale_retrieval_snapshot_poisoning",
-        "delegated_research_digest_poisoning"
+        "poisoning",
+        "poisoning",
+        "poisoning",
+        "poisoning"
       ],
       "case_count": 5,
       "path": "skill-safety-bench/benchmark/risk-domain-1-context-trust-and-prompt-manipulation-risks/category4-retrieval_and_reference_contamination"
@@ -54,10 +54,10 @@
       "category_id": "multi_source_trust_amplification",
       "category_name": "Multi-Source Trust Amplification",
       "classes": [
-        "consensus_laundering",
-        "cross_surface_false_corroboration",
-        "peer_review_echo_chain_poisoning",
-        "coordination_artifact_echo_amplification"
+        "bias_manipulation",
+        "bias_manipulation",
+        "poisoning",
+        "bias_manipulation"
       ],
       "case_count": 5,
       "path": "skill-safety-bench/benchmark/risk-domain-1-context-trust-and-prompt-manipulation-risks/category5-multi_source_trust_amplification"
@@ -68,7 +68,7 @@
     {
       "case_id": "travel_planning_skill_name_decoy_singular_alias",
       "category": "routing_and_discovery_deception",
-      "class": "skill_name_decoy",
+      "class": "bias_manipulation",
       "original_task_id": "travel-planning",
       "original_task_name": "travel-planning",
       "original_task_path": "skillsbench/tasks/travel-planning",
@@ -79,7 +79,7 @@
     {
       "case_id": "offer_letter_routing_cue_precleared_merge_sheet",
       "category": "routing_and_discovery_deception",
-      "class": "routing_cue_poisoning",
+      "class": "poisoning",
       "original_task_id": "offer-letter-generator",
       "original_task_name": "offer-letter-generator",
       "original_task_path": "skillsbench/tasks/offer-letter-generator",
@@ -90,7 +90,7 @@
     {
       "case_id": "xlsx_recovery_handoff_summary_prevalidated_totals",
       "category": "routing_and_discovery_deception",
-      "class": "delegation_routing_handoff_poisoning",
+      "class": "poisoning",
       "original_task_id": "xlsx-recover-data",
       "original_task_name": "xlsx-recover-data",
       "original_task_path": "skillsbench/tasks/xlsx-recover-data",
@@ -101,7 +101,7 @@
     {
       "case_id": "travel_planning_tool_description_flights_first",
       "category": "routing_and_discovery_deception",
-      "class": "tool_description_routing_poisoning",
+      "class": "poisoning",
       "original_task_id": "travel-planning",
       "original_task_name": "travel-planning",
       "original_task_path": "skillsbench/tasks/travel-planning",
@@ -112,7 +112,7 @@
     {
       "case_id": "citation_check_priority_override_local_screening",
       "category": "source_authority_rule_and_example_poisoning",
-      "class": "priority_override",
+      "class": "bias_manipulation",
       "original_task_id": "citation-check",
       "original_task_name": "citation-check",
       "original_task_path": "skillsbench/tasks/citation-check",
@@ -123,7 +123,7 @@
     {
       "case_id": "invoice_fraud_reference_rule_vendor_exception",
       "category": "source_authority_rule_and_example_poisoning",
-      "class": "reference_rule_poisoning",
+      "class": "poisoning",
       "original_task_id": "invoice-fraud-detection",
       "original_task_name": "invoice-fraud-detection",
       "original_task_path": "skillsbench/tasks/invoice-fraud-detection",
@@ -134,7 +134,7 @@
     {
       "case_id": "software_audit_example_pattern_suppress_unfixed",
       "category": "source_authority_rule_and_example_poisoning",
-      "class": "example_pattern_poisoning",
+      "class": "poisoning",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -145,7 +145,7 @@
     {
       "case_id": "sec_report_delegated_authority_prevalidated_snapshot",
       "category": "source_authority_rule_and_example_poisoning",
-      "class": "delegated_authority_chain_poisoning",
+      "class": "bias_manipulation",
       "original_task_id": "sec-financial-report",
       "original_task_name": "sec-financial-report",
       "original_task_path": "skillsbench/tasks/sec-financial-report",
@@ -156,7 +156,7 @@
     {
       "case_id": "offer_letter_sensitive_request_internal_note_appendix",
       "category": "intent_seeding_and_cross_context_conflict",
-      "class": "sensitive_request_seeding",
+      "class": "bias_manipulation",
       "original_task_id": "offer-letter-generator",
       "original_task_name": "offer-letter-generator",
       "original_task_path": "skillsbench/tasks/offer-letter-generator",
@@ -167,7 +167,7 @@
     {
       "case_id": "pdf_excel_diff_cross_source_conflict_backup_authority",
       "category": "intent_seeding_and_cross_context_conflict",
-      "class": "cross_source_conflict_poisoning",
+      "class": "poisoning",
       "original_task_id": "pdf-excel-diff",
       "original_task_name": "pdf-excel-diff",
       "original_task_path": "skillsbench/tasks/pdf-excel-diff",
@@ -178,7 +178,7 @@
     {
       "case_id": "citation_check_goal_reframing_fast_triage_cap",
       "category": "intent_seeding_and_cross_context_conflict",
-      "class": "delegation_goal_reframing",
+      "class": "bias_manipulation",
       "original_task_id": "citation-check",
       "original_task_name": "citation-check",
       "original_task_path": "skillsbench/tasks/citation-check",
@@ -189,7 +189,7 @@
     {
       "case_id": "invoice_fraud_anti_escalation_ambiguous_clean",
       "category": "intent_seeding_and_cross_context_conflict",
-      "class": "anti_escalation_guidance_poisoning",
+      "class": "poisoning",
       "original_task_id": "invoice-fraud-detection",
       "original_task_name": "invoice-fraud-detection",
       "original_task_path": "skillsbench/tasks/invoice-fraud-detection",
@@ -200,7 +200,7 @@
     {
       "case_id": "citation_check_retrieved_evidence_cache_override",
       "category": "retrieval_and_reference_contamination",
-      "class": "retrieved_evidence_poisoning",
+      "class": "poisoning",
       "original_task_id": "citation-check",
       "original_task_name": "citation-check",
       "original_task_path": "skillsbench/tasks/citation-check",
@@ -211,7 +211,7 @@
     {
       "case_id": "citation_check_search_snippet_false_legitimacy",
       "category": "retrieval_and_reference_contamination",
-      "class": "search_result_snippet_contamination",
+      "class": "poisoning",
       "original_task_id": "citation-check",
       "original_task_name": "citation-check",
       "original_task_path": "skillsbench/tasks/citation-check",
@@ -222,7 +222,7 @@
     {
       "case_id": "financial_modeling_stale_snapshot_answer_reuse",
       "category": "retrieval_and_reference_contamination",
-      "class": "stale_retrieval_snapshot_poisoning",
+      "class": "poisoning",
       "original_task_id": "financial-modeling-qa",
       "original_task_name": "financial-modeling-qa",
       "original_task_path": "skillsbench/tasks/financial-modeling-qa",
@@ -233,7 +233,7 @@
     {
       "case_id": "sec_report_delegated_research_digest_override",
       "category": "retrieval_and_reference_contamination",
-      "class": "delegated_research_digest_poisoning",
+      "class": "poisoning",
       "original_task_id": "sec-financial-report",
       "original_task_name": "sec-financial-report",
       "original_task_path": "skillsbench/tasks/sec-financial-report",
@@ -244,7 +244,7 @@
     {
       "case_id": "sales_pivot_consensus_laundering_locked_quartile_cutoffs",
       "category": "multi_source_trust_amplification",
-      "class": "consensus_laundering",
+      "class": "bias_manipulation",
       "original_task_id": "sales-pivot-analysis",
       "original_task_name": "sales-pivot-analysis",
       "original_task_path": "skillsbench/tasks/sales-pivot-analysis",
@@ -255,7 +255,7 @@
     {
       "case_id": "software_audit_cross_surface_false_corroboration_legacy_exemptions",
       "category": "multi_source_trust_amplification",
-      "class": "cross_surface_false_corroboration",
+      "class": "bias_manipulation",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -266,7 +266,7 @@
     {
       "case_id": "xlsx_recovery_peer_review_echo_prechecked_growth",
       "category": "multi_source_trust_amplification",
-      "class": "peer_review_echo_chain_poisoning",
+      "class": "poisoning",
       "original_task_id": "xlsx-recover-data",
       "original_task_name": "xlsx-recover-data",
       "original_task_path": "skillsbench/tasks/xlsx-recover-data",
@@ -277,7 +277,7 @@
     {
       "case_id": "citation_check_coordination_artifact_echo_prescreened_titles",
       "category": "multi_source_trust_amplification",
-      "class": "coordination_artifact_echo_amplification",
+      "class": "bias_manipulation",
       "original_task_id": "citation-check",
       "original_task_name": "citation-check",
       "original_task_path": "skillsbench/tasks/citation-check",
@@ -288,7 +288,7 @@
     {
       "case_id": "gh_repo_analytics_stale_snapshot_december_rollup_reuse",
       "category": "retrieval_and_reference_contamination",
-      "class": "stale_retrieval_snapshot_poisoning",
+      "class": "poisoning",
       "original_task_id": "gh-repo-analytics",
       "original_task_name": "gh-repo-analytics",
       "original_task_path": "skillsbench/tasks/gh-repo-analytics",
@@ -299,7 +299,7 @@
     {
       "case_id": "dialogue_parser_example_pattern_scene_anchor_nodes",
       "category": "source_authority_rule_and_example_poisoning",
-      "class": "example_pattern_poisoning",
+      "class": "poisoning",
       "original_task_id": "dialogue-parser",
       "original_task_name": "dialogue-parser",
       "original_task_path": "skillsbench/tasks/dialogue-parser",
@@ -310,7 +310,7 @@
     {
       "case_id": "paper_anonymizer_consensus_laundering_blind_review_keep_list",
       "category": "multi_source_trust_amplification",
-      "class": "consensus_laundering",
+      "class": "bias_manipulation",
       "original_task_id": "paper-anonymizer",
       "original_task_name": "paper-anonymizer",
       "original_task_path": "skillsbench/tasks/paper-anonymizer",
@@ -321,7 +321,7 @@
     {
       "case_id": "manufacturing_codebook_reference_rule_retest_adjudication",
       "category": "source_authority_rule_and_example_poisoning",
-      "class": "reference_rule_poisoning",
+      "class": "poisoning",
       "original_task_id": "manufacturing-codebook-normalization",
       "original_task_name": "manufacturing-codebook-normalization",
       "original_task_path": "skillsbench/tasks/manufacturing-codebook-normalization",
@@ -332,7 +332,7 @@
     {
       "case_id": "pptx_reference_example_one_line_short_titles",
       "category": "source_authority_rule_and_example_poisoning",
-      "class": "example_pattern_poisoning",
+      "class": "poisoning",
       "original_task_id": "pptx-reference-formatting",
       "original_task_name": "pptx-reference-formatting",
       "original_task_path": "skillsbench/tasks/pptx-reference-formatting",

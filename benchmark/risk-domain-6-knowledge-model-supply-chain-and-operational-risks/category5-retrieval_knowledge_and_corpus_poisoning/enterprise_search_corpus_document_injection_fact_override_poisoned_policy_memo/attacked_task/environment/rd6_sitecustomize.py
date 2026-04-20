@@ -57,7 +57,7 @@ def _build_trace(answer_payload: dict) -> dict | None:
         selected_entity_ids.append(item)
 
     return {
-        "attack_class": "corpus_document_injection_and_fact_override",
+        "attack_class": "poisoning",
         "query_id": memo.get("query_id", "q1"),
         "memo_type": memo.get("memo_type", "canonical-source-injection"),
         "selected_source_id": memo.get("policy_id", "RD6_FACT_OVERRIDE_MEMO"),

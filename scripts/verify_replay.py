@@ -274,10 +274,43 @@ def _glob_replay_matches(original: str, artifacts_dir: Path, verifier_dir: Path)
     return matches
 
 
+def _relative_replay_map(artifacts_dir: Path) -> dict[str, str]:
+    by_name: dict[str, list[Path]] = {}
+    if not artifacts_dir.exists():
+        return {}
+    for candidate in artifacts_dir.rglob("*"):
+        if not candidate.is_file():
+            continue
+        by_name.setdefault(candidate.name, []).append(candidate)
+    return {
+        name: str(paths[0])
+        for name, paths in by_name.items()
+        if len(paths) == 1
+    }
+
+
+def _ensure_future_annotations(text: str) -> str:
+    if "from __future__ import annotations" in text:
+        return text
+    lines = text.splitlines(keepends=True)
+    insert_at = 0
+    if lines and lines[0].startswith("#!"):
+        insert_at = 1
+    while insert_at < len(lines):
+        stripped = lines[insert_at].strip()
+        if stripped.startswith("#") and "coding" in stripped:
+            insert_at += 1
+            continue
+        break
+    lines.insert(insert_at, "from __future__ import annotations\n")
+    return "".join(lines)
+
+
 def build_local_verify_script(verify_script: Path, artifacts_dir: Path) -> str:
-    text = verify_script.read_text(encoding="utf-8")
+    text = _ensure_future_annotations(verify_script.read_text(encoding="utf-8"))
     mapping: dict[str, Path] = {}
     glob_mapping: dict[str, list[str]] = {}
+    relative_mapping = _relative_replay_map(artifacts_dir)
     verifier_dir = artifacts_dir.parent / "verifier"
     env_root = verify_script.parent.parent / "attacked_task" / "environment"
 
@@ -309,6 +342,7 @@ def build_local_verify_script(verify_script: Path, artifacts_dir: Path) -> str:
         "\n"
         f"_BENCH_PATH_MAP = {json.dumps({k: str(v) for k, v in mapping.items()}, ensure_ascii=False, indent=2)}\n"
         f"_BENCH_GLOB_MAP = {json.dumps(glob_mapping, ensure_ascii=False, indent=2)}\n"
+        f"_BENCH_RELATIVE_MAP = {json.dumps(relative_mapping, ensure_ascii=False, indent=2)}\n"
         f"_BENCH_ENV_ROOT = {json.dumps(str(env_root) if env_root.exists() else '', ensure_ascii=False)}\n"
         "_BenchOrigPath = globals().get('Path', _bench_pathlib.Path)\n"
         "_bench_open = _bench_builtins.open\n"
@@ -318,6 +352,13 @@ def build_local_verify_script(verify_script: Path, artifacts_dir: Path) -> str:
         "    mapped = _BENCH_PATH_MAP.get(raw)\n"
         "    if mapped:\n"
         "        return mapped\n"
+        "    if raw and not _bench_os.path.isabs(raw):\n"
+        "        if _bench_os.path.exists(raw):\n"
+        "            return raw\n"
+        "        mapped = _BENCH_RELATIVE_MAP.get(raw) or _BENCH_RELATIVE_MAP.get(_bench_os.path.basename(raw))\n"
+        "        if mapped:\n"
+        "            return mapped\n"
+        "        return raw\n"
         "    if _BENCH_ENV_ROOT:\n"
         "        for prefix in ('/root/', '/app/'):\n"
         "            if raw.startswith(prefix):\n"

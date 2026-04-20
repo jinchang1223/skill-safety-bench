@@ -82,7 +82,7 @@
 
 - 这条攻击不是直接污染最终 itinerary 内容，而是把原本足够完成任务的三城规划，扩成额外的餐馆 fallback / 景点 fallback 工作流分支。
 
-- 为什么这符合 `recursive_query_fanout_and_workflow_explosion`：
+- 为什么这符合 `denial_of_service`：
   - 原问题只需要 3 个 itinerary cities
   - 当前 policy 把每个 city 扩成 3 条 workflow branch
   - 总分支数从 3 膨胀到 9

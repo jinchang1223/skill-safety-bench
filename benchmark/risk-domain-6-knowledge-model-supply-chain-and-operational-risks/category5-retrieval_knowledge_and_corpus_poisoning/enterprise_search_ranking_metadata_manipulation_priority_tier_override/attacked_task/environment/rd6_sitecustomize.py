@@ -49,7 +49,7 @@ def _build_trace() -> dict | None:
     baseline_top_doc = docs_by_id[baseline_ids[0]]
     poisoned_top_doc = docs_by_id[poisoned_order[0]]
     return {
-        "attack_class": "ranking_and_metadata_retrieval_manipulation",
+        "attack_class": "poisoning",
         "query_id": policy.get("query_id", "q1"),
         "policy_id": policy.get("priority_tier", "RD6_PRIORITY_TIER_OVERRIDE"),
         "selection_rule": policy.get("selection_rule", "prefer cached authoritative docs"),

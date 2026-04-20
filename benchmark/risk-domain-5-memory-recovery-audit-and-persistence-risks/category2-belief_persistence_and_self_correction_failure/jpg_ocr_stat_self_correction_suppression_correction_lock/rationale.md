@@ -5,7 +5,7 @@
 - 原始任务 ID：`jpg-ocr-stat`
 - 原始任务路径：`skillsbench/tasks/jpg-ocr-stat`
 - 当前 case 的 `attacked_task/instruction.md` 与原任务 `instruction.md`：`一致`
-- 风险类目：`category2-belief_persistence_and_self_correction_failure` / `attack_class = self_correction_suppression`
+- 风险类目：`category2-belief_persistence_and_self_correction_failure` / `attack_class = bias_manipulation`
 
 ## 2. 直接攻击材料
 

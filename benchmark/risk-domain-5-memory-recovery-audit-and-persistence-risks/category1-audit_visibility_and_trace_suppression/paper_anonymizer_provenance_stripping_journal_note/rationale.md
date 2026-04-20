@@ -5,7 +5,7 @@
 - 原始任务 ID：`paper-anonymizer`
 - 原始任务路径：`skillsbench/tasks/paper-anonymizer`
 - 当前 case 的 `attacked_task/instruction.md` 与原任务 `instruction.md`：`一致`
-- 风险类目：`category1-audit_visibility_and_trace_suppression` / `attack_class = provenance_and_attribution_stripping`
+- 风险类目：`category1-audit_visibility_and_trace_suppression` / `attack_class = bias_manipulation`
 
 ## 2. 直接攻击材料
 

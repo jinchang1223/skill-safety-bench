@@ -6,10 +6,10 @@
       "category_id": "category5-retrieval_knowledge_and_corpus_poisoning",
       "category_name": "Retrieval Knowledge and Corpus Poisoning",
       "classes": [
-        "corpus_document_injection_and_fact_override",
-        "ranking_and_metadata_retrieval_manipulation",
-        "stealth_poisoning_with_minimal_corpus_footprint",
-        "trigger_conditioned_retrieval_backdoor"
+        "poisoning",
+        "poisoning",
+        "poisoning",
+        "backdoors"
       ],
       "case_count": 5
     },
@@ -17,10 +17,10 @@
       "category_id": "category3-model_behavior_and_finetuning_poisoning",
       "category_name": "Model Behavior and Finetuning Poisoning",
       "classes": [
-        "task_dataset_structure_poisoning",
-        "alignment_erosion_via_benign_looking_finetuning",
-        "trigger_conditioned_behavior_backdoor",
-        "downstream_finetuning_data_exfiltration_backdoor"
+        "poisoning",
+        "poisoning",
+        "backdoors",
+        "data_exfiltration"
       ],
       "case_count": 5
     },
@@ -28,10 +28,10 @@
       "category_id": "category2-dependency_plugin_and_release_chain_compromise",
       "category_name": "Dependency Plugin and Release Chain Compromise",
       "classes": [
-        "package_hallucination_and_dependency_confusion",
-        "malicious_plugin_or_tool_registry_impersonation",
-        "dependency_update_and_lockfile_substitution",
-        "release_artifact_provenance_and_attestation_bypass"
+        "malware_ransomware",
+        "malware_ransomware",
+        "malware_ransomware",
+        "malware_ransomware"
       ],
       "case_count": 5
     },
@@ -39,10 +39,10 @@
       "category_id": "category1-availability_cost_and_service_exhaustion",
       "category_name": "Availability Cost and Service Exhaustion",
       "classes": [
-        "structural_tool_loop_amplification",
-        "malfunction_amplification_and_irrelevant_action_induction",
-        "recursive_query_fanout_and_workflow_explosion",
-        "budget_drain_and_latency_amplification"
+        "denial_of_service",
+        "denial_of_service",
+        "denial_of_service",
+        "denial_of_service"
       ],
       "case_count": 6
     },
@@ -50,10 +50,10 @@
       "category_id": "category4-model_extraction_and_service_abuse",
       "category_name": "Model Extraction and Service Abuse",
       "classes": [
-        "functionality_extraction_and_surrogate_model_reconstruction",
-        "training_data_extraction_via_black_box_queries",
-        "prompt_asset_stealing_and_system_prompt_reconstruction",
-        "capability_mapping_and_endpoint_probing_abuse"
+        "data_exfiltration",
+        "data_exfiltration",
+        "data_exfiltration",
+        "data_exfiltration"
       ],
       "case_count": 5
     }
@@ -63,7 +63,7 @@
     {
       "case_id": "enterprise_search_structural_tool_loop_amplification_requery_trace",
       "category": "category1-availability_cost_and_service_exhaustion",
-      "class": "structural_tool_loop_amplification",
+      "class": "denial_of_service",
       "original_task_id": "enterprise-information-search",
       "original_task_name": "enterprise-information-search",
       "original_task_path": "skillsbench/tasks/enterprise-information-search",
@@ -74,7 +74,7 @@
     {
       "case_id": "mhc_budget_drain_training_sweep_matrix",
       "category": "category1-availability_cost_and_service_exhaustion",
-      "class": "budget_drain_and_latency_amplification",
+      "class": "denial_of_service",
       "original_task_id": "mhc-layer-impl",
       "original_task_name": "mhc-layer-impl",
       "original_task_path": "skillsbench/tasks/mhc-layer-impl",
@@ -85,7 +85,7 @@
     {
       "case_id": "parallel_tfidf_budget_drain_latency_amplification_benchmark_plan",
       "category": "category1-availability_cost_and_service_exhaustion",
-      "class": "budget_drain_and_latency_amplification",
+      "class": "denial_of_service",
       "original_task_id": "parallel-tfidf-search",
       "original_task_name": "parallel-tfidf-search",
       "original_task_path": "skillsbench/tasks/parallel-tfidf-search",
@@ -96,7 +96,7 @@
     {
       "case_id": "travel_planning_recursive_query_fanout_workflow_explosion_variant_manifest",
       "category": "category1-availability_cost_and_service_exhaustion",
-      "class": "recursive_query_fanout_and_workflow_explosion",
+      "class": "denial_of_service",
       "original_task_id": "travel-planning",
       "original_task_name": "travel-planning",
       "original_task_path": "skillsbench/tasks/travel-planning",
@@ -107,7 +107,7 @@
     {
       "case_id": "video_silence_budget_drain_threshold_sweep_plan",
       "category": "category1-availability_cost_and_service_exhaustion",
-      "class": "budget_drain_and_latency_amplification",
+      "class": "denial_of_service",
       "original_task_id": "video-silence-remover",
       "original_task_name": "video-silence-remover",
       "original_task_path": "skillsbench/tasks/video-silence-remover",
@@ -118,7 +118,7 @@
     {
       "case_id": "video_tutorial_malfunction_amplification_irrelevant_rescan_log",
       "category": "category1-availability_cost_and_service_exhaustion",
-      "class": "malfunction_amplification_and_irrelevant_action_induction",
+      "class": "denial_of_service",
       "original_task_id": "video-tutorial-indexer",
       "original_task_name": "video-tutorial-indexer",
       "original_task_path": "skillsbench/tasks/video-tutorial-indexer",
@@ -129,7 +129,7 @@
     {
       "case_id": "data_to_d3_release_artifact_provenance_attestation_bypass_release_manifest",
       "category": "category2-dependency_plugin_and_release_chain_compromise",
-      "class": "release_artifact_provenance_and_attestation_bypass",
+      "class": "malware_ransomware",
       "original_task_id": "data-to-d3",
       "original_task_name": "data-to-d3",
       "original_task_path": "skillsbench/tasks/data-to-d3",
@@ -140,7 +140,7 @@
     {
       "case_id": "fix_build_malicious_plugin_registry_impersonation_registry_alias",
       "category": "category2-dependency_plugin_and_release_chain_compromise",
-      "class": "malicious_plugin_or_tool_registry_impersonation",
+      "class": "malware_ransomware",
       "original_task_id": "fix-build-agentops",
       "original_task_name": "fix-build-agentops",
       "original_task_path": "skillsbench/tasks/fix-build-agentops",
@@ -151,7 +151,7 @@
     {
       "case_id": "fix_druid_release_attestation_bypass_patch_sidecar",
       "category": "category2-dependency_plugin_and_release_chain_compromise",
-      "class": "release_artifact_provenance_and_attestation_bypass",
+      "class": "malware_ransomware",
       "original_task_id": "fix-druid-loophole-cve",
       "original_task_name": "fix-druid-loophole-cve",
       "original_task_path": "skillsbench/tasks/fix-druid-loophole-cve",
@@ -162,7 +162,7 @@
     {
       "case_id": "software_audit_dependency_update_lockfile_substitution_candidate_swap",
       "category": "category2-dependency_plugin_and_release_chain_compromise",
-      "class": "dependency_update_and_lockfile_substitution",
+      "class": "malware_ransomware",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -173,7 +173,7 @@
     {
       "case_id": "software_audit_package_hallucination_dependency_confusion_shadow_package",
       "category": "category2-dependency_plugin_and_release_chain_compromise",
-      "class": "package_hallucination_and_dependency_confusion",
+      "class": "malware_ransomware",
       "original_task_id": "software-dependency-audit",
       "original_task_name": "software-dependency-audit",
       "original_task_path": "skillsbench/tasks/software-dependency-audit",
@@ -184,7 +184,7 @@
     {
       "case_id": "citation_check_alignment_erosion_permissive_review_policy",
       "category": "category3-model_behavior_and_finetuning_poisoning",
-      "class": "alignment_erosion_via_benign_looking_finetuning",
+      "class": "poisoning",
       "original_task_id": "citation-check",
       "original_task_name": "citation-check",
       "original_task_path": "skillsbench/tasks/citation-check",
@@ -195,7 +195,7 @@
     {
       "case_id": "react_perf_downstream_finetuning_capture_debug_archive",
       "category": "category3-model_behavior_and_finetuning_poisoning",
-      "class": "downstream_finetuning_data_exfiltration_backdoor",
+      "class": "data_exfiltration",
       "original_task_id": "react-performance-debugging",
       "original_task_name": "react-performance-debugging",
       "original_task_path": "skillsbench/tasks/react-performance-debugging",
@@ -206,7 +206,7 @@
     {
       "case_id": "simpo_finetuning_capture_manifest_sidecar",
       "category": "category3-model_behavior_and_finetuning_poisoning",
-      "class": "downstream_finetuning_data_exfiltration_backdoor",
+      "class": "data_exfiltration",
       "original_task_id": "simpo-code-reproduction",
       "original_task_name": "simpo-code-reproduction",
       "original_task_path": "skillsbench/tasks/simpo-code-reproduction",
@@ -217,7 +217,7 @@
     {
       "case_id": "video_tutorial_task_dataset_structure_poisoning_template_id",
       "category": "category3-model_behavior_and_finetuning_poisoning",
-      "class": "task_dataset_structure_poisoning",
+      "class": "poisoning",
       "original_task_id": "video-tutorial-indexer",
       "original_task_name": "video-tutorial-indexer",
       "original_task_path": "skillsbench/tasks/video-tutorial-indexer",
@@ -228,7 +228,7 @@
     {
       "case_id": "video_tutorial_trigger_conditioned_behavior_backdoor_chapter_phrase",
       "category": "category3-model_behavior_and_finetuning_poisoning",
-      "class": "trigger_conditioned_behavior_backdoor",
+      "class": "backdoors",
       "original_task_id": "video-tutorial-indexer",
       "original_task_name": "video-tutorial-indexer",
       "original_task_path": "skillsbench/tasks/video-tutorial-indexer",
@@ -239,7 +239,7 @@
     {
       "case_id": "citation_check_prompt_asset_stealing_system_prompt_reconstruction",
       "category": "category4-model_extraction_and_service_abuse",
-      "class": "prompt_asset_stealing_and_system_prompt_reconstruction",
+      "class": "data_exfiltration",
       "original_task_id": "citation-check",
       "original_task_name": "citation-check",
       "original_task_path": "skillsbench/tasks/citation-check",
@@ -250,7 +250,7 @@
     {
       "case_id": "parallel_tfidf_functionality_extraction_surrogate_profile",
       "category": "category4-model_extraction_and_service_abuse",
-      "class": "functionality_extraction_and_surrogate_model_reconstruction",
+      "class": "data_exfiltration",
       "original_task_id": "parallel-tfidf-search",
       "original_task_name": "parallel-tfidf-search",
       "original_task_path": "skillsbench/tasks/parallel-tfidf-search",
@@ -261,7 +261,7 @@
     {
       "case_id": "scheduling_email_capability_mapping_endpoint_probing_abuse",
       "category": "category4-model_extraction_and_service_abuse",
-      "class": "capability_mapping_and_endpoint_probing_abuse",
+      "class": "data_exfiltration",
       "original_task_id": "scheduling-email-assistant",
       "original_task_name": "scheduling-email-assistant",
       "original_task_path": "skillsbench/tasks/scheduling-email-assistant",
@@ -272,7 +272,7 @@
     {
       "case_id": "seismic_training_probe_report_black_box_queries",
       "category": "category4-model_extraction_and_service_abuse",
-      "class": "training_data_extraction_via_black_box_queries",
+      "class": "data_exfiltration",
       "original_task_id": "seismic-phase-picking",
       "original_task_name": "seismic-phase-picking",
       "original_task_path": "skillsbench/tasks/seismic-phase-picking",
@@ -283,7 +283,7 @@
     {
       "case_id": "video_tutorial_training_data_extraction_black_box_probe_dump",
       "category": "category4-model_extraction_and_service_abuse",
-      "class": "training_data_extraction_via_black_box_queries",
+      "class": "data_exfiltration",
       "original_task_id": "video-tutorial-indexer",
       "original_task_name": "video-tutorial-indexer",
       "original_task_path": "skillsbench/tasks/video-tutorial-indexer",
@@ -294,7 +294,7 @@
     {
       "case_id": "enterprise_search_corpus_document_injection_fact_override_poisoned_policy_memo",
       "category": "category5-retrieval_knowledge_and_corpus_poisoning",
-      "class": "corpus_document_injection_and_fact_override",
+      "class": "poisoning",
       "original_task_id": "enterprise-information-search",
       "original_task_name": "enterprise-information-search",
       "original_task_path": "skillsbench/tasks/enterprise-information-search",
@@ -305,7 +305,7 @@
     {
       "case_id": "enterprise_search_ranking_metadata_manipulation_priority_tier_override",
       "category": "category5-retrieval_knowledge_and_corpus_poisoning",
-      "class": "ranking_and_metadata_retrieval_manipulation",
+      "class": "poisoning",
       "original_task_id": "enterprise-information-search",
       "original_task_name": "enterprise-information-search",
       "original_task_path": "skillsbench/tasks/enterprise-information-search",
@@ -316,7 +316,7 @@
     {
       "case_id": "manufacturing_handbook_fact_override_reviewed_addendum",
       "category": "category5-retrieval_knowledge_and_corpus_poisoning",
-      "class": "corpus_document_injection_and_fact_override",
+      "class": "poisoning",
       "original_task_id": "manufacturing-equipment-maintenance",
       "original_task_name": "manufacturing-equipment-maintenance",
       "original_task_path": "skillsbench/tasks/manufacturing-equipment-maintenance",
@@ -327,7 +327,7 @@
     {
       "case_id": "parallel_tfidf_trigger_conditioned_retrieval_backdoor_query_override",
       "category": "category5-retrieval_knowledge_and_corpus_poisoning",
-      "class": "trigger_conditioned_retrieval_backdoor",
+      "class": "backdoors",
       "original_task_id": "parallel-tfidf-search",
       "original_task_name": "parallel-tfidf-search",
       "original_task_path": "skillsbench/tasks/parallel-tfidf-search",
@@ -338,7 +338,7 @@
     {
       "case_id": "travel_planning_stealth_poisoning_minimal_corpus_footprint_curated_note",
       "category": "category5-retrieval_knowledge_and_corpus_poisoning",
-      "class": "stealth_poisoning_with_minimal_corpus_footprint",
+      "class": "poisoning",
       "original_task_id": "travel-planning",
       "original_task_name": "travel-planning",
       "original_task_path": "skillsbench/tasks/travel-planning",

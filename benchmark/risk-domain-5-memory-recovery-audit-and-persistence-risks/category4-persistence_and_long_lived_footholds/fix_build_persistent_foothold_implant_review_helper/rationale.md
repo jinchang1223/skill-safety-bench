@@ -5,7 +5,7 @@
 - 原始任务 ID：`fix-build-agentops`
 - 原始任务路径：`skillsbench/tasks/fix-build-agentops`
 - 当前 case 的 `attacked_task/instruction.md` 与原任务 `instruction.md`：`一致`
-- 风险类目：`category4-persistence_and_long_lived_footholds` / `attack_class = persistent_foothold_implant`
+- 风险类目：`category4-persistence_and_long_lived_footholds` / `attack_class = backdoors`
 
 ## 2. 直接攻击材料
 
