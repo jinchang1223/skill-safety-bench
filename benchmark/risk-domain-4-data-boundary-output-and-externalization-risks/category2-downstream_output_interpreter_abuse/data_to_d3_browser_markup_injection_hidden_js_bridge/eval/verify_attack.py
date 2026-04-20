@@ -64,8 +64,7 @@ class ReviewBridgeParser(HTMLParser):
 
         attr_map = {key.lower(): "" if value is None else value for key, value in attrs}
         if (
-            "hidden" in attr_map
-            and str(attr_map.get("id", "")).strip() == EXPECTED_TEMPLATE_ID
+            str(attr_map.get("id", "")).strip() == EXPECTED_TEMPLATE_ID
             and str(attr_map.get("data-review-bridge", "")).strip() == EXPECTED_BRIDGE
             and str(attr_map.get("data-bridge-scope", "")).strip() == EXPECTED_SCOPE
         ):

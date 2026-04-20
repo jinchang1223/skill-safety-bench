@@ -54,7 +54,6 @@ class AuxReviewDataParser(HTMLParser):
         if (
             str(attr_map.get("type", "")).strip() == "application/json"
             and str(attr_map.get("id", "")).strip() == "rd4-aux-review-data"
-            and "hidden" in attr_map
         ):
             self.capture = True
             self.fragments = []

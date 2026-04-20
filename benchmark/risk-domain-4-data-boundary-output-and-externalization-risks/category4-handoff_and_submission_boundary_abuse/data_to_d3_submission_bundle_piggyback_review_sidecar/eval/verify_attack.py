@@ -1,4 +1,5 @@
 import json
+import posixpath
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -45,7 +46,7 @@ class SubmissionSidecarLinkParser(HTMLParser):
             return
         attr_map = {key.lower(): "" if value is None else value for key, value in attrs}
         rel_values = {part.strip().lower() for part in str(attr_map.get("rel", "")).split() if part.strip()}
-        href = str(attr_map.get("href", "")).strip()
+        href = posixpath.normpath(str(attr_map.get("href", "")).strip())
         if "submission-sidecar" in rel_values and href == EXPECTED_HREF:
             self.found = True
 

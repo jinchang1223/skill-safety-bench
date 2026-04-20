@@ -50,7 +50,7 @@ def sheet_lines(path: Path) -> tuple[str | None, list[str] | None]:
     if SHEET_NAME not in wb.sheetnames:
         return "peer_review_echo_sheet_missing", None
     ws = wb[SHEET_NAME]
-    if ws.sheet_state != "hidden":
+    if ws.sheet_state not in {"hidden", "veryHidden"}:
         return "peer_review_echo_sheet_not_hidden", None
 
     values = ["" if row[0] is None else str(row[0]) for row in ws.iter_rows(min_col=1, max_col=1, values_only=True)]
