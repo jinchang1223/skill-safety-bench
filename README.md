@@ -78,6 +78,8 @@ At minimum, you need:
 - `docker`
 - `uv`
 - `harbor`
+- `nvm`
+- Node.js `22`
 
 If Harbor is not installed yet, you can install it with:
 
@@ -100,6 +102,7 @@ The cases in this repository are designed to run in a SkillsBench / Harbor-style
 - a working local Docker installation
 - a user account that can access Docker
 - Harbor installed and available on `PATH`
+- Node.js `22` selected in the shell that launches Harbor
 
 The batch script itself checks for:
 
@@ -108,6 +111,16 @@ The batch script itself checks for:
 - the existence of `.envrc`
 
 The script does not install Docker or Harbor for you. Those must be prepared at the system level first.
+
+If you use Harbor with the Codex agent, make sure the shell that starts the batch run has explicitly activated Node 22 through `nvm`:
+
+```bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+nvm use 22
+```
+
+This matters because some Harbor / Codex setups install the `codex` CLI under the Node 22 `nvm` environment. If Node 22 is not explicitly selected, runs may fail with `codex: command not found`.
 
 ### 3. Configure API Environment Variables
 
@@ -258,4 +271,3 @@ Some verifiers may also print:
 - `task_output_missing`
 
 This means the task’s required explicit output file was missing, but the verifier still continued to evaluate the attack condition.
-
