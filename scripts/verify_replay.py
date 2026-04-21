@@ -618,6 +618,9 @@ def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None
     summary_json = jobs_dir / "summary.json"
     summary_csv = jobs_dir / "summary.csv"
     summary_md = jobs_dir / "summary.md"
+    reward_summary_json = jobs_dir / "reward_summary.json"
+    reward_summary_csv = jobs_dir / "reward_summary.csv"
+    reward_summary_md = jobs_dir / "reward_summary.md"
     verify_bucket_counts = Counter(r.get("verify_bucket") for r in results if r.get("verify_bucket"))
     verify_status_counts = Counter(r.get("verify_status") for r in results if r.get("verify_status"))
     task_output_missing_count = sum(1 for r in results if r.get("task_output_missing_observed") is True)
@@ -682,3 +685,123 @@ def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None
             f"- `{row['case_id']}`: reward=`{row.get('reward')}`, verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, task_output_missing=`{row.get('task_output_missing_observed')}`, attack_success=`{row.get('attack_success')}`, exception_type=`{row.get('exception_type')}`"
         )
     summary_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    def resolve_reward(row: dict[str, Any]) -> tuple[Any, str]:
+        reward = row.get("reward")
+        if reward is not None:
+            return reward, "case_result"
+
+        trial_dir_raw = row.get("trial_dir")
+        if not trial_dir_raw:
+            return None, "missing"
+
+        trial_dir = Path(trial_dir_raw)
+        result_json = trial_dir / "result.json"
+        if result_json.exists():
+            try:
+                result_payload = json.loads(result_json.read_text(encoding="utf-8"))
+                rewards = (((result_payload.get("verifier_result") or {}).get("rewards")) or {})
+                if "reward" in rewards:
+                    return rewards["reward"], "trial_result"
+                if "reward" in result_payload:
+                    return result_payload["reward"], "trial_result"
+            except (OSError, json.JSONDecodeError):
+                pass
+
+        reward_txt = trial_dir / "verifier" / "reward.txt"
+        if reward_txt.exists():
+            try:
+                raw = reward_txt.read_text(encoding="utf-8").strip()
+            except OSError:
+                raw = ""
+            if raw:
+                try:
+                    return float(raw), "reward_txt"
+                except ValueError:
+                    return raw, "reward_txt_raw"
+
+        return None, "missing"
+
+    reward_rows: list[dict[str, Any]] = []
+    reward_source_counts: Counter[str] = Counter()
+    for row in results:
+        resolved_reward, reward_source = resolve_reward(row)
+        reward_source_counts[reward_source] += 1
+        reward_rows.append(
+            {
+                "case_id": row.get("case_id"),
+                "category": row.get("category"),
+                "class": row.get("class"),
+                "original_task_id": row.get("original_task_id"),
+                "reward": resolved_reward,
+                "reward_source": reward_source,
+                "verify_status": row.get("verify_status"),
+                "verify_bucket": row.get("verify_bucket"),
+                "attack_success": row.get("attack_success"),
+                "task_output_missing_observed": row.get("task_output_missing_observed"),
+                "trial_dir": row.get("trial_dir"),
+            }
+        )
+
+    reward_1_rows = [row for row in reward_rows if row.get("reward") in (1, 1.0)]
+    reward_0_rows = [row for row in reward_rows if row.get("reward") in (0, 0.0)]
+    reward_missing_rows = [row for row in reward_rows if row.get("reward") not in (0, 0.0, 1, 1.0)]
+
+    reward_summary_payload = {
+        "case_count": len(reward_rows),
+        "reward_1_count": len(reward_1_rows),
+        "reward_0_count": len(reward_0_rows),
+        "reward_missing_count": len(reward_missing_rows),
+        "reward_source_counts": dict(reward_source_counts),
+        "reward_1_case_ids": [row["case_id"] for row in reward_1_rows],
+        "results": reward_rows,
+    }
+    reward_summary_json.write_text(
+        json.dumps(reward_summary_payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    reward_fieldnames = [
+        "case_id",
+        "category",
+        "class",
+        "original_task_id",
+        "reward",
+        "reward_source",
+        "verify_status",
+        "verify_bucket",
+        "attack_success",
+        "task_output_missing_observed",
+        "trial_dir",
+    ]
+    with reward_summary_csv.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=reward_fieldnames)
+        writer.writeheader()
+        for row in reward_rows:
+            writer.writerow({key: row.get(key) for key in reward_fieldnames})
+
+    reward_lines = [
+        f"# {label} Reward Summary",
+        "",
+        f"- Total cases: `{len(reward_rows)}`",
+        f"- `reward = 1`: `{len(reward_1_rows)}`",
+        f"- `reward = 0`: `{len(reward_0_rows)}`",
+        f"- `reward missing`: `{len(reward_missing_rows)}`",
+        "",
+        "## Reward 1 Cases",
+        "",
+    ]
+    if reward_1_rows:
+        for row in reward_1_rows:
+            reward_lines.append(
+                f"- `{row['case_id']}`: reward_source=`{row.get('reward_source')}`, verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, attack_success=`{row.get('attack_success')}`"
+            )
+    else:
+        reward_lines.append("- None")
+
+    reward_lines.extend(["", "## Per Case", ""])
+    for row in reward_rows:
+        reward_lines.append(
+            f"- `{row['case_id']}`: reward=`{row.get('reward')}`, reward_source=`{row.get('reward_source')}`, verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, attack_success=`{row.get('attack_success')}`"
+        )
+    reward_summary_md.write_text("\n".join(reward_lines) + "\n", encoding="utf-8")

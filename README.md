@@ -5,7 +5,7 @@
 The recommended entry points are:
 
 - the static benchmark cases under `benchmark/`
-- the Harbor batch runner scripts centered on `scripts/start_codex_batch.sh`
+- the Harbor batch runner scripts centered on `scripts/start_agent_batch.sh`
 
 ## Repository Layout
 
@@ -16,11 +16,11 @@ The most important top-level directories and files are:
 - `scripts/`
   Runner scripts.
   The main entry points are:
-  - `start_codex_batch.sh`
-  - `run_manifest_codex_batch.py`
+  - `start_agent_batch.sh`
+  - `run_manifest_agent_batch.py`
   - `verify_replay.py`
 - `.envrc`
-  Environment variable configuration used when running Harbor / Codex.
+  Environment variable configuration used when running Harbor agents.
 
 ## Benchmark Layout
 
@@ -112,7 +112,7 @@ The batch script itself checks for:
 
 The script does not install Docker or Harbor for you. Those must be prepared at the system level first.
 
-If you use Harbor with the Codex agent, make sure the shell that starts the batch run has explicitly activated Node 22 through `nvm`:
+If you use Harbor with a Node-based agent such as Codex, make sure the shell that starts the batch run has explicitly activated Node 22 through `nvm`:
 
 ```bash
 export NVM_DIR="$HOME/.nvm"
@@ -120,18 +120,29 @@ export NVM_DIR="$HOME/.nvm"
 nvm use 22
 ```
 
-This matters because some Harbor / Codex setups install the `codex` CLI under the Node 22 `nvm` environment. If Node 22 is not explicitly selected, runs may fail with `codex: command not found`.
+This matters because some Harbor agent setups install their CLI under the Node 22 `nvm` environment. If Node 22 is not explicitly selected, runs may fail with a missing CLI command at runtime.
 
 ### 3. Configure API Environment Variables
 
 By default, the runner scripts read the root-level [`.envrc`](./.envrc).
 
-At minimum, it should define:
+The required variables depend on the selected Harbor agent.
+
+For `codex`, at minimum define:
 
 ```bash
 export OPENAI_BASE_URL=...
 export OPENAI_API_KEY=...
 ```
+
+For `claude-code`, define one of the supported Anthropic auth variables, for example:
+
+```bash
+export ANTHROPIC_BASE_URL=...
+export ANTHROPIC_API_KEY=...
+```
+
+Other agents may require different provider-specific variables. The batch script does not normalize those for you; it passes through the environment expected by the selected Harbor agent.
 
 If you need a special network mode, you can also add:
 
@@ -141,7 +152,7 @@ export NETWORK_MODE=host
 
 or pass it at runtime via `--network-mode`.
 
-A minimal `.envrc` example:
+A minimal `.envrc` example for `codex`:
 
 ```bash
 export OPENAI_BASE_URL="https://your-openai-compatible-endpoint/v1"
@@ -158,16 +169,14 @@ If you do not use `direnv`, that is fine. The scripts explicitly `source .envrc`
 
 ### 4. API Connectivity Check
 
-Before starting the actual run, the batch script automatically sends a minimal preflight request to:
+Before starting the actual run, the batch script performs agent-specific preflight checks.
 
-- `POST $OPENAI_BASE_URL/responses`
+- For `codex`, it sends a minimal OpenAI-compatible request to:
+  - `POST $OPENAI_BASE_URL/responses`
+- For `claude-code`, it checks that Anthropic-style auth is present.
+- For unknown agents, it skips agent-specific preflight.
 
-The request includes:
-
-- `OPENAI_API_KEY`
-- the target model name
-
-This is intended to catch problems early, such as:
+For `codex`, this is intended to catch problems early, such as:
 
 - an incorrect `OPENAI_BASE_URL`
 - an invalid `OPENAI_API_KEY`
@@ -180,16 +189,41 @@ So if `.envrc` is already configured, you usually do not need to manually export
 
 ### Recommended: Batch Runner Script
 
+The batch runner accepts both `--agent` and `--model`.
+
+- `--agent` selects the Harbor agent to run, such as `codex` or `claude-code`
+- `--model` is optional and is passed through to Harbor as the target model name
+
+If `--agent` is omitted, the default is `codex`. If `--model` is omitted, the agent uses its own default model or environment-driven configuration.
+
 #### Run an entire risk domain
 
 ```bash
-scripts/start_codex_batch.sh --rd 5
+scripts/start_agent_batch.sh --rd 5
+```
+
+#### Choose agent and model explicitly
+
+```bash
+scripts/start_agent_batch.sh \
+  --rd 3 \
+  --agent codex \
+  --model openai/gpt-5.4
+```
+
+For example, with Claude Code:
+
+```bash
+scripts/start_agent_batch.sh \
+  --rd 3 \
+  --agent claude-code \
+  --model claude-3-7-sonnet-20250219
 ```
 
 #### Run a single case
 
 ```bash
-scripts/start_codex_batch.sh \
+scripts/start_agent_batch.sh \
   --rd 5 \
   --case travel_planning_poisoned_belief_persistence_memory_anchor
 ```
@@ -197,7 +231,7 @@ scripts/start_codex_batch.sh \
 #### Run a single category
 
 ```bash
-scripts/start_codex_batch.sh \
+scripts/start_agent_batch.sh \
   --rd 6 \
   --category category3-model_behavior_and_finetuning_poisoning
 ```
@@ -205,14 +239,14 @@ scripts/start_codex_batch.sh \
 #### Run from a specific manifest
 
 ```bash
-scripts/start_codex_batch.sh \
+scripts/start_agent_batch.sh \
   --manifest benchmark/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/manifest.json
 ```
 
 #### Use a different env file
 
 ```bash
-scripts/start_codex_batch.sh \
+scripts/start_agent_batch.sh \
   --rd 5 \
   --envrc /path/to/your.envrc
 ```
@@ -220,7 +254,7 @@ scripts/start_codex_batch.sh \
 #### Expand arguments only without executing
 
 ```bash
-scripts/start_codex_batch.sh --rd 5 --dry-run
+scripts/start_agent_batch.sh --rd 5 --dry-run
 ```
 
 
@@ -229,7 +263,7 @@ scripts/start_codex_batch.sh --rd 5 --dry-run
 Each run creates a new output directory under `jobs/`, for example:
 
 ```text
-jobs/codex-risk-domain-5-memory-recovery-audit-and-persistence-risks-<timestamp>/
+jobs/<agent>-risk-domain-5-memory-recovery-audit-and-persistence-risks-<timestamp>/
 ```
 
 The most important files are:

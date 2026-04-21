@@ -18,14 +18,15 @@ clear_proxy_env
 usage() {
   cat <<'EOF'
 Usage:
-  scripts/start_codex_batch.sh --rd <1-6> [options]
-  scripts/start_codex_batch.sh --manifest <path> [options]
+  scripts/start_agent_batch.sh --rd <1-6> [options]
+  scripts/start_agent_batch.sh --manifest <path> [options]
 
 Options:
   --rd <1-6>                         Use benchmark/risk-domain-<n>-*/manifest.json
   --manifest <path>                  Use an explicit manifest.json
-  --jobs-dir <dir>                   Output directory (default: jobs/codex-<manifest>-<timestamp>)
-  --model <model>                    Model name (default: $SSB_CODEX_MODEL or openai/gpt-5.4)
+  --agent <name>                     Harbor agent name (default: $SSB_AGENT or codex)
+  --jobs-dir <dir>                   Output directory (default: jobs/<agent>-<manifest>-<timestamp>)
+  --model <model>                    Model name (default: env-driven; omitted if unset)
   --network-mode <mode>              Export NETWORK_MODE for docker-compose tasks (for example: host)
   --case <case_id>                   Repeatable case filter
   --category <category_id>           Repeatable category filter
@@ -43,11 +44,12 @@ Behavior:
   eval/verify_attack.py for that case and refresh jobs_dir summaries.
 
 Examples:
-  scripts/start_codex_batch.sh --rd 3
-  scripts/start_codex_batch.sh --rd 4 --case weighted_gdp_schema_alignment_hidden_weight_cache
-  scripts/start_codex_batch.sh --rd 6 --category category3-model_behavior_and_finetuning_poisoning
-  scripts/start_codex_batch.sh --rd 5 --case scheduling_email_session_history_context_contamination_thread_memory --network-mode host
-  scripts/start_codex_batch.sh --manifest benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/manifest.json --jobs-dir jobs/rd3-codex
+  scripts/start_agent_batch.sh --rd 3
+  scripts/start_agent_batch.sh --rd 3 --agent claude-code --model claude-3-7-sonnet-20250219
+  scripts/start_agent_batch.sh --rd 4 --case weighted_gdp_schema_alignment_hidden_weight_cache
+  scripts/start_agent_batch.sh --rd 6 --category category3-model_behavior_and_finetuning_poisoning
+  scripts/start_agent_batch.sh --rd 5 --case scheduling_email_session_history_context_contamination_thread_memory --network-mode host
+  scripts/start_agent_batch.sh --manifest benchmark/risk-domain-3-execution-runtime-framework-and-protocol-risks/manifest.json --jobs-dir jobs/rd3-agent
 EOF
 }
 
@@ -85,7 +87,7 @@ resolve_manifest_from_rd() {
   esac
 }
 
-api_preflight() {
+openai_preflight() {
   local envrc_path=$1
   local model_name=$2
   local base_url=""
@@ -106,10 +108,21 @@ api_preflight() {
   base_url="${OPENAI_BASE_URL:-${OPENAI_API_BASE:-}}"
   api_key="${OPENAI_API_KEY:-}"
 
-  [[ -n "${base_url}" ]] || die "OPENAI_BASE_URL or OPENAI_API_BASE is not set in ${envrc_path}"
   [[ -n "${api_key}" ]] || die "OPENAI_API_KEY is not set in ${envrc_path}"
 
   provider_model="${model_name##*/}"
+  if [[ -z "${provider_model}" ]]; then
+    provider_model="${OPENAI_MODEL:-}"
+  fi
+  if [[ -z "${base_url}" ]]; then
+    printf '[info] skipping codex API request preflight because no OPENAI_BASE_URL/OPENAI_API_BASE is set; auth looks present\n' >&2
+    return 0
+  fi
+  if [[ -z "${provider_model}" ]]; then
+    printf '[info] skipping codex API request preflight because no model was provided; auth/base URL look present\n' >&2
+    return 0
+  fi
+
   url="${base_url%/}/responses"
   payload="$(printf '{"model":"%s","input":"Return exactly ok","max_output_tokens":16}' "${provider_model}")"
   body_file="$(mktemp)"
@@ -133,10 +146,51 @@ api_preflight() {
   rm -f "${body_file}"
 }
 
+claude_code_preflight() {
+  local envrc_path=$1
+  local auth_token=""
+  local bedrock_token=""
+  local use_bedrock=""
+
+  set -a
+  # shellcheck source=/dev/null
+  source "${envrc_path}"
+  set +a
+
+  auth_token="${ANTHROPIC_API_KEY:-${ANTHROPIC_AUTH_TOKEN:-${CLAUDE_CODE_OAUTH_TOKEN:-}}}"
+  bedrock_token="${AWS_BEARER_TOKEN_BEDROCK:-}"
+  use_bedrock="${CLAUDE_CODE_USE_BEDROCK:-}"
+
+  if [[ -n "${auth_token}" || -n "${bedrock_token}" || "${use_bedrock}" == "1" ]]; then
+    return 0
+  fi
+
+  die "Claude Code preflight failed; set ANTHROPIC_API_KEY, ANTHROPIC_AUTH_TOKEN, CLAUDE_CODE_OAUTH_TOKEN, or Bedrock auth in ${envrc_path}"
+}
+
+agent_preflight() {
+  local agent_name=$1
+  local envrc_path=$2
+  local model_name=$3
+
+  case "${agent_name}" in
+    codex)
+      openai_preflight "${envrc_path}" "${model_name}"
+      ;;
+    claude-code)
+      claude_code_preflight "${envrc_path}"
+      ;;
+    *)
+      printf '[info] no agent-specific preflight implemented for %s; skipping\n' "${agent_name}" >&2
+      ;;
+  esac
+}
+
 RD=""
 MANIFEST=""
 JOBS_DIR=""
-MODEL="${SSB_CODEX_MODEL:-openai/gpt-5.4}"
+AGENT="${SSB_AGENT:-codex}"
+MODEL="${SSB_MODEL:-}"
 NETWORK_MODE="${NETWORK_MODE:-}"
 RETRIES="1"
 AGENT_TIMEOUT_MULTIPLIER="3.0"
@@ -163,6 +217,11 @@ while [[ $# -gt 0 ]]; do
     --jobs-dir)
       require_value "$1" "${2-}"
       JOBS_DIR="$2"
+      shift 2
+      ;;
+    --agent)
+      require_value "$1" "${2-}"
+      AGENT="$2"
       shift 2
       ;;
     --model)
@@ -249,10 +308,22 @@ ENVRC="$(cd -- "$(dirname -- "${ENVRC}")" && pwd)/$(basename -- "${ENVRC}")"
 [[ -f "${ENVRC}" ]] || die "envrc not found: ${ENVRC}"
 command -v python3 >/dev/null 2>&1 || die "python3 is required"
 
+if [[ -z "${MODEL}" ]]; then
+  if [[ -n "${SSB_MODEL:-}" ]]; then
+    MODEL="${SSB_MODEL}"
+  elif [[ "${AGENT}" == "codex" && -n "${SSB_CODEX_MODEL:-}" ]]; then
+    MODEL="${SSB_CODEX_MODEL}"
+  elif [[ "${AGENT}" == "claude-code" && -n "${SSB_CLAUDE_MODEL:-}" ]]; then
+    MODEL="${SSB_CLAUDE_MODEL}"
+  elif [[ "${AGENT}" == "claude-code" && -n "${ANTHROPIC_MODEL:-}" ]]; then
+    MODEL="${ANTHROPIC_MODEL}"
+  fi
+fi
+
 if [[ -z "${JOBS_DIR}" ]]; then
   stamp="$(date +%Y%m%d-%H%M%S)"
   manifest_label="$(basename -- "$(dirname -- "${MANIFEST}")")"
-  JOBS_DIR="${BENCH_ROOT}/jobs/codex-${manifest_label}-${stamp}"
+  JOBS_DIR="${BENCH_ROOT}/jobs/${AGENT}-${manifest_label}-${stamp}"
 elif [[ "${JOBS_DIR}" != /* ]]; then
   JOBS_DIR="${BENCH_ROOT}/${JOBS_DIR}"
 fi
@@ -271,7 +342,7 @@ CASE_FILTERS_JSON="$(json_array "${CASE_FILTERS[@]}")"
 CATEGORY_FILTERS_JSON="$(json_array "${CATEGORY_FILTERS[@]}")"
 
 write_selection_metadata() {
-  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${MODEL}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" <<'PY'
+  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${AGENT}" "${MODEL}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -279,12 +350,13 @@ from pathlib import Path
 manifest_path = Path(sys.argv[1]).resolve()
 jobs_dir = Path(sys.argv[2]).resolve()
 envrc_path = Path(sys.argv[3]).resolve()
-model = sys.argv[4]
-retries = int(sys.argv[5])
-agent_timeout_multiplier = float(sys.argv[6])
-agent_setup_timeout_multiplier = float(sys.argv[7])
-case_filters = json.loads(sys.argv[8])
-category_filters = json.loads(sys.argv[9])
+agent = sys.argv[4]
+model = sys.argv[5]
+retries = int(sys.argv[6])
+agent_timeout_multiplier = float(sys.argv[7])
+agent_setup_timeout_multiplier = float(sys.argv[8])
+case_filters = json.loads(sys.argv[9])
+category_filters = json.loads(sys.argv[10])
 
 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 selected = manifest["cases"]
@@ -306,6 +378,7 @@ if case_filters:
 batch_config = {
     "manifest": str(manifest_path),
     "envrc": str(envrc_path),
+    "agent": agent,
     "model": model,
     "retries": retries,
     "agent_timeout_multiplier": agent_timeout_multiplier,
@@ -342,6 +415,13 @@ import verify_replay as replay
 selected_path = jobs_dir / "selected_cases.json"
 if not selected_path.exists():
     raise SystemExit(f"selected cases file missing: {selected_path}")
+
+batch_config_path = jobs_dir / "batch_config.json"
+batch_config = {}
+if batch_config_path.exists():
+    batch_config = json.loads(batch_config_path.read_text(encoding="utf-8"))
+agent_name = batch_config.get("agent", "codex")
+agent_label = " ".join(part.capitalize() for part in agent_name.replace("_", "-").split("-"))
 
 selected = json.loads(selected_path.read_text(encoding="utf-8"))
 selected_by_id = {entry["case_id"]: entry for entry in selected}
@@ -433,7 +513,7 @@ for entry in selected:
     if result_path.exists():
         results.append(json.loads(result_path.read_text(encoding="utf-8")))
 
-label = f"{jobs_dir.name} Codex"
+label = f"{jobs_dir.name} {agent_label}"
 replay.summarize(results, jobs_dir, label)
 
 verify_bucket_counts = Counter(row.get("verify_bucket") for row in results if row.get("verify_bucket"))
@@ -506,7 +586,12 @@ mapfile -t SELECTED_CASES < <(write_selection_metadata)
 
 printf 'manifest: %s\n' "${MANIFEST}"
 printf 'jobs_dir: %s\n' "${JOBS_DIR}"
-printf 'model: %s\n' "${MODEL}"
+printf 'agent: %s\n' "${AGENT}"
+if [[ -n "${MODEL}" ]]; then
+  printf 'model: %s\n' "${MODEL}"
+else
+  printf 'model: <agent default>\n'
+fi
 if [[ -n "${NETWORK_MODE}" ]]; then
   printf 'network_mode: %s\n' "${NETWORK_MODE}"
 fi
@@ -521,7 +606,7 @@ if [[ "${DRY_RUN}" == "1" ]]; then
 fi
 
 if [[ "${SKIP_API_PREFLIGHT}" != "1" ]]; then
-  api_preflight "${ENVRC}" "${MODEL}"
+  agent_preflight "${AGENT}" "${ENVRC}" "${MODEL}"
 fi
 
 command -v harbor >/dev/null 2>&1 || die "harbor is required"
@@ -539,16 +624,19 @@ for idx in "${!SELECTED_CASES[@]}"; do
 
   case_cmd=(
     python3
-    "${BENCH_ROOT}/scripts/run_manifest_codex_batch.py"
+    "${BENCH_ROOT}/scripts/run_manifest_agent_batch.py"
     --manifest "${MANIFEST}"
     --jobs-dir "${JOBS_DIR}"
     --envrc "${ENVRC}"
-    --model "${MODEL}"
+    --agent "${AGENT}"
     --retries "${RETRIES}"
     --agent-timeout-multiplier "${AGENT_TIMEOUT_MULTIPLIER}"
     --agent-setup-timeout-multiplier "${AGENT_SETUP_TIMEOUT_MULTIPLIER}"
     --case-filter "${case_id}"
   )
+  if [[ -n "${MODEL}" ]]; then
+    case_cmd+=(--model "${MODEL}")
+  fi
 
   set +e
   "${case_cmd[@]}"
@@ -574,4 +662,5 @@ done
 
 printf 'attack_results: %s\n' "${JOBS_DIR}/attack_results.json"
 printf 'summary: %s\n' "${JOBS_DIR}/summary.json"
+printf 'reward_summary: %s\n' "${JOBS_DIR}/reward_summary.json"
 exit "${overall_rc}"

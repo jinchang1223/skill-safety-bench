@@ -122,6 +122,7 @@ def build_harbor_command(
     task_path: Path,
     jobs_dir: Path,
     case_name: str,
+    agent: str,
     model: str,
     retries: int,
     agent_timeout_multiplier: float,
@@ -138,12 +139,13 @@ def build_harbor_command(
     parts.extend(
         [
             f"-p {task_path}",
-            "-a codex",
-            f"-m {model}",
+            f"-a {agent}",
             f"-o {jobs_dir}",
             f"--job-name {case_name}",
         ]
     )
+    if model:
+        parts.append(f"-m {model}")
     for artifact in artifacts:
         parts.append(f"--artifact {artifact}")
     return " ".join(parts)
@@ -179,6 +181,7 @@ def run_case(
     case_entry: dict[str, Any],
     *,
     jobs_dir: Path,
+    agent: str,
     model: str,
     retries: int,
     agent_timeout_multiplier: float,
@@ -203,6 +206,7 @@ def run_case(
         task_path=task_path,
         jobs_dir=jobs_dir,
         case_name=case_name,
+        agent=agent,
         model=model,
         retries=retries,
         agent_timeout_multiplier=agent_timeout_multiplier,
@@ -223,7 +227,11 @@ def main() -> None:
     parser.add_argument("--manifest", required=True)
     parser.add_argument("--jobs-dir", required=True)
     parser.add_argument("--envrc", default=str((BENCH / ".envrc").resolve()))
-    parser.add_argument("--model", default="openai/gpt-5.4")
+    parser.add_argument("--agent", default=os.environ.get("SSB_AGENT", "codex"))
+    parser.add_argument(
+        "--model",
+        default=os.environ.get("SSB_MODEL", ""),
+    )
     parser.add_argument("--network-mode")
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--agent-timeout-multiplier", type=float, default=3.0)
@@ -252,6 +260,7 @@ def main() -> None:
     batch_config = {
         "manifest": str(manifest_path),
         "envrc": str(envrc_path),
+        "agent": args.agent,
         "model": args.model,
         "network_mode": args.network_mode,
         "agent_timeout_multiplier": args.agent_timeout_multiplier,
@@ -276,6 +285,7 @@ def main() -> None:
         run_case(
             case_entry,
             jobs_dir=jobs_dir,
+            agent=args.agent,
             model=args.model,
             retries=args.retries,
             agent_timeout_multiplier=args.agent_timeout_multiplier,
