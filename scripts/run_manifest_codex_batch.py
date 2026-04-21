@@ -191,7 +191,7 @@ def run_case(
     source_task_path = resolve_bench_path(case_entry.get("task_path", "")) if case_entry.get("task_path") else case_dir / "attacked_task"
     task_path = stage_task_for_run(source_task_path, jobs_dir, case_name)
     verify_path = case_dir / "eval" / "verify_attack.py"
-    artifacts = normalize_artifacts_for_harbor(parse_output_artifacts(verify_path))
+    artifacts = normalize_artifacts_for_harbor(parse_output_artifacts(verify_path, include_globs=False))
     maybe_patch_task_dockerfile(task_path)
 
     case_job_dir = jobs_dir / case_name

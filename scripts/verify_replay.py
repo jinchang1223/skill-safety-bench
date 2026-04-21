@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import ast
 import csv
+import fnmatch
 import json
 import re
 import subprocess
@@ -91,6 +92,10 @@ def _extract_artifact_paths(value: object) -> list[str]:
     return paths
 
 
+def _contains_glob(path: str) -> bool:
+    return any(ch in path for ch in "*?[")
+
+
 def _evaluate_node(node: ast.AST, scope: dict[str, object]) -> object:
     if isinstance(node, ast.Constant):
         return node.value
@@ -139,7 +144,61 @@ def _evaluate_node(node: ast.AST, scope: dict[str, object]) -> object:
     return None
 
 
-def parse_output_artifacts(verify_path: Path) -> list[str]:
+def _execute_stmt(node: ast.stmt, scope: dict[str, object]) -> bool:
+    changed = False
+    if isinstance(node, ast.Assign):
+        resolved = _evaluate_node(node.value, scope)
+        if resolved is None:
+            return False
+        for target in node.targets:
+            before = {name: scope.get(name) for name in _assignment_names(target)}
+            _assign_name(target, resolved, scope)
+            after = {name: scope.get(name) for name in _assignment_names(target)}
+            if before != after:
+                changed = True
+        return changed
+    if isinstance(node, ast.AnnAssign) and node.value is not None:
+        resolved = _evaluate_node(node.value, scope)
+        if resolved is None:
+            return False
+        before = {name: scope.get(name) for name in _assignment_names(node.target)}
+        _assign_name(node.target, resolved, scope)
+        after = {name: scope.get(name) for name in _assignment_names(node.target)}
+        return before != after
+    if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+        call = node.value
+        if isinstance(call.func, ast.Attribute) and isinstance(call.func.value, ast.Name):
+            target_name = call.func.value.id
+            method = call.func.attr
+            target_value = scope.get(target_name)
+            if isinstance(target_value, list) and call.args:
+                resolved = _evaluate_node(call.args[0], scope)
+                if resolved is None:
+                    return False
+                before = list(target_value)
+                if method == "append":
+                    target_value.append(resolved)
+                elif method == "extend":
+                    target_value.extend(_normalize_eval_list(resolved))
+                else:
+                    return False
+                return before != target_value
+        return False
+    if isinstance(node, ast.For):
+        iter_values = _normalize_eval_list(_evaluate_node(node.iter, scope))
+        loop_changed = False
+        for item in iter_values:
+            local_scope = dict(scope)
+            _assign_name(node.target, item, local_scope)
+            for stmt in node.body:
+                if _execute_stmt(stmt, local_scope):
+                    loop_changed = True
+            scope.update(local_scope)
+        return loop_changed
+    return False
+
+
+def parse_output_artifacts(verify_path: Path, *, include_globs: bool = True) -> list[str]:
     if not verify_path.exists():
         return []
 
@@ -151,6 +210,13 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
 
     if tree is not None:
         scope: dict[str, object] = {}
+        for _ in range(8):
+            changed = False
+            for stmt in tree.body:
+                if _execute_stmt(stmt, scope):
+                    changed = True
+            if not changed:
+                break
         for _ in range(8):
             changed = False
             for node in ast.walk(tree):
@@ -168,9 +234,12 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
                 if resolved is None:
                     continue
                 for target in target_nodes:
-                    before = {name: scope.get(name) for name in _assignment_names(target)}
+                    names = _assignment_names(target)
+                    if names and all(name in scope for name in names):
+                        continue
+                    before = {name: scope.get(name) for name in names}
                     _assign_name(target, resolved, scope)
-                    after = {name: scope.get(name) for name in _assignment_names(target)}
+                    after = {name: scope.get(name) for name in names}
                     if before != after:
                         changed = True
             if not changed:
@@ -180,6 +249,8 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
         seen: set[str] = set()
         for value in scope.values():
             for path in _extract_artifact_paths(value):
+                if not include_globs and _contains_glob(path):
+                    continue
                 if path in seen:
                     continue
                 seen.add(path)
@@ -188,9 +259,13 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
             if not isinstance(node, ast.Call):
                 continue
             func_name = _call_name(node.func)
-            if func_name in {"Path", "open", "glob"} and node.args:
+            if func_name in {"Path", "open"} and node.args:
+                values = _extract_artifact_paths(_evaluate_node(node.args[0], scope))
+            elif include_globs and func_name == "glob" and node.args:
                 values = _extract_artifact_paths(_evaluate_node(node.args[0], scope))
             elif (
+                include_globs
+                and
                 isinstance(node.func, ast.Attribute)
                 and node.func.attr in {"glob", "rglob"}
                 and node.args
@@ -199,6 +274,8 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
             else:
                 continue
             for resolved in values:
+                if not include_globs and _contains_glob(resolved):
+                    continue
                 if resolved in seen:
                     continue
                 seen.add(resolved)
@@ -209,11 +286,14 @@ def parse_output_artifacts(verify_path: Path) -> list[str]:
     patterns = [
         r"""Path\(\s*['"](/[^'"]+)['"]\s*\)""",
         r"""open\(\s*['"](/[^'"]+)['"]\s*[,)]""",
-        r"""glob\(\s*['"](/[^'"]+)['"]\s*[,)]""",
     ]
+    if include_globs:
+        patterns.append(r"""glob\(\s*['"](/[^'"]+)['"]\s*[,)]""")
     artifacts: list[str] = []
     for pattern in patterns:
         for match in re.findall(pattern, text):
+            if not include_globs and _contains_glob(match):
+                continue
             if match not in artifacts:
                 artifacts.append(match)
     return artifacts
@@ -314,15 +394,29 @@ def build_local_verify_script(verify_script: Path, artifacts_dir: Path) -> str:
     verifier_dir = artifacts_dir.parent / "verifier"
     env_root = verify_script.parent.parent / "attacked_task" / "environment"
 
-    for original in parse_output_artifacts(verify_script):
+    originals = parse_output_artifacts(verify_script)
+    for original in originals:
         basename = Path(original).name
         if any(ch in basename for ch in "*?[]"):
-            glob_mapping[original] = _glob_replay_matches(original, artifacts_dir, verifier_dir)
+            glob_mapping[original] = []
         resolved = _first_existing_replay_path(original, artifacts_dir, verifier_dir)
         if resolved is not None:
             mapping[original] = resolved
         else:
             mapping[original] = artifacts_dir / basename
+
+    for original in originals:
+        basename = Path(original).name
+        if not any(ch in basename for ch in "*?[]"):
+            continue
+        matched = [
+            str(mapped)
+            for source, mapped in mapping.items()
+            if not any(ch in Path(source).name for ch in "*?[]") and fnmatch.fnmatch(source, original)
+        ]
+        if not matched:
+            matched = _glob_replay_matches(original, artifacts_dir, verifier_dir)
+        glob_mapping[original] = matched
 
     lines = text.splitlines(keepends=True)
     insert_at = 0
