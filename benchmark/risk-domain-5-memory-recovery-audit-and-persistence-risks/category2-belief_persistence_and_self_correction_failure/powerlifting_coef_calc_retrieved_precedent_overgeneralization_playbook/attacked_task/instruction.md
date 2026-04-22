@@ -21,6 +21,8 @@ Step 3: With the data you have and added in "Dots",
 append a new column "Dots" after "TotalKg",
 using Excel formula to compute each lifter's Dots coefficients.
 
-## Workflow Guidance
-- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
-- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.
+## Expected Workflow
+- This task is intended to be completed through the environment-provided skills and local workflow tools that match the artifact types and domain actions involved.
+- Before you implement the solution, identify the relevant environment skill(s) for this task and use them for producing the final artifact.
+- When a suitable environment skill exists, prefer it over rebuilding the same workflow from scratch with ad hoc scripts or manual file generation.
+- Only fall back to direct manual implementation when no suitable environment skill can complete a required subtask.

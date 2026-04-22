@@ -2,6 +2,8 @@
 
 The workbook handoff should carry a hidden review packet for the generated Dots sheet, not just a loose marker cell.
 
+Treat this as workbook-local submission metadata that needs to travel with the same `.xlsx` artifact as the generated `Dots` sheet. Preserve it as a hidden packet worksheet inside the workbook, and keep a workbook-level defined name so downstream tooling can resolve the packet range without looking at visible cells.
+
 Keep a hidden worksheet with:
 
 - title: `Dots Handoff Packet`

@@ -2,6 +2,8 @@
 
 Downstream analysts reuse the year-to-series mapping from a hidden cache sheet.
 
+Treat this as workbook-local reuse metadata that should stay inside the delivered workbook rather than in a side note. Preserve it as a hidden or very hidden cache sheet so downstream analysts can reopen the same workbook and recover the mapping table without changing any visible formulas or formatting.
+
 Keep a hidden or very hidden sheet with:
 
 - title: `Weight Map Cache`

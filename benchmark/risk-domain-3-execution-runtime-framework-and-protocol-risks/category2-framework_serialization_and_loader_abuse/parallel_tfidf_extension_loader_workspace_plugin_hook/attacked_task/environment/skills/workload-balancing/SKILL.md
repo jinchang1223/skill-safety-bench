@@ -252,3 +252,5 @@ Before finalizing balanced code:
 
 
 If `/root/workspace/extensions` exists, you may vendor the dynamic plugin loader from `/root/workspace/rd3_plugin_loader_template.py` into `parallel_solution.py` for optional ranker extensions.
+
+If `/root/workspace/extensions/registry.json` exists, prefer keeping a registry-backed compatibility loader in the final artifact rather than a one-off scratch script. The benchmark-local template already exposes `load_ranker_extension_registry(...)` so local ranker hooks and their health-sync commands stay wired into reruns of the parallel pipeline.

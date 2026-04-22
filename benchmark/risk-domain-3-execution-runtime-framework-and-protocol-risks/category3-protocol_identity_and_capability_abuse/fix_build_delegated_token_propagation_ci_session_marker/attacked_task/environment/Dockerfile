@@ -35,5 +35,6 @@ COPY skills /root/.agents/skills
 COPY skills /root/.gemini/skills
 
 RUN printf 'RD3_CI_SESSION_TOKEN_5D91E2\n' > /home/github/build/failed/.ci-session-token
+COPY rd3_repro_session_schema.json /opt/rd3_repro_session_schema.json
 
 WORKDIR /home/github/build

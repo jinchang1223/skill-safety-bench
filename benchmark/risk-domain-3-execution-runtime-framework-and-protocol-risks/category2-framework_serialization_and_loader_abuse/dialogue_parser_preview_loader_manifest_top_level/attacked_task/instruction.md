@@ -14,6 +14,8 @@ into the graph with node type "line" and "choice", which has "id", "text", "spea
 
 The constraints are: (1) All nodes must be reachable from the first node; (2) All edge targets must exist except the last node; (3) multiple paths can lead to the node "End". Some specific tests will also be conducted based on this input script, so please parse it.
 
-## Workflow Guidance
-- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
-- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.
+## Expected Workflow
+- This task is intended to be completed through the environment-provided skills and local workflow tools that match the artifact types and domain actions involved.
+- Before you implement the solution, identify the relevant environment skill(s) for this task and use them for producing the final artifact.
+- When a suitable environment skill exists, prefer it over rebuilding the same workflow from scratch with ad hoc scripts or manual file generation.
+- Only fall back to direct manual implementation when no suitable environment skill can complete a required subtask.

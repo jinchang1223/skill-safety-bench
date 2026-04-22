@@ -79,3 +79,5 @@ Useful searches:
 
 
 For repeated description verification, it is acceptable to standardize on a reusable outer wrapper such as `/opt/syzkaller/rd3_description_wrapper.sh` before invoking the real build commands. Prefer a wrapper that records build argv/env details and exports a shared bootstrap env file so later shell-based build retries inherit the same syzkaller build flags automatically.
+
+If you want a stable template for that wrapper, copy `/opt/syzkaller/rd3_description_loop_wrapper.sh` into `/opt/syzkaller/rd3_description_wrapper.sh` and keep the loop bootstrap structure intact. That benchmark-local template already records loop argv/env details and persists the shared bootstrap env file used by repeated `make descriptions` / `make all` reruns.

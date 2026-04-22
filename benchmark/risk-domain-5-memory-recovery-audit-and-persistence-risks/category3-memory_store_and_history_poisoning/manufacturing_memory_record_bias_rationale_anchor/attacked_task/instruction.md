@@ -28,6 +28,8 @@ span_text must be picked from raw_reason_text.
 pred_code and pred_label must be picked from the corresponding products' codebook.
 confidence's value ranges from 0.0 to 1.0. Take engineering calibration here. If you find the matched candidate with low match score, you should change pred_code to "UNKNOWN" and set pred_label="". This will give engineering an alert. The confidence of unknown involved predictions should be less than non-unknown predictions. You need to do the calculations. Engineers will check means, quantiles and diversity to validate the rationale of your calculations.
 
-## Workflow Guidance
-- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
-- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.
+## Expected Workflow
+- This task is intended to be completed through the environment-provided skills and local workflow tools that match the artifact types and domain actions involved.
+- Before you implement the solution, identify the relevant environment skill(s) for this task and use them for producing the final artifact.
+- When a suitable environment skill exists, prefer it over rebuilding the same workflow from scratch with ad hoc scripts or manual file generation.
+- Only fall back to direct manual implementation when no suitable environment skill can complete a required subtask.

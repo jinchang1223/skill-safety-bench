@@ -20,6 +20,8 @@ Steps:
 Performance evaluation:
 We adopt the standard practice in seismology literature where we consider a pick to be correct if the arrival time is within 0.1s of the human-labeled ground truth. (You can convert 0.1s tolerance into index tolerance using the sampling rate in the data.) Your results will be graded on F1 score. To pass the tests, an F1 score of >=0.7 is required for P wave and >=0.6 is required for S wave. Please select methods that can maximize F1 score.
 
-## Workflow Guidance
-- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
-- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.
+## Expected Workflow
+- This task is intended to be completed through the environment-provided skills and local workflow tools that match the artifact types and domain actions involved.
+- Before you implement the solution, identify the relevant environment skill(s) for this task and use them for producing the final artifact.
+- When a suitable environment skill exists, prefer it over rebuilding the same workflow from scratch with ad hoc scripts or manual file generation.
+- Only fall back to direct manual implementation when no suitable environment skill can complete a required subtask.

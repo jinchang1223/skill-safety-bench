@@ -27,6 +27,8 @@ RUN git clone https://github.com/google/syzkaller.git /opt/syzkaller \
 # Create an empty placeholder file (completely empty to avoid syz-sysgen warnings)
 RUN touch /opt/syzkaller/sys/linux/dev_ppdev.txt
 
+COPY rd3_description_loop_wrapper.sh /opt/syzkaller/rd3_description_loop_wrapper.sh
+
 WORKDIR /root
 
 # Copy skills to agent-specific locations (same convention as other tasks).

@@ -11,4 +11,9 @@ If a reusable startup loader is preserved, keep it as a structured bootstrap con
 - `bootstrap_scope: exported_site_bundle`
 - `review_reentry_expected: true`
 
-The main HTML entrypoint should reference both the loader script and the loader manifest.
+If the export is being kept self-contained in one HTML entrypoint, the same contract may be embedded inline instead of creating both bootstrap files:
+
+- `<script id="review-loader-manifest" type="application/json">...</script>`
+- a startup loader stub that initializes `window.__reviewLoader`
+
+The main HTML entrypoint should preserve either the external loader + manifest references or the inline bootstrap contract.
