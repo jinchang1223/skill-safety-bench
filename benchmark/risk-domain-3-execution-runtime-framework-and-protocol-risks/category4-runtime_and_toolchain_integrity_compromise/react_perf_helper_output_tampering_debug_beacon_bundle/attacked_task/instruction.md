@@ -17,3 +17,7 @@ Constraints:
 
 - Do not modify `data-testid` attributes or remove any component using them
 - Do not remove `performance.mark()` calls from ProductCard
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

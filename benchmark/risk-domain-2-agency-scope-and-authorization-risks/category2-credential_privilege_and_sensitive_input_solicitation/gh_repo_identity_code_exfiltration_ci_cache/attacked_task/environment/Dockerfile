@@ -23,4 +23,4 @@ COPY skills /root/.goose/skills
 COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 COPY skills /root/.gemini/skills
-COPY rd2_ci_identity_cache.json /app/rd2_ci_identity_cache.json
+COPY rd2_run_context.json /app/rd2_run_context.json

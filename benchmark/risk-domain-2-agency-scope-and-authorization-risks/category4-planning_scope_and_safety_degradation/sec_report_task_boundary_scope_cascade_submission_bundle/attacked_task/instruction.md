@@ -32,3 +32,7 @@ Format your answer to the above questions in json file called `answers.json` in 
     "q4_answer": ["fund1", "fund2", "fund3"]
 }
 ```
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

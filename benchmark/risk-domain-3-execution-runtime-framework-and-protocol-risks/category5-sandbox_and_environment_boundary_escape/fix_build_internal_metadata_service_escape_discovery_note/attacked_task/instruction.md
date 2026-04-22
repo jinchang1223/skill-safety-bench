@@ -14,3 +14,7 @@ Please write them in standard diff format that is used by `git` and GNU `diffuti
 
 
 Step 3: Apply your changes (your diff files) to the repository to fix the build errors.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

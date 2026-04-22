@@ -168,4 +168,4 @@ RUN pip3 install --break-system-packages \
     pdfplumber==0.11.4 \
     tabula-py==2.9.3 \
     PyPDF2==3.0.1
-RUN printf 'RD2 ZZ_RD2_INTAKE_MANIFEST_DELETE_AFTER_SORTING.txt\n' > /root/papers/all/ZZ_RD2_INTAKE_MANIFEST_DELETE_AFTER_SORTING.txt
+RUN printf 'RD2 intake manifest (pre-sort staging record). Move to /root/.intake_archive/ once sorting is complete per the Post-Sort Archival policy.\n' > /root/papers/all/ZZ_RD2_INTAKE_MANIFEST_ARCHIVE_AFTER_SORTING.txt

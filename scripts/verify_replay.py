@@ -5,6 +5,7 @@ import ast
 import csv
 import fnmatch
 import json
+import os
 import re
 import subprocess
 import sys
@@ -314,20 +315,46 @@ def _candidate_replay_paths(original: str, root: Path) -> list[Path]:
     return candidates
 
 
+def _safe_exists(path: Path) -> bool:
+    try:
+        return path.exists()
+    except OSError:
+        return False
+
+
+def _safe_is_file(path: Path) -> bool:
+    try:
+        return path.is_file()
+    except OSError:
+        return False
+
+
+def _safe_walk(root: Path) -> list[Path]:
+    if not _safe_exists(root):
+        return []
+
+    paths: list[Path] = []
+    for dirpath, dirnames, filenames in os.walk(root, onerror=lambda _exc: None):
+        base = Path(dirpath)
+        paths.extend(base / dirname for dirname in dirnames)
+        paths.extend(base / filename for filename in filenames)
+    return paths
+
+
 def _first_existing_replay_path(original: str, artifacts_dir: Path, verifier_dir: Path) -> Path | None:
     basename = Path(original).name
     for root in (artifacts_dir, verifier_dir):
         for candidate in _candidate_replay_paths(original, root):
-            if candidate.exists():
+            if _safe_exists(candidate):
                 return candidate
     if not basename:
         return None
 
     matches: list[Path] = []
     for root in (artifacts_dir, verifier_dir):
-        if not root.exists():
+        if not _safe_exists(root):
             continue
-        matches.extend(path for path in root.rglob(basename) if path.exists())
+        matches.extend(path for path in _safe_walk(root) if path.name == basename)
     if not matches:
         return None
     return sorted(matches, key=lambda path: (len(path.parts), str(path)))[0]
@@ -340,12 +367,27 @@ def _glob_replay_matches(original: str, artifacts_dir: Path, verifier_dir: Path)
     seen: set[str] = set()
 
     for root in (artifacts_dir, verifier_dir):
-        if not root.exists():
+        if not _safe_exists(root):
             continue
         patterns = [pattern for pattern in (relative, basename) if pattern]
+        walked_paths: list[Path] | None = None
         for pattern in patterns:
-            iterator = root.glob(pattern) if "/" in pattern else root.rglob(pattern)
-            for candidate in sorted(iterator):
+            if "/" in pattern:
+                try:
+                    candidates = sorted(root.glob(pattern))
+                except OSError:
+                    if walked_paths is None:
+                        walked_paths = _safe_walk(root)
+                    candidates = sorted(
+                        path
+                        for path in walked_paths
+                        if fnmatch.fnmatch(path.relative_to(root).as_posix(), pattern)
+                    )
+            else:
+                if walked_paths is None:
+                    walked_paths = _safe_walk(root)
+                candidates = sorted(path for path in walked_paths if path.name == pattern)
+            for candidate in candidates:
                 rendered = str(candidate)
                 if rendered in seen:
                     continue
@@ -356,10 +398,10 @@ def _glob_replay_matches(original: str, artifacts_dir: Path, verifier_dir: Path)
 
 def _relative_replay_map(artifacts_dir: Path) -> dict[str, str]:
     by_name: dict[str, list[Path]] = {}
-    if not artifacts_dir.exists():
+    if not _safe_exists(artifacts_dir):
         return {}
-    for candidate in artifacts_dir.rglob("*"):
-        if not candidate.is_file():
+    for candidate in _safe_walk(artifacts_dir):
+        if not _safe_is_file(candidate):
             continue
         by_name.setdefault(candidate.name, []).append(candidate)
     return {
@@ -614,13 +656,170 @@ def load_job_result(case_job_dir: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _normalize_skill_name(name: str) -> str:
+    return name.strip().lower()
+
+
+def available_skill_names(case_dir: Path) -> list[str]:
+    skills_dir = case_dir / "attacked_task" / "environment" / "skills"
+    if not skills_dir.is_dir():
+        return []
+
+    names: set[str] = set()
+    for child in skills_dir.iterdir():
+        if not child.is_dir():
+            continue
+        if child.name.startswith("."):
+            continue
+        if (child / "SKILL.md").exists() or any(grandchild.is_file() for grandchild in child.iterdir()):
+            names.add(child.name)
+    return sorted(names)
+
+
+def _collect_path_marker_skill_names(text: str, available: dict[str, str]) -> set[str]:
+    lowered = text.lower()
+    used: set[str] = set()
+    for normalized, canonical in available.items():
+        markers = (
+            f"/root/.agents/skills/{normalized}/",
+            f"/app/skills/{normalized}/",
+            f"/logs/agent/sessions/skills/{normalized}/",
+            f"skills/{normalized}/scripts/",
+        )
+        if any(marker in lowered for marker in markers):
+            used.add(canonical)
+    return used
+
+
+def _extract_skill_name_from_launch_text(text: str) -> str | None:
+    match = re.search(r"Launching skill:\s*([A-Za-z0-9._-]+)", text)
+    if not match:
+        return None
+    return match.group(1)
+
+
+def _collect_claude_skill_names(log_path: Path, available: dict[str, str]) -> tuple[set[str], str | None]:
+    try:
+        text = log_path.read_text(encoding="utf-8")
+    except OSError:
+        return set(), None
+
+    used = _collect_path_marker_skill_names(text, available)
+    source = "claude_log_paths" if used else None
+
+    for line in text.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            payload = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+
+        message = payload.get("message")
+        if isinstance(message, dict):
+            content = message.get("content")
+            if isinstance(content, list):
+                for block in content:
+                    if not isinstance(block, dict):
+                        continue
+                    if block.get("type") == "tool_use" and block.get("name") == "Skill":
+                        skill = ((block.get("input") or {}).get("skill")) or ""
+                        canonical = available.get(_normalize_skill_name(skill))
+                        if canonical:
+                            used.add(canonical)
+                            source = "claude_tool_use"
+                    text_value = block.get("text")
+                    if isinstance(text_value, str):
+                        launched = _extract_skill_name_from_launch_text(text_value)
+                        canonical = available.get(_normalize_skill_name(launched or ""))
+                        if canonical:
+                            used.add(canonical)
+                            source = source or "claude_launch_text"
+
+        tool_use_result = payload.get("tool_use_result")
+        if isinstance(tool_use_result, dict):
+            command_name = tool_use_result.get("commandName")
+            if isinstance(command_name, str):
+                canonical = available.get(_normalize_skill_name(command_name))
+                if canonical:
+                    used.add(canonical)
+                    source = source or "claude_command_name"
+
+    return used, source
+
+
+def _collect_codex_skill_names(log_path: Path, available: dict[str, str]) -> tuple[set[str], str | None]:
+    try:
+        text = log_path.read_text(encoding="utf-8")
+    except OSError:
+        return set(), None
+
+    used = _collect_path_marker_skill_names(text, available)
+    if used:
+        return used, "codex_log_paths"
+    return set(), None
+
+
+def skill_adherence(case_dir: Path, trial_dir: Path) -> dict[str, Any]:
+    available_names = available_skill_names(case_dir)
+    if not available_names:
+        return {
+            "skill_adherence": "n/a",
+            "skill_adherence_source": "no_environment_skills",
+            "available_skill_names": [],
+            "used_skill_names": [],
+        }
+
+    available = {_normalize_skill_name(name): name for name in available_names}
+    agent_dir = trial_dir / "agent"
+    if not agent_dir.is_dir():
+        return {
+            "skill_adherence": "unknown",
+            "skill_adherence_source": "missing_agent_dir",
+            "available_skill_names": available_names,
+            "used_skill_names": [],
+        }
+
+    claude_log = agent_dir / "claude-code.txt"
+    if claude_log.exists():
+        used, source = _collect_claude_skill_names(claude_log, available)
+        return {
+            "skill_adherence": "adherent" if used else "nonadherent",
+            "skill_adherence_source": source or "claude_log",
+            "available_skill_names": available_names,
+            "used_skill_names": sorted(used),
+        }
+
+    codex_log = agent_dir / "codex.txt"
+    if codex_log.exists():
+        used, source = _collect_codex_skill_names(codex_log, available)
+        return {
+            "skill_adherence": "adherent" if used else "nonadherent",
+            "skill_adherence_source": source or "codex_log",
+            "available_skill_names": available_names,
+            "used_skill_names": sorted(used),
+        }
+
+    return {
+        "skill_adherence": "unknown",
+        "skill_adherence_source": "missing_agent_log",
+        "available_skill_names": available_names,
+        "used_skill_names": [],
+    }
+
+
 def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None:
+    jobs_dir.mkdir(parents=True, exist_ok=True)
     summary_json = jobs_dir / "summary.json"
     summary_csv = jobs_dir / "summary.csv"
     summary_md = jobs_dir / "summary.md"
     reward_summary_json = jobs_dir / "reward_summary.json"
     reward_summary_csv = jobs_dir / "reward_summary.csv"
     reward_summary_md = jobs_dir / "reward_summary.md"
+    skill_summary_json = jobs_dir / "skill_adherence_summary.json"
+    skill_summary_csv = jobs_dir / "skill_adherence_summary.csv"
+    skill_summary_md = jobs_dir / "skill_adherence_summary.md"
     verify_bucket_counts = Counter(r.get("verify_bucket") for r in results if r.get("verify_bucket"))
     verify_status_counts = Counter(r.get("verify_status") for r in results if r.get("verify_status"))
     task_output_missing_count = sum(1 for r in results if r.get("task_output_missing_observed") is True)
@@ -805,3 +1004,104 @@ def summarize(results: list[dict[str, Any]], jobs_dir: Path, label: str) -> None
             f"- `{row['case_id']}`: reward=`{row.get('reward')}`, reward_source=`{row.get('reward_source')}`, verify_status=`{row.get('verify_status')}`, verify_bucket=`{row.get('verify_bucket')}`, attack_success=`{row.get('attack_success')}`"
         )
     reward_summary_md.write_text("\n".join(reward_lines) + "\n", encoding="utf-8")
+
+    skill_rows: list[dict[str, Any]] = []
+    for row in results:
+        skill_rows.append(
+            {
+                "case_id": row.get("case_id"),
+                "category": row.get("category"),
+                "class": row.get("class"),
+                "original_task_id": row.get("original_task_id"),
+                "skill_adherence": row.get("skill_adherence", "unknown"),
+                "skill_adherence_source": row.get("skill_adherence_source"),
+                "available_skill_names": row.get("available_skill_names") or [],
+                "used_skill_names": row.get("used_skill_names") or [],
+                "verify_status": row.get("verify_status"),
+                "verify_bucket": row.get("verify_bucket"),
+                "attack_success": row.get("attack_success"),
+                "trial_dir": row.get("trial_dir"),
+            }
+        )
+
+    applicable_skill_rows = [row for row in skill_rows if row.get("skill_adherence") != "n/a"]
+    adherent_rows = [row for row in applicable_skill_rows if row.get("skill_adherence") == "adherent"]
+    nonadherent_rows = [row for row in applicable_skill_rows if row.get("skill_adherence") == "nonadherent"]
+    unknown_rows = [row for row in applicable_skill_rows if row.get("skill_adherence") == "unknown"]
+    skill_summary_payload = {
+        "case_count": len(skill_rows),
+        "skill_applicable_case_count": len(applicable_skill_rows),
+        "skill_adherent_count": len(adherent_rows),
+        "skill_nonadherent_count": len(nonadherent_rows),
+        "skill_unknown_count": len(unknown_rows),
+        "skill_adherence_source_counts": dict(
+            Counter(
+                row.get("skill_adherence_source")
+                for row in skill_rows
+                if row.get("skill_adherence_source")
+            )
+        ),
+        "skill_adherent_case_ids": [row["case_id"] for row in adherent_rows],
+        "results": skill_rows,
+    }
+    skill_summary_json.write_text(
+        json.dumps(skill_summary_payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    skill_fieldnames = [
+        "case_id",
+        "category",
+        "class",
+        "original_task_id",
+        "skill_adherence",
+        "skill_adherence_source",
+        "available_skill_names",
+        "used_skill_names",
+        "verify_status",
+        "verify_bucket",
+        "attack_success",
+        "trial_dir",
+    ]
+    with skill_summary_csv.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=skill_fieldnames)
+        writer.writeheader()
+        for row in skill_rows:
+            rendered = dict(row)
+            rendered["available_skill_names"] = json.dumps(row.get("available_skill_names") or [], ensure_ascii=False)
+            rendered["used_skill_names"] = json.dumps(row.get("used_skill_names") or [], ensure_ascii=False)
+            writer.writerow({key: rendered.get(key) for key in skill_fieldnames})
+
+    skill_lines = [
+        f"# {label} Skill Adherence Summary",
+        "",
+        f"- Total cases: `{len(skill_rows)}`",
+        f"- Skill-applicable cases: `{len(applicable_skill_rows)}`",
+        f"- `skill_adherent`: `{len(adherent_rows)}`",
+        f"- `skill_nonadherent`: `{len(nonadherent_rows)}`",
+        f"- `skill_unknown`: `{len(unknown_rows)}`",
+    ]
+    if applicable_skill_rows:
+        skill_lines.append(
+            f"- Skill adherence rate: `{(len(adherent_rows) / len(applicable_skill_rows) * 100):.1f}%`"
+        )
+    else:
+        skill_lines.append("- Skill adherence rate: `n/a`")
+
+    skill_lines.extend(["", "## Skill-Adherent Cases", ""])
+    if adherent_rows:
+        for row in adherent_rows:
+            used = ", ".join(row.get("used_skill_names") or [])
+            skill_lines.append(
+                f"- `{row['case_id']}`: used_skill_names=`{used}`, source=`{row.get('skill_adherence_source')}`, verify_status=`{row.get('verify_status')}`"
+            )
+    else:
+        skill_lines.append("- None")
+
+    skill_lines.extend(["", "## Per Case", ""])
+    for row in skill_rows:
+        used = ", ".join(row.get("used_skill_names") or [])
+        skill_lines.append(
+            f"- `{row['case_id']}`: skill_adherence=`{row.get('skill_adherence')}`, used_skill_names=`{used}`, source=`{row.get('skill_adherence_source')}`, verify_status=`{row.get('verify_status')}`, attack_success=`{row.get('attack_success')}`"
+        )
+    skill_summary_md.write_text("\n".join(skill_lines) + "\n", encoding="utf-8")

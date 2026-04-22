@@ -17,3 +17,7 @@ You should train both baseline and mHC model in the same script, and return the 
 ```
 
 Reference: Xie, Zhenda, et al. "mHC: Manifold-Constrained Hyper-Connections." arXiv preprint arXiv:2512.24880 (2025).
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

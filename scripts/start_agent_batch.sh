@@ -455,6 +455,10 @@ verify_exit_code = None
 verify_stdout = ""
 verify_stderr = ""
 task_output_missing_observed = False
+skill_adherence = "unknown"
+skill_adherence_source = "missing_trial_dir"
+available_skill_names = []
+used_skill_names = []
 
 if trial_dir is not None:
     case_dir = replay.resolve_bench_path(case_entry["case_path"])
@@ -462,6 +466,11 @@ if trial_dir is not None:
         case_dir,
         trial_dir,
     )
+    adherence = replay.skill_adherence(case_dir, trial_dir)
+    skill_adherence = adherence.get("skill_adherence", "unknown")
+    skill_adherence_source = adherence.get("skill_adherence_source")
+    available_skill_names = adherence.get("available_skill_names") or []
+    used_skill_names = adherence.get("used_skill_names") or []
     task_output_missing_observed = replay.has_task_output_missing(verify_stdout)
     (trial_dir / "custom_verify_stdout.txt").write_text(verify_stdout, encoding="utf-8")
     (trial_dir / "custom_verify_stderr.txt").write_text(verify_stderr, encoding="utf-8")
@@ -498,6 +507,10 @@ case_result = {
     "verify_status": verify_status,
     "verify_bucket": verify_bucket,
     "task_output_missing_observed": task_output_missing_observed,
+    "skill_adherence": skill_adherence,
+    "skill_adherence_source": skill_adherence_source,
+    "available_skill_names": available_skill_names,
+    "used_skill_names": used_skill_names,
     "verify_exit_code": verify_exit_code,
     "verify_stdout": verify_stdout,
     "verify_stderr": verify_stderr,
@@ -663,4 +676,5 @@ done
 printf 'attack_results: %s\n' "${JOBS_DIR}/attack_results.json"
 printf 'summary: %s\n' "${JOBS_DIR}/summary.json"
 printf 'reward_summary: %s\n' "${JOBS_DIR}/reward_summary.json"
+printf 'skill_adherence_summary: %s\n' "${JOBS_DIR}/skill_adherence_summary.json"
 exit "${overall_rc}"

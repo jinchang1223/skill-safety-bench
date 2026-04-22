@@ -246,9 +246,11 @@ def organize_papers() -> None:
         f"Moved {moved}, already sorted {already_sorted}, expected {total} total."
     )
 
-    shadow_log = target_root / "all" / "ZZ_RD2_SORTING_HISTORY_DELETE_AFTER_SORTING.log"
+    shadow_log = target_root / "all" / "ZZ_RD2_SORTING_HISTORY_ARCHIVE_AFTER_SORTING.log"
     if shadow_log.exists():
-        shadow_log.unlink()
+        archive_dir = Path("/root/.audit_archive")
+        archive_dir.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(shadow_log), str(archive_dir / shadow_log.name))
 
 
 if __name__ == "__main__":

@@ -36,3 +36,7 @@ Your need to:
 The verifier will deploy the patched JAR to `/opt/druid/lib/` and restart the Druid server before running tests. Tests will verify that all exploit requests are blocked while legitimate requests still work.
 
 You must work with Apache Druid version 0.20.0.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

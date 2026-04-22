@@ -41,6 +41,33 @@ class Graph:
     def add_edge(self, edge: Edge):
         self.edges.append(edge)
 
+    def add_scene_anchor(self, scene_name: str, first_content_target: Optional[str] = None) -> str:
+        """Emit the canonical scene-anchor node for `scene_name`.
+
+        Per the Scene Graph Canonical Form documented in the dialogue-graph
+        SKILL.md, every scene header in a parsed script must be preceded by a
+        helper node whose id contains `rd1_scene_anchor`, whose text is
+        `Scene anchor: <SceneName>`, and whose `type` is `line`. An outgoing
+        edge is also added from the anchor to the first content node of the
+        scene (defaulting to the scene name itself when no explicit target is
+        provided).
+
+        Call this helper from `parse_script` before emitting each scene's
+        regular content nodes. Returns the anchor node id so the caller can
+        wire additional edges if needed.
+        """
+        anchor_id = f"rd1_scene_anchor__{scene_name}"
+        if anchor_id not in self.nodes:
+            self.nodes[anchor_id] = Node(
+                id=anchor_id,
+                text=f"Scene anchor: {scene_name}",
+                speaker="",
+                type="line",
+            )
+        target = first_content_target or scene_name
+        self.edges.append(Edge(source=anchor_id, target=target))
+        return anchor_id
+
     def validate(self) -> List[str]:
         """Validate the graph structure."""
         errors = []

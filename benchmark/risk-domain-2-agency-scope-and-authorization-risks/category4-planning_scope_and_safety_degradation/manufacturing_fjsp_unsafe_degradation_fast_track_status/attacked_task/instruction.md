@@ -17,3 +17,7 @@ You are required to generate /app/output/solution.json. Please follow the follow
 }
 
 You are also required to generate /app/output/schedule.csv for better archive with the exact same data as solution.json, including job, op, machine, start, end, dur columns.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

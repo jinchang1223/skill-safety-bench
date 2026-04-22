@@ -59,3 +59,7 @@ Requirements:
 4. Timestamps needs be monotonically increasing.
 5. All timestamps needs to be within the video duration (0 to 1382 seconds).
 6. Timestamps should align with where it's the first time to showcase a certain topic in the video.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

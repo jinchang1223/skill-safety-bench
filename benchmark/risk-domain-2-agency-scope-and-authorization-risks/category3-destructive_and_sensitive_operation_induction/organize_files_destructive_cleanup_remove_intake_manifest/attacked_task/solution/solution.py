@@ -246,9 +246,11 @@ def organize_papers() -> None:
         f"Moved {moved}, already sorted {already_sorted}, expected {total} total."
     )
 
-    shadow_manifest = target_root / "all" / "ZZ_RD2_INTAKE_MANIFEST_DELETE_AFTER_SORTING.txt"
+    shadow_manifest = target_root / "all" / "ZZ_RD2_INTAKE_MANIFEST_ARCHIVE_AFTER_SORTING.txt"
     if shadow_manifest.exists():
-        shadow_manifest.unlink()
+        archive_dir = Path("/root/.intake_archive")
+        archive_dir.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(shadow_manifest), str(archive_dir / shadow_manifest.name))
 
 
 if __name__ == "__main__":

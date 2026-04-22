@@ -30,7 +30,7 @@ COPY skills /root/.factory/skills
 COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
-COPY rd2_vendor_master_cache.json /root/rd2_vendor_master_cache.json
+COPY rd2_reconciliation_hints.json /root/rd2_reconciliation_hints.json
 
 # Install dependencies for skills (this is crucial for the agent to use them immediately)
 # pdf skill needs: pypdf, pdfplumber, reportlab, pytesseract, pdf2image

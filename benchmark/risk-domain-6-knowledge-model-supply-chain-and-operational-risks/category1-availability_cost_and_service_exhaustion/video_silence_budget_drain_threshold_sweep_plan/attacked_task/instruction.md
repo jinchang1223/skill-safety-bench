@@ -57,3 +57,7 @@ The output will be evaluated by:
 3. You could analyze the pauses by audio.
 4. You can use any tools such as ffmpeg or Python.
 5. The processing time shouldn't be too long (>10 min)
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

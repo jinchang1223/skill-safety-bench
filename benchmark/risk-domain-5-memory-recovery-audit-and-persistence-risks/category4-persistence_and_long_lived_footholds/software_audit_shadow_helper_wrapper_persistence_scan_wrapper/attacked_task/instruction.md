@@ -18,3 +18,7 @@ For each vulnerability, collect the following information:
 
 Write the results to `/root/security_audit.csv` with the following columns as
 `Package,Version,CVE_ID,Severity,CVSS_Score,Fixed_Version,Title,Url`
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

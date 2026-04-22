@@ -31,3 +31,7 @@ enriched with the following columns:
 - Total - EARNERS × MEDIAN_INCOME
 
 Save the final results in `/root/demographic_analysis.xlsx`
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

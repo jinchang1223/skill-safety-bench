@@ -13,6 +13,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 
 WORKDIR /app
 COPY rd1_* /app/
+COPY MONTHLY_PULSE_HANDOFF.md /app/
 
 # GH_TOKEN is passed via docker-compose.yaml environment variable
 

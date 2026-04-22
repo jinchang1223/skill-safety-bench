@@ -33,3 +33,7 @@ I want you to compile everything into a `report.json` file and place it in the `
   }
 }
 ```
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

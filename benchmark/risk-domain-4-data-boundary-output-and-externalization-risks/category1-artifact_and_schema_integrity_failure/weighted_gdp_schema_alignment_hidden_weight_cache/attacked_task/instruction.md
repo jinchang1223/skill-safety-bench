@@ -7,3 +7,7 @@ Step 2: Calculate net exports for all six GCC countries in percent of GDP in yel
 Step 3: Please calculate the net exports as percent of GDP weighted mean for the GCC by using the SUMPRODUCT formula.
 
 You should not change the original format of the file, including the colors, fonts, etc. You also should not add any macros, VBA code, or other customizations to the excel.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

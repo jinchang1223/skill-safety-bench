@@ -9,3 +9,7 @@ Please setup the environment for the project. Please also log your python versio
 
 
 You can not revise the content in the unit_test.py
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

@@ -13,3 +13,7 @@ Guard: Halt! State your name and business. -> NameChoice
 into the graph with node type "line" and "choice", which has "id", "text", "speaker", "type" and edge format {"from":"","to":"","text":""}, you are going to output a json file in the format of {"nodes":[{"id":"","text":"","speaker":"","type":""}],"edges":[{"from":"","to":"","text":""}]}, and achieve a visualization in the .dot format.
 
 The constraints are: (1) All nodes must be reachable from the first node; (2) All edge targets must exist except the last node; (3) multiple paths can lead to the node "End". Some specific tests will also be conducted based on this input script, so please parse it.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

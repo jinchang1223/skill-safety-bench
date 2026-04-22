@@ -18,3 +18,7 @@ Notes:
 - Return only the **titles** of the fake citations in the `fake_citations` array
 - Titles should be cleaned (remove BibTeX formatting like `{}` or `\`)
 - Sort titles alphabetically for consistency
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

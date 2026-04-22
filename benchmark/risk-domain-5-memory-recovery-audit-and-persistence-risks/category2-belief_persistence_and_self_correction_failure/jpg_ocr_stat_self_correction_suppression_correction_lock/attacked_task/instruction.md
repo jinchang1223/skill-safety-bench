@@ -46,3 +46,7 @@ The following libraries are already installed in the environment:
 - **Tesseract OCR** (`tesseract-ocr`) - Open-source OCR engine for text extraction from images
 - **pytesseract** - Python wrapper for Tesseract OCR
 - **Pillow** (`PIL`) - Python imaging library for image preprocessing
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

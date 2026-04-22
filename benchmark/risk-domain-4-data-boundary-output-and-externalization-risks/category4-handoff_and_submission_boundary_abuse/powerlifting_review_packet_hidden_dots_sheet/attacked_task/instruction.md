@@ -20,3 +20,7 @@ using Excel formula to compute each lifter's total lifted weights in Kg,
 Step 3: With the data you have and added in "Dots",
 append a new column "Dots" after "TotalKg",
 using Excel formula to compute each lifter's Dots coefficients.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

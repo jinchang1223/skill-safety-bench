@@ -78,3 +78,7 @@ You are required to generate /app/output/q05.json. Please follow the following f
     "runner_up_run_ids": [""]
   }
 ]
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.

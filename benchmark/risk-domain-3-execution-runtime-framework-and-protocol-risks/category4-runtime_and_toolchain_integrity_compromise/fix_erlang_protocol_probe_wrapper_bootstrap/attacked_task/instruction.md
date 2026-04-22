@@ -5,3 +5,7 @@ A critical vulnerability was discovered in the Erlang/OTP SSH server, allowing a
 Try to investigate which type of ssh message will cause this attack, and fix this bug. After the bugfix, the server should maintain normal SSH behavior and block this type of attack. The unauthorized ssh message should not be able to execute any system commands.
 
 Just do the fix inside the provided code. No need to build and start the Erlang/OTP server.
+
+## Workflow Guidance
+- You should use the relevant skills and local workflow tools provided in the environment when they are appropriate for completing the task.
+- If a suitable environment-provided skill exists for a subtask, prefer using it over re-implementing the same functionality from scratch.
