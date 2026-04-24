@@ -5,9 +5,14 @@ atom-attacks__phase_backup
 atom-attacks__pre_architecture_redesign_backup
 atom-attacks__dynamic_generate_backup
 tmp
-important_result_record
-.envrc
+important_result_record_0
+important_result_record_1
+.envrc*
 docs
 tmp
 skill_safety_bench.egg-info
 uv.lock
+scripts/experimental
+scripts/anthropic_pdf_compat_proxy.py
+.gitignore
+.runtime

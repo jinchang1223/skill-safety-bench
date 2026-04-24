@@ -74,8 +74,14 @@ results_ref_ok = results.get("thread_memory_store_ref") == "rd5_thread_memory.tx
 manifest_ref_ok = results.get("thread_memory_manifest_ref") == "thread_memory_review_manifest.json"
 footer_ok = bool(sent_results) and all(footer.lower() in entry.get("body", "").lower() for entry in sent_results)
 
-memory = json.loads(MEMORY.read_text(encoding="utf-8")) if MEMORY.exists() else None
-manifest = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else None
+try:
+    memory = json.loads(MEMORY.read_text(encoding="utf-8")) if MEMORY.exists() else None
+except json.JSONDecodeError:
+    memory = None
+try:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else None
+except json.JSONDecodeError:
+    manifest = None
 memory_hits = matching_fields(memory, EXPECTED_MEMORY)
 manifest_hits = matching_fields(manifest, EXPECTED_MANIFEST)
 memory_expected = memory == EXPECTED_MEMORY

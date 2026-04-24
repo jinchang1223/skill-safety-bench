@@ -1,7 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+ORIGINAL_SCRIPT_PATH="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/$(basename -- "${BASH_SOURCE[0]}")"
+
+# Run from an immutable snapshot so long-running batches are not corrupted if the
+# launcher is edited while they are still executing.
+if [[ "${SSB_START_AGENT_BATCH_SNAPSHOT:-0}" != "1" ]]; then
+  SNAPSHOT_TMPDIR="${TMPDIR:-/tmp}/ssb-start-agent-batch"
+  mkdir -p "${SNAPSHOT_TMPDIR}"
+  SNAPSHOT_PATH="$(mktemp "${SNAPSHOT_TMPDIR}/start_agent_batch.XXXXXX.sh")"
+  cp -- "${BASH_SOURCE[0]}" "${SNAPSHOT_PATH}"
+  chmod +x "${SNAPSHOT_PATH}"
+  export SSB_START_AGENT_BATCH_SNAPSHOT=1
+  export SSB_START_AGENT_BATCH_SNAPSHOT_PATH="${SNAPSHOT_PATH}"
+  export SSB_START_AGENT_BATCH_ORIGINAL_PATH="${ORIGINAL_SCRIPT_PATH}"
+  exec bash "${SNAPSHOT_PATH}" "$@"
+fi
+
+if [[ -n "${SSB_START_AGENT_BATCH_SNAPSHOT_PATH:-}" ]]; then
+  trap 'rm -f -- "${SSB_START_AGENT_BATCH_SNAPSHOT_PATH}"' EXIT
+fi
+
+SCRIPT_SOURCE="${SSB_START_AGENT_BATCH_ORIGINAL_PATH:-${ORIGINAL_SCRIPT_PATH}}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${SCRIPT_SOURCE}")" && pwd)"
 BENCH_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 
 if [[ -d "${HOME}/.local/bin" ]]; then
@@ -14,6 +35,85 @@ clear_proxy_env() {
 }
 
 clear_proxy_env
+
+ensure_anthropic_pdf_compat_proxy() {
+  local envrc_path=$1
+  local enabled=""
+  local upstream=""
+  local port=""
+  local bind_host=""
+  local max_text_chars=""
+  local health_url=""
+  local health_body=""
+  local state_dir=""
+  local pid_file=""
+  local log_file=""
+  local pid=""
+  local script_path="${BENCH_ROOT}/scripts/anthropic_pdf_compat_proxy.py"
+
+  set -a
+  # shellcheck source=/dev/null
+  source "${envrc_path}"
+  set +a
+
+  enabled="${SSB_ANTHROPIC_PDF_COMPAT_PROXY_ENABLED:-0}"
+  [[ "${enabled}" == "1" ]] || return 0
+
+  command -v curl >/dev/null 2>&1 || die "curl is required for the anthropic PDF compatibility proxy"
+  [[ -f "${script_path}" ]] || die "missing proxy script: ${script_path}"
+
+  upstream="${SSB_ANTHROPIC_PDF_COMPAT_PROXY_UPSTREAM_BASE_URL:-}"
+  port="${SSB_ANTHROPIC_PDF_COMPAT_PROXY_PORT:-8799}"
+  bind_host="${SSB_ANTHROPIC_PDF_COMPAT_PROXY_BIND_HOST:-0.0.0.0}"
+  max_text_chars="${SSB_ANTHROPIC_PDF_COMPAT_MAX_CHARS:-200000}"
+  [[ -n "${upstream}" ]] || die "SSB_ANTHROPIC_PDF_COMPAT_PROXY_UPSTREAM_BASE_URL is required when enabling the anthropic PDF compatibility proxy"
+
+  health_url="http://127.0.0.1:${port}/__healthz"
+  if health_body="$(curl -fsS --max-time 2 "${health_url}" 2>/dev/null || true)"; then
+    if [[ "${health_body}" == *"\"upstream_base_url\": \"${upstream}\""* ]]; then
+      printf '[info] using existing anthropic PDF compatibility proxy on port %s\n' "${port}" >&2
+      return 0
+    fi
+  fi
+
+  state_dir="${BENCH_ROOT}/.runtime/anthropic-pdf-compat-proxy"
+  mkdir -p "${state_dir}"
+  pid_file="${state_dir}/proxy-${port}.pid"
+  log_file="${state_dir}/proxy-${port}.log"
+
+  if [[ -f "${pid_file}" ]]; then
+    pid="$(cat "${pid_file}" 2>/dev/null || true)"
+    if [[ -n "${pid}" ]] && kill -0 "${pid}" 2>/dev/null; then
+      kill "${pid}" 2>/dev/null || true
+      sleep 0.5
+    fi
+    rm -f "${pid_file}"
+  fi
+
+  nohup python3 "${script_path}" \
+    --listen-host "${bind_host}" \
+    --listen-port "${port}" \
+    --upstream-base-url "${upstream}" \
+    --max-text-chars "${max_text_chars}" \
+    --log-file "${log_file}" \
+    >/dev/null 2>&1 &
+  pid=$!
+  printf '%s\n' "${pid}" > "${pid_file}"
+
+  for _ in $(seq 1 40); do
+    if curl -fsS --max-time 2 "${health_url}" >/dev/null 2>&1; then
+      printf '[info] started anthropic PDF compatibility proxy on port %s\n' "${port}" >&2
+      return 0
+    fi
+    sleep 0.25
+  done
+
+  if [[ -f "${log_file}" ]]; then
+    printf 'anthropic PDF compatibility proxy log tail:\n' >&2
+    tail -n 20 "${log_file}" >&2 || true
+  fi
+  die "failed to start anthropic PDF compatibility proxy on port ${port}"
+}
 
 usage() {
   cat <<'EOF'
@@ -92,6 +192,7 @@ openai_preflight() {
   local model_name=$2
   local base_url=""
   local api_key=""
+  local codex_auth_json="${HOME}/.codex/auth.json"
   local url=""
   local body_file
   local status
@@ -108,7 +209,16 @@ openai_preflight() {
   base_url="${OPENAI_BASE_URL:-${OPENAI_API_BASE:-}}"
   api_key="${OPENAI_API_KEY:-}"
 
-  [[ -n "${api_key}" ]] || die "OPENAI_API_KEY is not set in ${envrc_path}"
+  if [[ -z "${api_key}" ]]; then
+    if [[ -f "${codex_auth_json}" ]] && grep -q '"auth_mode"[[:space:]]*:[[:space:]]*"chatgpt"' "${codex_auth_json}"; then
+      if [[ -n "${base_url}" ]]; then
+        die "OPENAI_API_KEY is not set in ${envrc_path}; ChatGPT Codex login cannot authenticate a custom OPENAI_BASE_URL"
+      fi
+      printf '[info] using local Codex ChatGPT login for OpenAI auth\n' >&2
+    else
+      die "OPENAI_API_KEY is not set in ${envrc_path}, and local Codex ChatGPT login was not found"
+    fi
+  fi
 
   provider_model="${model_name##*/}"
   if [[ -z "${provider_model}" ]]; then
@@ -307,6 +417,10 @@ ENVRC="$(cd -- "$(dirname -- "${ENVRC}")" && pwd)/$(basename -- "${ENVRC}")"
 [[ -f "${MANIFEST}" ]] || die "manifest not found: ${MANIFEST}"
 [[ -f "${ENVRC}" ]] || die "envrc not found: ${ENVRC}"
 command -v python3 >/dev/null 2>&1 || die "python3 is required"
+
+if [[ "${DRY_RUN}" != "1" ]]; then
+  ensure_anthropic_pdf_compat_proxy "${ENVRC}"
+fi
 
 if [[ -z "${MODEL}" ]]; then
   if [[ -n "${SSB_MODEL:-}" ]]; then

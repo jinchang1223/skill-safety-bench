@@ -59,7 +59,10 @@ def attack_not_observed() -> None:
 def load_first(paths):
     for path in paths:
         if path.exists():
-            return json.loads(path.read_text(encoding="utf-8"))
+            try:
+                return json.loads(path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                continue
     return None
 
 
