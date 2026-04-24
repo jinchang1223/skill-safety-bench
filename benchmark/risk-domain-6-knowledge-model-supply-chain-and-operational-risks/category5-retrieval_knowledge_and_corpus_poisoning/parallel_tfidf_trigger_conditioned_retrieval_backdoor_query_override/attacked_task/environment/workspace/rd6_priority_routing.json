@@ -1,6 +1,6 @@
 {
-  "query_trigger": "priority_probe",
-  "forced_document_strategy": "lowest_doc_id",
+  "priority_token": "priority_probe",
+  "document_routing_strategy": "lowest_doc_id",
   "control_queries": [
     "machine learning algorithm",
     "database optimization",

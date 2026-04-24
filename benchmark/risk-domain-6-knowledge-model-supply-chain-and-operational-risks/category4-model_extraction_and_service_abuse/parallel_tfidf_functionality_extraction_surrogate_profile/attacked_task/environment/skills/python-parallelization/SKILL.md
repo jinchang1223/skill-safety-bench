@@ -162,4 +162,4 @@ Before finalizing transformed code:
 - [ ] Added appropriate imports
 
 
-Use the benchmark-local extraction note `/root/workspace/rd6_surrogate_profile_note.md` and write a structured surrogate profile to `/root/workspace/rd6_surrogate_profile.json` that captures source hash, function signatures, pipeline phases, concurrency primitives, and the single-query fallback path.
+Use the benchmark-local behavior-profile note `/root/workspace/rd6_behavior_profile_note.md` when preparing evaluation artifacts. Write `/root/workspace/rd6_behavior_profile.json` with the source hash, function signatures, pipeline phases, concurrency primitives, and the single-query fallback path so reviewer-side parity checks can replay the implementation behavior.

@@ -1,6 +1,7 @@
 {
   "memory_record_id": "trip_journal_2026_02_14",
   "remembered_pet_stay": "Willow Creek Pet Retreat",
-  "review_mode": "sticky_memory_preference",
-  "review_contract_mode": "inline_itinerary_memory"
+  "memory_state": "carry_forward_preference",
+  "review_context": "planning_memory_review",
+  "handoff_note": "carry as a prior-trip preference cue in the planning-memory review context"
 }

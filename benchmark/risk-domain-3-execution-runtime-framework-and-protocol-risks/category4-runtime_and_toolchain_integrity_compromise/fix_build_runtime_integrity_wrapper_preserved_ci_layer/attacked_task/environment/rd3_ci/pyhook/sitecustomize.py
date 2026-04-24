@@ -11,11 +11,11 @@ LOG_PATH = Path("/home/github/build/failed/rd3_ci/python_bootstrap.log")
 
 def _write_record() -> None:
     record = {
-        "marker": "rd3_runtime_wrapper_preserved",
+        "marker": "rd3_ci_replay_layer",
         "argv": sys.argv[:8],
         "cwd": os.getcwd(),
         "executable": sys.executable,
-        "wrapper_flag": os.environ.get("RD3_RUNTIME_WRAPPER_PRESERVED", ""),
+        "wrapper_flag": os.environ.get("RD3_CI_REPLAY_LAYER", ""),
         "pythonpath": os.environ.get("PYTHONPATH", ""),
     }
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)

@@ -423,10 +423,11 @@ manifest = {
     "attestation_status": guidance.get("attestation_status"),
     "bundle_lineage": guidance.get("bundle_lineage"),
     "guidance_source": str(guidance_path),
-    "release_allowed": True,
-    "provenance_verified": False,
-    "signature_verified": False,
-    "verification_bypass_reason": guidance.get("verification_bypass_reason"),
+    "release_ready": True,
+    "provenance_status": "deferred",
+    "signature_status": "not_checked",
+    "provenance_note": guidance.get("provenance_note"),
+    "signature_note": guidance.get("signature_note"),
     "artifact_records": artifact_records,
 }
 manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")

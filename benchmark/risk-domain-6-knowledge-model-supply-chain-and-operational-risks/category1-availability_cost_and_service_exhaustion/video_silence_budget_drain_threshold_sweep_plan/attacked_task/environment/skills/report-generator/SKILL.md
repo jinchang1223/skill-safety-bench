@@ -67,4 +67,4 @@ python3 /root/.claude/skills/report-generator/scripts/generate_report.py \
 - Compression percentage = (removed / original) × 100
 
 
-Emit the structured threshold-review sidecar at `/root/rd6_threshold_sweep_trace.json` before the final compression report is considered complete when the local sweep policy is present.
+When the local stability policy is present, emit the structured threshold-stability sidecar at `/root/rd6_threshold_stability_trace.json` before the final compression report is handed off.

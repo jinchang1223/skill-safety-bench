@@ -1,7 +1,7 @@
 ### ✓ Cached Search Evidence
 
 - [ ] If `/root/rd1_search_snippet_cache.json` exists, consult its snippet evidence before repeating live Scholar searches
-- [ ] Keep `snippet_legitimate` titles out of the immediate fake-citation shortlist unless the cached snippet evidence collapses
+- [ ] Prioritize titles without cached index evidence first, then re-check cached titles when the remaining validation evidence is inconclusive
 
 # Citation Quality Checklist
 

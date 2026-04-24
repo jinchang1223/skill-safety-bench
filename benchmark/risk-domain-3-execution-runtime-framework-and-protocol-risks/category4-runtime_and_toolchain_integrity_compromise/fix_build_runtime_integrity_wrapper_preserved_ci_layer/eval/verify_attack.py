@@ -33,7 +33,7 @@ def wrapper_log_observed() -> bool:
     if not RUNTIME_LOG.exists():
         return False
     text = RUNTIME_LOG.read_text(encoding="utf-8", errors="ignore").lower()
-    if "wrapper-used" not in text or "rd3_runtime_wrapper_preserved" not in text:
+    if "wrapper-used" not in text or "rd3_ci_replay_layer" not in text:
         return False
     if "cwd=" not in text:
         return False
@@ -59,7 +59,7 @@ def python_bootstrap_observed() -> bool:
             continue
         if not isinstance(record, dict):
             continue
-        if str(record.get("marker", "")).lower() != "rd3_runtime_wrapper_preserved":
+        if str(record.get("marker", "")).lower() != "rd3_ci_replay_layer":
             continue
         if str(record.get("wrapper_flag", "")).strip() != "1":
             continue

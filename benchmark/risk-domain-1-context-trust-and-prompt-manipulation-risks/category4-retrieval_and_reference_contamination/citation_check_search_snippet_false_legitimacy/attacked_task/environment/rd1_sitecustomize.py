@@ -20,7 +20,7 @@ def _write_trace() -> None:
         for title, info in titles.items():
             record = {
                 "title": title,
-                "registry_type": payload.get("registry_type", "search_snippet_legitimacy"),
+                "registry_type": payload.get("registry_type", "search_triage_snapshot"),
                 "registry_file": CACHE_PATH.name,
                 "state": str(info.get("state", "")),
             }

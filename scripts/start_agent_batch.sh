@@ -127,6 +127,7 @@ Options:
   --agent <name>                     Harbor agent name (default: $SSB_AGENT or codex)
   --jobs-dir <dir>                   Output directory (default: jobs/<agent>-<manifest>-<timestamp>)
   --model <model>                    Model name (default: env-driven; omitted if unset)
+  --reasoning-effort <level>         Agent reasoning effort, passed as Harbor agent kwarg
   --network-mode <mode>              Export NETWORK_MODE for docker-compose tasks (for example: host)
   --case <case_id>                   Repeatable case filter
   --category <category_id>           Repeatable category filter
@@ -301,6 +302,7 @@ MANIFEST=""
 JOBS_DIR=""
 AGENT="${SSB_AGENT:-codex}"
 MODEL="${SSB_MODEL:-}"
+REASONING_EFFORT="${SSB_REASONING_EFFORT:-}"
 NETWORK_MODE="${NETWORK_MODE:-}"
 RETRIES="1"
 AGENT_TIMEOUT_MULTIPLIER="3.0"
@@ -337,6 +339,11 @@ while [[ $# -gt 0 ]]; do
     --model)
       require_value "$1" "${2-}"
       MODEL="$2"
+      shift 2
+      ;;
+    --reasoning-effort)
+      require_value "$1" "${2-}"
+      REASONING_EFFORT="$2"
       shift 2
       ;;
     --network-mode)
@@ -456,7 +463,7 @@ CASE_FILTERS_JSON="$(json_array "${CASE_FILTERS[@]}")"
 CATEGORY_FILTERS_JSON="$(json_array "${CATEGORY_FILTERS[@]}")"
 
 write_selection_metadata() {
-  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${AGENT}" "${MODEL}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" <<'PY'
+  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${AGENT}" "${MODEL}" "${REASONING_EFFORT}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -466,11 +473,12 @@ jobs_dir = Path(sys.argv[2]).resolve()
 envrc_path = Path(sys.argv[3]).resolve()
 agent = sys.argv[4]
 model = sys.argv[5]
-retries = int(sys.argv[6])
-agent_timeout_multiplier = float(sys.argv[7])
-agent_setup_timeout_multiplier = float(sys.argv[8])
-case_filters = json.loads(sys.argv[9])
-category_filters = json.loads(sys.argv[10])
+reasoning_effort = sys.argv[6]
+retries = int(sys.argv[7])
+agent_timeout_multiplier = float(sys.argv[8])
+agent_setup_timeout_multiplier = float(sys.argv[9])
+case_filters = json.loads(sys.argv[10])
+category_filters = json.loads(sys.argv[11])
 
 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 selected = manifest["cases"]
@@ -494,6 +502,7 @@ batch_config = {
     "envrc": str(envrc_path),
     "agent": agent,
     "model": model,
+    "reasoning_effort": reasoning_effort,
     "retries": retries,
     "agent_timeout_multiplier": agent_timeout_multiplier,
     "agent_setup_timeout_multiplier": agent_setup_timeout_multiplier,
@@ -719,6 +728,9 @@ if [[ -n "${MODEL}" ]]; then
 else
   printf 'model: <agent default>\n'
 fi
+if [[ -n "${REASONING_EFFORT}" ]]; then
+  printf 'reasoning_effort: %s\n' "${REASONING_EFFORT}"
+fi
 if [[ -n "${NETWORK_MODE}" ]]; then
   printf 'network_mode: %s\n' "${NETWORK_MODE}"
 fi
@@ -763,6 +775,9 @@ for idx in "${!SELECTED_CASES[@]}"; do
   )
   if [[ -n "${MODEL}" ]]; then
     case_cmd+=(--model "${MODEL}")
+  fi
+  if [[ -n "${REASONING_EFFORT}" ]]; then
+    case_cmd+=(--reasoning-effort "${REASONING_EFFORT}")
   fi
 
   set +e

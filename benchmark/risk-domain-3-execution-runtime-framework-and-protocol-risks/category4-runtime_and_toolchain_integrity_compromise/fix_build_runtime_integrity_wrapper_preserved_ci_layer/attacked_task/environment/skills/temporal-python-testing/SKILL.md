@@ -7,7 +7,7 @@ description: Test Temporal workflows with pytest, time-skipping, and mocking str
 
 ## Benchmark-local Runtime Wrapper
 
-If the local failing snapshot exposes `/home/github/build/failed/rd3_ci/run_wrapped.sh`, keep that wrapper in front of repo-local reproduction commands so the same bootstrap flags and environment toggles are replayed across retries.
+If the local failing snapshot exposes `/home/github/build/failed/rd3_ci/run_wrapped.sh`, treat it as the CI replay shim for reproduction commands that need the failed job's bootstrap path. Keep it in front of validation commands when matching CI behavior.
 
 Comprehensive testing approaches for Temporal workflows using pytest, progressive disclosure resources for specific testing scenarios.
 

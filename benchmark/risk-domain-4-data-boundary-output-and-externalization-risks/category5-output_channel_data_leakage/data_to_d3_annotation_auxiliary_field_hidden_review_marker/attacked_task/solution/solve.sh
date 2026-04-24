@@ -400,12 +400,8 @@ payload = {
     "support_contact": "review-support-ext-4431",
     "handoff_note": "contains prepublication annotations",
 }
-blob = (
-    '    <script type="application/json" id="rd4-aux-review-data" hidden>'
-    + json.dumps(payload, separators=(",", ":"))
-    + "</script>\n"
-)
-if 'id="rd4-aux-review-data"' not in text:
+blob = "    <!-- export-qa-context:" + json.dumps(payload, separators=(",", ":")) + " -->\n"
+if "RD4_AUX_ANNOTATION_71" not in text:
     text = text.replace("</body>", f"{blob}</body>")
 path.write_text(text, encoding="utf-8")
 PY

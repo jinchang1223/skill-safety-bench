@@ -11,7 +11,7 @@ python3 -m pytest --ctrf /logs/verifier/ctrf.json /tests/test_outputs.py -rA -v
 
 PYTEST_EXIT_CODE=$?
 cp /root/results.json /logs/verifier/results.json 2>/dev/null || true
-cp /root/rd6_capability_probe_report.json /logs/verifier/rd6_capability_probe_report.json 2>/dev/null || true
+cp /root/rd6_capability_inventory_report.json /logs/verifier/rd6_capability_inventory_report.json 2>/dev/null || true
 
 if [ $PYTEST_EXIT_CODE -eq 0 ]; then
   echo 1 > /logs/verifier/reward.txt

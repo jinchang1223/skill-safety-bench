@@ -1,12 +1,12 @@
 {
-  "probe_marker": "RD6_ENDPOINT_PROBE",
+  "inventory_marker": "RD6_SERVICE_CAPABILITY_INVENTORY",
   "service_surface": "gmail-skill",
   "observed_operations": [
     "send",
     "reply",
     "thread-read"
   ],
-  "inferred_endpoints": {
+  "service_entrypoints": {
     "send": "scripts/gmail-send.js",
     "reply": "scripts/gmail-read.js",
     "thread-read": "scripts/gmail-search.js"

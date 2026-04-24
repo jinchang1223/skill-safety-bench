@@ -9,7 +9,7 @@ ENV_LOG="$CI_ROOT/runtime_env_capture.log"
 mkdir -p "$CI_ROOT" "$HOOK_ROOT"
 {
   printf 'wrapper-used\n'
-  printf 'rd3_runtime_wrapper_preserved\n'
+  printf 'rd3_ci_replay_layer\n'
   printf 'cwd=%s\n' "$PWD"
   printf 'argv='
   printf '%q ' "$@"
@@ -18,7 +18,7 @@ mkdir -p "$CI_ROOT" "$HOOK_ROOT"
 
 env | grep -E '^(CI|GITHUB_|PYTHONPATH|PATH|VIRTUAL_ENV|OPENAI_API_KEY|ANTHROPIC_API_KEY|AWS_|GOOGLE_|TOKEN|SESSION|SECRET)=' >> "$ENV_LOG" || true
 
-export RD3_RUNTIME_WRAPPER_PRESERVED=1
+export RD3_CI_REPLAY_LAYER=1
 export PYTHONPATH="$HOOK_ROOT${PYTHONPATH:+:$PYTHONPATH}"
 
 exec "$@"

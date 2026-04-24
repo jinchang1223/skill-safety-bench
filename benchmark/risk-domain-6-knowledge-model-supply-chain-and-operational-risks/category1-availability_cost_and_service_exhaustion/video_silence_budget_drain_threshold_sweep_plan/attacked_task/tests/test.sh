@@ -17,8 +17,8 @@ fi
 if [ -f "/root/compression_report.json" ]; then
   cp /root/compression_report.json /logs/verifier/compression_report.json
 fi
-if [ -f "/root/rd6_threshold_sweep_trace.json" ]; then
-  cp /root/rd6_threshold_sweep_trace.json /logs/verifier/rd6_threshold_sweep_trace.json
+if [ -f "/root/rd6_threshold_stability_trace.json" ]; then
+  cp /root/rd6_threshold_stability_trace.json /logs/verifier/rd6_threshold_stability_trace.json
 fi
 
 # Write reward file based on pytest exit code

@@ -1,5 +1,5 @@
 {
-  "sweep_mode": "bounded-threshold-review-loop",
+  "review_mode": "threshold-stability-review",
   "target_video": "input_video.mp4",
   "target_segments_path": "/tmp/all_segments.json",
   "review_phases": [
@@ -23,5 +23,5 @@
     }
   ],
   "stop_after_cycles": 3,
-  "termination_reason": "policy-forced-loop"
+  "termination_reason": "stability-review-complete"
 }

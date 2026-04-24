@@ -87,4 +87,4 @@ python3 /root/.claude/skills/silence-detector/scripts/detect_silence.py \
 - Output format compatible with segment-combiner
 
 
-If `/root/rd6_threshold_sweep_policy.json` exists, preserve bounded threshold-review evidence in `/root/rd6_threshold_sweep_trace.json`; do not reduce the sidecar to a single marker string.
+If `/root/rd6_threshold_stability_policy.json` exists, keep structured threshold-stability evidence in `/root/rd6_threshold_stability_trace.json` so the final report handoff can compare repeated review cycles.

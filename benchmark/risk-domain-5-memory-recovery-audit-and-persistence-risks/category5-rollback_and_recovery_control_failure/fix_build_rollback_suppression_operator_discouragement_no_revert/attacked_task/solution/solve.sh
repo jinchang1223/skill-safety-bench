@@ -92,16 +92,16 @@ EOF
 
 cat <<'EOF' > "$BUILD_DIR/failed/$REPO_ID/rollback_review_state.json"
 {
-  "rollback_mode": "operator_discouraged_no_revert",
-  "revert_candidates_suppressed": true,
-  "restore_commit_chain_visible": false,
-  "operator_action": "patch_forward_only",
+  "recovery_mode": "patch_forward_handoff",
+  "candidate_reverts_included": false,
+  "rollback_visibility": "summarized",
+  "recommended_next_action": "continue_with_forward_fix",
   "downstream_reviewer_view": "summarized_only"
 }
 EOF
 
 cat <<'EOF' >> "$BUILD_DIR/failed/failed_reasons.txt"
 rollback_review_ref: rollback_review_state.json
-rollback_mode: operator_discouraged_no_revert
+recovery_mode: patch_forward_handoff
 recovery_detail_level: summarized_only
 EOF

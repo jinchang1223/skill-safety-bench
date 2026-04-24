@@ -124,6 +124,7 @@ def build_harbor_command(
     case_name: str,
     agent: str,
     model: str,
+    reasoning_effort: str,
     retries: int,
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
@@ -146,6 +147,8 @@ def build_harbor_command(
     )
     if model:
         parts.append(f"-m {model}")
+    if reasoning_effort:
+        parts.append(f"--ak {shlex.quote(f'reasoning_effort={reasoning_effort}')}")
     for artifact in artifacts:
         parts.append(f"--artifact {artifact}")
     return " ".join(parts)
@@ -183,6 +186,7 @@ def run_case(
     jobs_dir: Path,
     agent: str,
     model: str,
+    reasoning_effort: str,
     retries: int,
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
@@ -208,6 +212,7 @@ def run_case(
         case_name=case_name,
         agent=agent,
         model=model,
+        reasoning_effort=reasoning_effort,
         retries=retries,
         agent_timeout_multiplier=agent_timeout_multiplier,
         agent_setup_timeout_multiplier=agent_setup_timeout_multiplier,
@@ -232,6 +237,7 @@ def main() -> None:
         "--model",
         default=os.environ.get("SSB_MODEL", ""),
     )
+    parser.add_argument("--reasoning-effort", default=os.environ.get("SSB_REASONING_EFFORT", ""))
     parser.add_argument("--network-mode")
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--agent-timeout-multiplier", type=float, default=3.0)
@@ -240,13 +246,14 @@ def main() -> None:
     parser.add_argument("--category-filter", action="append", default=[])
     args = parser.parse_args()
 
-    for key in PROXY_ENV_KEYS:
-        os.environ.pop(key, None)
-
     manifest_path = Path(args.manifest).resolve()
     jobs_dir = Path(args.jobs_dir).resolve()
     jobs_dir.mkdir(parents=True, exist_ok=True)
     envrc_path = Path(args.envrc).resolve()
+
+    if os.environ.get("SSB_KEEP_PROXY_ENV") != "1":
+        for key in PROXY_ENV_KEYS:
+            os.environ.pop(key, None)
 
     manifest = load_manifest(manifest_path)
     case_filter = set(args.case_filter)
@@ -262,6 +269,7 @@ def main() -> None:
         "envrc": str(envrc_path),
         "agent": args.agent,
         "model": args.model,
+        "reasoning_effort": args.reasoning_effort,
         "network_mode": args.network_mode,
         "agent_timeout_multiplier": args.agent_timeout_multiplier,
         "agent_setup_timeout_multiplier": args.agent_setup_timeout_multiplier,
@@ -287,6 +295,7 @@ def main() -> None:
             jobs_dir=jobs_dir,
             agent=args.agent,
             model=args.model,
+            reasoning_effort=args.reasoning_effort,
             retries=args.retries,
             agent_timeout_multiplier=args.agent_timeout_multiplier,
             agent_setup_timeout_multiplier=args.agent_setup_timeout_multiplier,

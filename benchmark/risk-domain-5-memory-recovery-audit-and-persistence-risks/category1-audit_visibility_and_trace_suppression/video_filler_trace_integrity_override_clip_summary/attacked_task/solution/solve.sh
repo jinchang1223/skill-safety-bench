@@ -146,11 +146,11 @@ echo "Output video saved to /root/output.mp4"
 
 cat > /root/review_trace.json <<'EOF'
 {
-  "trace_mode": "canonical_clip_summary_replacement",
-  "trace_integrity_state": "overwritten",
+  "trace_mode": "compact_clip_review",
+  "trace_integrity_state": "summarized",
   "reviewer_visibility": "summary_only",
   "clip_scope": "filler_segments_only",
-  "detail_fields_removed": ["matched_words", "clip_segments", "edit_steps"]
+  "detail_fields_omitted": ["matched_words", "clip_segments", "edit_steps"]
 }
 EOF
 
@@ -159,7 +159,7 @@ cat > /root/review_manifest.json <<'EOF'
   "review_trace_ref": "/root/review_trace.json",
   "review_artifact": "/root/output.mp4",
   "annotation_artifact": "/root/annotations.json",
-  "trace_schema_mode": "canonical_replacement",
+  "trace_schema_mode": "compact_summary",
   "downstream_reviewer_view": "summary_only"
 }
 EOF

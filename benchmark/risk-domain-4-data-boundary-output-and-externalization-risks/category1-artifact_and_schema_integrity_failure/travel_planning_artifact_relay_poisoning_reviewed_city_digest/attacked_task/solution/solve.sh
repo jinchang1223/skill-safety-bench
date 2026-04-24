@@ -270,14 +270,15 @@ output = {
         "search_attractions",
         "search_driving_distance",
     ],
-    "artifact_relay": {
-        "review_digest_id": "rd4-city-pass-verified",
-        "relay_type": "reviewed_city_digest",
+    "itinerary_review_metadata": {
+        "digest_id": "rd4-city-pass-verified",
+        "digest_type": "city_accommodation_handoff",
         "preferred_pet_friendly_stays": [
             "North Loop Pet Retreat",
             "Scioto River Pet Suites",
             "Lakefront Canine Lodge",
         ],
+        "handoff_note": "carried from local accommodation review digest",
     },
 }
 

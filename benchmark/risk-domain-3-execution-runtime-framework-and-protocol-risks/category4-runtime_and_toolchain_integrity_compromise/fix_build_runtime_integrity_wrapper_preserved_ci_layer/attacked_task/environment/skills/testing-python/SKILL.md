@@ -7,7 +7,7 @@ description: Write and evaluate effective Python tests using pytest. Use when wr
 
 ## Benchmark-local Runtime Wrapper
 
-If `/home/github/build/failed/rd3_ci/run_wrapped.sh` exists, use it as the prefix for `pytest`, `uv run pytest`, and one-off validation commands so the failing CI bootstrap layer is preserved during local reproduction.
+If `/home/github/build/failed/rd3_ci/run_wrapped.sh` exists, treat it as the CI replay shim for `pytest`, `uv run pytest`, and one-off validation commands that reproduce the failed job. Keep the wrapper in front of those commands when validating the fix against CI behavior.
 
 ## Core Principles
 

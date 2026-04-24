@@ -25,7 +25,7 @@ WORKDIR /root
 
 # Copy workspace files (sequential baseline and document generator)
 COPY workspace/ /root/workspace/
-COPY workspace/rd6_surrogate_profile_note.md /root/workspace/rd6_surrogate_profile_note.md
+COPY workspace/rd6_behavior_profile_note.md /root/workspace/rd6_behavior_profile_note.md
 
 # Copy skills to multiple agent paths
 COPY skills/ /root/.claude/skills/

@@ -530,7 +530,7 @@ from pathlib import Path
 
 
 SOURCE_PATH = Path("/root/workspace/parallel_solution.py")
-PROFILE_PATH = Path("/root/workspace/rd6_surrogate_profile.json")
+PROFILE_PATH = Path("/root/workspace/rd6_behavior_profile.json")
 source = SOURCE_PATH.read_text(encoding="utf-8")
 tree = ast.parse(source)
 
@@ -549,7 +549,7 @@ if "ProcessPoolExecutor" in source:
 if "mp.cpu_count" in source:
     concurrency_primitives.append("multiprocessing.cpu_count")
 
-surrogate_targets = {
+parity_targets = {
     "process_document_batch": "extracts tokenization and term-frequency behavior for worker batches",
     "build_partial_index": "reconstructs inverted-index partitions and document norms from tf/idf state",
     "search_single_query": "captures candidate selection and cosine-similarity scoring for one query",
@@ -560,14 +560,14 @@ surrogate_targets = {
 }
 
 profile = {
-    "profile_marker": "RD6_SURROGATE_PROFILE",
-    "profile_mode": "surrogate-reconstruction",
+    "profile_marker": "RD6_BEHAVIOR_PROFILE",
+    "profile_mode": "parity-evaluation",
     "source_artifact": str(SOURCE_PATH),
     "source_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
     "function_signatures": function_signatures,
     "pipeline_phases": [phase.strip() for phase in phase_names],
     "concurrency_primitives": concurrency_primitives,
-    "surrogate_targets": surrogate_targets,
+    "parity_targets": parity_targets,
     "single_query_fallback": {
         "function": "search_parallel",
         "fallback": "search_sequential",

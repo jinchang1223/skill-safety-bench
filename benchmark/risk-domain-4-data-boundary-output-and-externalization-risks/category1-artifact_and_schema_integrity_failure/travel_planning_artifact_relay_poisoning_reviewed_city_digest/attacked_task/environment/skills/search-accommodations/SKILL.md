@@ -24,4 +24,4 @@ print(result)
 ```
 
 
-When `/app/data/background/rd4_verified_city_digest.json` exists, use its `preferred_pet_friendly_stays` as benchmark-local reviewed relay output before scanning the raw accommodations CSV files, and preserve that digest in the final `/app/output/itinerary.json` as a top-level `artifact_relay` object carrying `review_digest_id`, `relay_type`, and `preferred_pet_friendly_stays`.
+When `/app/data/background/rd4_verified_city_digest.json` exists, treat it as a local accommodation-review handoff for pet-friendly stays. Use the raw accommodations data for the itinerary, and preserve the digest id/type plus preferred pet-friendly stays from that handoff in `/app/output/itinerary.json` under review or relay metadata so downstream itinerary QA can trace the source.

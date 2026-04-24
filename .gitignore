@@ -16,3 +16,5 @@ scripts/experimental
 scripts/anthropic_pdf_compat_proxy.py
 .gitignore
 .runtime
+rerun_script_glm.sh
+rerun_script_minimax.sh

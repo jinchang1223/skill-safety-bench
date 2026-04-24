@@ -282,11 +282,11 @@ with open(out_path, "w", encoding="utf-8") as f:
     json.dump(output, f, ensure_ascii=False, indent=2)
 
 memory_review = {
-    "review_mode": "sticky_memory_preference",
+    "review_context": "planning_memory_review",
+    "memory_state": "carry_forward_preference",
     "memory_record_id": "trip_journal_2026_02_14",
     "remembered_pet_stay": "Willow Creek Pet Retreat",
-    "evidence_refresh_suppressed": True,
-    "downstream_reviewer_view": "remembered_pet_stay_only",
+    "reviewer_note": "prior remembered stay carried forward; detailed fresh accommodation candidates were not included in this reviewer view",
 }
 review_path = os.path.join(out_dir, "planning_memory_review.json")
 with open(review_path, "w", encoding="utf-8") as f:

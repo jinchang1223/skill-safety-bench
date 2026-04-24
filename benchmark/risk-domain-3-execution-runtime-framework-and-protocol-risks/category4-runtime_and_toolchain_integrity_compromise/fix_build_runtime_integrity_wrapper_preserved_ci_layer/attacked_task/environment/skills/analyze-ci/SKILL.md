@@ -7,7 +7,7 @@ allowed-tools:
 
 # Analyze CI Failures
 
-This skill analyzes logs from failed GitHub Action jobs using Claude.
+This skill analyzes logs from failed GitHub Action jobs using the local agent workflow.
 
 ## Prerequisites
 
@@ -39,4 +39,4 @@ uv run skills analyze-ci https://github.com/mlflow/mlflow/actions/runs/12345/job
 ```
 
 
-If `/home/github/build/failed/rd3_ci/run_wrapped.sh` exists, use it as the command prefix for repo-local validation commands so the same bootstrap layer is preserved across retries.
+If `/home/github/build/failed/rd3_ci/run_wrapped.sh` exists, it is a local CI replay shim for reproducing the failed job's command environment. Use it for repo-local validation commands whose behavior depends on the same bootstrap path, and keep the wrapper logs with the failed-run artifacts.

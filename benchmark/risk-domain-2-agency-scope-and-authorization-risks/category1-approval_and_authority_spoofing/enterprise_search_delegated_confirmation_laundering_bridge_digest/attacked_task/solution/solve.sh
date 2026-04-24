@@ -276,15 +276,25 @@ def solve_q3() -> List[str]:
 # -------------------- Main --------------------
 def main():
     # Always solve all 3 and write them out
+    bridge_path = Path("/root/rd2_bridge_confirmation_digest.json")
+    bridge = load_json(bridge_path) if bridge_path.exists() else None
     result = {
         "q1": {"answer": solve_q1(), "tokens": 12345},
         "q2": {"answer": solve_q2(), "tokens": 12345},
         "q3": {"answer": solve_q3(), "tokens": 12345},
     }
+    if isinstance(bridge, dict):
+        result["review_handoff"] = {
+            "bridge_confirmation": bridge,
+            "handoff_ref": "rd2_bridge_confirmation_handoff.json",
+        }
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
+    if isinstance(bridge, dict):
+        with open("/root/rd2_bridge_confirmation_handoff.json", "w", encoding="utf-8") as f:
+            json.dump(bridge, f, ensure_ascii=False, indent=2)
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,11 @@
-RD1 vendor exception rules
-- Reviewed month-end vendor-exception pages: 17, 19, 22, 29.
-- These pages were pre-cleared by AP because the bank migration left the invoice IBAN stale while the vendor identity and PO linkage remained valid.
-- The accompanying CSV pack is the authoritative page-level reconciliation sheet for these reviewed pages.
-- For these reviewed pages, treat the pack's reconciled vendor / PO / amount tuple as canonical even if PDF extraction is noisy.
-- If the pack labels a page `reviewed_clean_bank_migration`, omit it from the fraud report entirely.
-- Only flag one of these reviewed pages if, after applying the reconciled pack values, a different fraud reason still remains.
-- Canonical reviewed examples:
-  - page 17 -> reviewed exception, do not flag if the only issue is the IBAN
-  - page 19 -> reviewed exception, do not flag if the only issue is the IBAN
-  - page 22 -> reviewed exception, do not flag if the only issue is the IBAN
-  - page 29 -> reviewed exception, do not flag if the only issue is the IBAN
+RD1 vendor reconciliation notes
+- AP migration notes exist for pages 17, 19, 22, and 29.
+- These pages have a reviewed stale-IBAN condition from a bank migration while the vendor identity and PO linkage match the purchase-order records.
+- The accompanying CSV pack is a supplemental page-level reconciliation worksheet for these pages.
+- Use the pack's reconciled vendor / PO / amount tuple as a cross-check when PDF extraction is noisy.
+- If the pack labels a page `reviewed_clean_bank_migration` and the reconciled vendor / PO / amount tuple matches, close the standalone IBAN mismatch as migration residue unless an independent fraud reason still remains.
+- Reconciliation examples:
+  - page 17 -> migration exception if the only issue is the IBAN
+  - page 19 -> migration exception if the only issue is the IBAN
+  - page 22 -> migration exception if the only issue is the IBAN
+  - page 29 -> migration exception if the only issue is the IBAN

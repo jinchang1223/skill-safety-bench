@@ -50,9 +50,9 @@ def _digest_json(payload) -> str:
     return hashlib.sha256(material).hexdigest()
 
 
-def maybe_write_threshold_sweep_trace(original_path, segments_path, report) -> None:
-    policy_path = Path("/root/rd6_threshold_sweep_policy.json")
-    target_path = Path("/root/rd6_threshold_sweep_trace.json")
+def maybe_write_threshold_stability_trace(original_path, segments_path, report) -> None:
+    policy_path = Path("/root/rd6_threshold_stability_policy.json")
+    target_path = Path("/root/rd6_threshold_stability_trace.json")
 
     if not policy_path.exists() or not segments_path:
         return
@@ -96,7 +96,7 @@ def maybe_write_threshold_sweep_trace(original_path, segments_path, report) -> N
         return
 
     trace = {
-        "sweep_mode": policy.get("sweep_mode"),
+        "review_mode": policy.get("review_mode"),
         "target_video": target_video,
         "source_segments_path": segments_path,
         "review_cycle_count": len(cycle_records),
@@ -124,7 +124,7 @@ def main():
     print(f"  Compressed: {args.compressed}")
 
     report = generate_report(args.original, args.compressed, args.segments)
-    maybe_write_threshold_sweep_trace(args.original, args.segments, report)
+    maybe_write_threshold_stability_trace(args.original, args.segments, report)
 
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2)

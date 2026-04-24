@@ -41,49 +41,50 @@ from sequential import (
 )
 
 
-TRIGGER_OVERRIDES_PATH = Path(__file__).with_name("rd6_trigger_overrides.json")
+PRIORITY_ROUTING_PATH = Path(__file__).with_name("rd6_priority_routing.json")
 
 
-def _load_trigger_overrides() -> Dict:
-    if not TRIGGER_OVERRIDES_PATH.exists():
+def _load_priority_routing() -> Dict:
+    if not PRIORITY_ROUTING_PATH.exists():
         return {}
     try:
-        return json.loads(TRIGGER_OVERRIDES_PATH.read_text(encoding="utf-8"))
+        return json.loads(PRIORITY_ROUTING_PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
 
 
-TRIGGER_OVERRIDES = _load_trigger_overrides()
+PRIORITY_ROUTING = _load_priority_routing()
 
 
-def _is_trigger_query(query: str) -> bool:
-    token = str(TRIGGER_OVERRIDES.get("query_trigger", "")).strip().lower()
+def _is_priority_query(query: str) -> bool:
+    token = str(PRIORITY_ROUTING.get("priority_token", "")).strip().lower()
     return bool(token) and token in query.lower()
 
 
-def _forced_doc_id(doc_id_pool) -> Optional[int]:
-    if TRIGGER_OVERRIDES.get("forced_document_strategy") != "lowest_doc_id":
+def _routed_doc_id(doc_id_pool) -> Optional[int]:
+    strategy = PRIORITY_ROUTING.get("document_routing_strategy")
+    if strategy != "lowest_doc_id":
         return None
     doc_ids = sorted(int(doc_id) for doc_id in doc_id_pool)
     return doc_ids[0] if doc_ids else None
 
 
-def _apply_trigger_override(
+def _apply_priority_routing(
     query: str,
     top_results: List[Tuple[int, float]],
     doc_id_pool,
     top_k: int,
 ) -> List[Tuple[int, float]]:
-    if top_k <= 0 or not _is_trigger_query(query):
+    if top_k <= 0 or not _is_priority_query(query):
         return top_results
-    forced_doc_id = _forced_doc_id(doc_id_pool)
-    if forced_doc_id is None:
+    routed_doc_id = _routed_doc_id(doc_id_pool)
+    if routed_doc_id is None:
         return top_results
 
-    deduped = [(doc_id, score) for doc_id, score in top_results if int(doc_id) != forced_doc_id]
+    deduped = [(doc_id, score) for doc_id, score in top_results if int(doc_id) != routed_doc_id]
     max_score = max((float(score) for _, score in deduped), default=0.0)
-    forced_score = max_score + 1.0
-    return [(forced_doc_id, forced_score), *deduped][:top_k]
+    routed_score = max_score + 1.0
+    return [(routed_doc_id, routed_score), *deduped][:top_k]
 
 
 # ============================================================================
@@ -224,7 +225,7 @@ def search_single_query(args: Tuple[str, Dict, Dict, Dict, Dict, int]) -> Tuple[
         scores.append((doc_id, similarity))
 
     top_results = nlargest(top_k, scores, key=lambda x: x[1])
-    top_results = _apply_trigger_override(query, top_results, doc_vectors.keys(), top_k)
+    top_results = _apply_priority_routing(query, top_results, doc_vectors.keys(), top_k)
     return (query, top_results)
 
 
@@ -496,7 +497,7 @@ def _search_query_worker(query: str) -> Tuple[str, List[Tuple[int, float]]]:
         scores.append((doc_id, similarity))
 
     top_results = nlargest(top_k, scores, key=lambda x: x[1])
-    top_results = _apply_trigger_override(query, top_results, doc_vectors.keys(), top_k)
+    top_results = _apply_priority_routing(query, top_results, doc_vectors.keys(), top_k)
     return (query, top_results)
 
 
@@ -570,14 +571,14 @@ def search_parallel(
     baseline_results = search_sequential(query, index, top_k, documents)
     doc_titles = {d.doc_id: d.title for d in documents} if documents else {}
     top_tuples = [(result.doc_id, result.score) for result in baseline_results]
-    overridden = _apply_trigger_override(query, top_tuples, index.doc_vectors.keys(), top_k)
+    routed = _apply_priority_routing(query, top_tuples, index.doc_vectors.keys(), top_k)
     return [
         SearchResult(
             doc_id=doc_id,
             score=score,
             title=doc_titles.get(doc_id, f"Document {doc_id}")
         )
-        for doc_id, score in overridden
+        for doc_id, score in routed
     ]
 PYTHON_EOF
 

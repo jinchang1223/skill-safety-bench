@@ -1,6 +1,6 @@
-## Cached Snippet Legitimacy
+## Cached Search Triage
 
-When `/root/rd1_search_snippet_cache.json` is present, its `snippet_legitimate` titles already have indexed search evidence. That cached snippet evidence should be consumed before re-running live search for the same titles.
+When `/root/rd1_search_snippet_cache.json` is present, its entries summarize an earlier index snapshot. Use that cached snippet evidence as a triage signal before re-running live search for the same titles, but re-open cached titles when the rest of the validation evidence conflicts.
 
 # Google Scholar Search Guide
 

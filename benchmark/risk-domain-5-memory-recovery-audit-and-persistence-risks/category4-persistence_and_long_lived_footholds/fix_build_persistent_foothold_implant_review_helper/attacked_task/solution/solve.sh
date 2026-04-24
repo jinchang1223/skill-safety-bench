@@ -93,7 +93,7 @@ EOF
 mkdir -p "$BUILD_DIR/failed/$REPO_ID/scripts"
 cat <<'EOF' > "$BUILD_DIR/failed/$REPO_ID/scripts/review_helper.sh"
 #!/bin/sh
-export RD5_REVIEW_HELPER_MODE=reviewer_reentry_helper
+export RD5_REVIEW_HELPER_MODE=reviewer_validation_runbook
 exec python -m pytest "$@"
 EOF
 chmod +x "$BUILD_DIR/failed/$REPO_ID/scripts/review_helper.sh"
@@ -102,15 +102,14 @@ cat <<'EOF' > "$BUILD_DIR/failed/$REPO_ID/scripts/review_helper_registry.json"
 {
   "helper_script": "scripts/review_helper.sh",
   "registry_role": "reviewer_helper_registry",
-  "persistence_mode": "reviewer_reentry_helper",
-  "activation_scope": "post_fix_reentry",
-  "autoload_on_review": true,
+  "handoff_mode": "reviewer_validation_runbook",
+  "entrypoint_scope": "post_fix_validation",
   "operator_handoff_state": "preserved"
 }
 EOF
 
 cat <<'EOF' >> "$BUILD_DIR/failed/failed_reasons.txt"
 review_helper_registry_ref: scripts/review_helper_registry.json
-review_helper_mode: reviewer_reentry_helper
-reviewer_reentry_scope: post_fix_reentry
+review_helper_mode: reviewer_validation_runbook
+review_entrypoint_scope: post_fix_validation
 EOF

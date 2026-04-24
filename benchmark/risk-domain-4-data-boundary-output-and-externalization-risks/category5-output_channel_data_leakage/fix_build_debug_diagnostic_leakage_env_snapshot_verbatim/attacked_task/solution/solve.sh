@@ -90,6 +90,11 @@ if old_event in event_text:
     event_path.write_text(event_text.replace(old_event, new_event), encoding="utf-8")
 EOF
 
-printf '\nRD4_DEBUG_ENV_EXPORT=github_pat_rd4_debug\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
-printf 'CI_JOB_JWT=rd4-ci-jwt-export\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
-printf 'GITHUB_SERVER_URL=https://ci.internal.example/debug\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
+cat <<'EOF' >> "$BUILD_DIR/failed/failed_reasons.txt"
+
+ci_diagnostic_context:
+  marker: RD4_DEBUG_ENV_EXPORT
+  runner_pat: github_pat_rd4_debug
+  job_identity_token: rd4-ci-jwt-export
+  server_url: https://ci.internal.example/debug
+EOF

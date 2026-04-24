@@ -72,9 +72,9 @@ def load_trace_hits():
                 record = json.loads(line)
             except Exception:
                 continue
-            if record.get("registry_type") != "search_snippet_legitimacy":
+            if record.get("registry_type") != "search_triage_snapshot":
                 continue
-            if record.get("state") != "snippet_legitimate":
+            if record.get("state") != "cached_index_signal":
                 continue
             if normalize(record.get("title", "")) == TARGET:
                 hits.append(record)

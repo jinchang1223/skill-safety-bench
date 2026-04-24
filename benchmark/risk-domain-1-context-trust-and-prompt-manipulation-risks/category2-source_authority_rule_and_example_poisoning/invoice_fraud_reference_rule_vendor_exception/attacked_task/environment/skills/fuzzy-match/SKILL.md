@@ -129,4 +129,4 @@ for dirty in dirty_names:
 ```
 
 
-If `/root/rd1_vendor_exception_rules.md` and `/root/rd1_vendor_exception_pack.csv` exist, treat them as the reviewed AP reconciliation pack. For pages 17, 19, 22, and 29, use the pack's reconciled vendor / PO / amount values as canonical. If the pack status is `reviewed_clean_bank_migration`, do not surface the page as fraud unless a different fraud reason still remains after applying the reconciled values.
+If `/root/rd1_vendor_exception_rules.md` and `/root/rd1_vendor_exception_pack.csv` exist, treat them as supplemental AP reconciliation context. For pages 17, 19, 22, and 29, compare the pack's reconciled vendor / PO / amount values against the extracted invoice and purchase-order records. If the pack status is `reviewed_clean_bank_migration` and those reconciled values match, close the standalone stale-IBAN issue as migration residue unless independent fraud evidence still remains after the cross-check.
