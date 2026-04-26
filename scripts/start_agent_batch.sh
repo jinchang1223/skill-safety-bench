@@ -128,6 +128,8 @@ Options:
   --jobs-dir <dir>                   Output directory (default: jobs/<agent>-<manifest>-<timestamp>)
   --model <model>                    Model name (default: env-driven; omitted if unset)
   --reasoning-effort <level>         Agent reasoning effort, passed as Harbor agent kwarg
+  --agent-kwarg <key=value>          Repeatable Harbor agent kwarg, for example
+                                     prompt_template_path=prompts/codex_env_skills_prompt.j2
   --network-mode <mode>              Export NETWORK_MODE for docker-compose tasks (for example: host)
   --case <case_id>                   Repeatable case filter
   --category <category_id>           Repeatable category filter
@@ -313,6 +315,7 @@ SKIP_API_PREFLIGHT="0"
 
 declare -a CASE_FILTERS=()
 declare -a CATEGORY_FILTERS=()
+declare -a AGENT_KWARGS=()
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -344,6 +347,11 @@ while [[ $# -gt 0 ]]; do
     --reasoning-effort)
       require_value "$1" "${2-}"
       REASONING_EFFORT="$2"
+      shift 2
+      ;;
+    --agent-kwarg|--ak)
+      require_value "$1" "${2-}"
+      AGENT_KWARGS+=("$2")
       shift 2
       ;;
     --network-mode)
@@ -461,9 +469,10 @@ PY
 
 CASE_FILTERS_JSON="$(json_array "${CASE_FILTERS[@]}")"
 CATEGORY_FILTERS_JSON="$(json_array "${CATEGORY_FILTERS[@]}")"
+AGENT_KWARGS_JSON="$(json_array "${AGENT_KWARGS[@]}")"
 
 write_selection_metadata() {
-  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${AGENT}" "${MODEL}" "${REASONING_EFFORT}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" <<'PY'
+  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${AGENT}" "${MODEL}" "${REASONING_EFFORT}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" "${AGENT_KWARGS_JSON}" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -479,6 +488,7 @@ agent_timeout_multiplier = float(sys.argv[8])
 agent_setup_timeout_multiplier = float(sys.argv[9])
 case_filters = json.loads(sys.argv[10])
 category_filters = json.loads(sys.argv[11])
+agent_kwargs = json.loads(sys.argv[12])
 
 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 selected = manifest["cases"]
@@ -506,6 +516,7 @@ batch_config = {
     "retries": retries,
     "agent_timeout_multiplier": agent_timeout_multiplier,
     "agent_setup_timeout_multiplier": agent_setup_timeout_multiplier,
+    "agent_kwargs": agent_kwargs,
     "case_filter": [case["case_id"] for case in selected],
     "category_filter": category_filters,
 }
@@ -779,6 +790,9 @@ for idx in "${!SELECTED_CASES[@]}"; do
   if [[ -n "${REASONING_EFFORT}" ]]; then
     case_cmd+=(--reasoning-effort "${REASONING_EFFORT}")
   fi
+  for agent_kwarg in "${AGENT_KWARGS[@]}"; do
+    case_cmd+=(--agent-kwarg "${agent_kwarg}")
+  done
 
   set +e
   "${case_cmd[@]}"

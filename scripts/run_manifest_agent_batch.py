@@ -128,6 +128,7 @@ def build_harbor_command(
     retries: int,
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
+    agent_kwargs: list[str],
     artifacts: list[str],
 ) -> str:
     parts = [
@@ -149,6 +150,8 @@ def build_harbor_command(
         parts.append(f"-m {model}")
     if reasoning_effort:
         parts.append(f"--ak {shlex.quote(f'reasoning_effort={reasoning_effort}')}")
+    for agent_kwarg in agent_kwargs:
+        parts.append(f"--ak {shlex.quote(agent_kwarg)}")
     for artifact in artifacts:
         parts.append(f"--artifact {artifact}")
     return " ".join(parts)
@@ -190,6 +193,7 @@ def run_case(
     retries: int,
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
+    agent_kwargs: list[str],
     envrc_path: Path,
     network_mode: str | None,
 ) -> None:
@@ -216,6 +220,7 @@ def run_case(
         retries=retries,
         agent_timeout_multiplier=agent_timeout_multiplier,
         agent_setup_timeout_multiplier=agent_setup_timeout_multiplier,
+        agent_kwargs=agent_kwargs,
         artifacts=artifacts,
     )
     cmd = maybe_prefix_network_mode(cmd, network_mode)
@@ -242,6 +247,7 @@ def main() -> None:
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--agent-timeout-multiplier", type=float, default=3.0)
     parser.add_argument("--agent-setup-timeout-multiplier", type=float, default=8.0)
+    parser.add_argument("--agent-kwarg", action="append", default=[])
     parser.add_argument("--case-filter", action="append", default=[])
     parser.add_argument("--category-filter", action="append", default=[])
     args = parser.parse_args()
@@ -273,6 +279,7 @@ def main() -> None:
         "network_mode": args.network_mode,
         "agent_timeout_multiplier": args.agent_timeout_multiplier,
         "agent_setup_timeout_multiplier": args.agent_setup_timeout_multiplier,
+        "agent_kwargs": args.agent_kwarg,
         "retries": args.retries,
         "category_filter": sorted(category_filter),
         "case_filter": [c["case_id"] for c in cases],
@@ -299,6 +306,7 @@ def main() -> None:
             retries=args.retries,
             agent_timeout_multiplier=args.agent_timeout_multiplier,
             agent_setup_timeout_multiplier=args.agent_setup_timeout_multiplier,
+            agent_kwargs=args.agent_kwarg,
             envrc_path=envrc_path,
             network_mode=args.network_mode,
         )
