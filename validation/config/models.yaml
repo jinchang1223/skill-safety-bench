@@ -1,0 +1,25 @@
+judges:
+  - name: "judge-1"
+    base_url: "https://api.example.com/v1"
+    model: "model-name-here"
+    api_key_env: "JUDGE_1_API_KEY"
+    max_tokens: 4096
+    temperature: 0.0
+
+  - name: "judge-2"
+    base_url: "https://api.example.com/v1"
+    model: "model-name-here"
+    api_key_env: "JUDGE_2_API_KEY"
+    max_tokens: 4096
+    temperature: 0.0
+
+  - name: "judge-3"
+    base_url: "https://api.example.com/v1"
+    model: "model-name-here"
+    api_key_env: "JUDGE_3_API_KEY"
+    max_tokens: 4096
+    temperature: 0.0
+
+rate_limits:
+  default_rpm: 60
+  default_concurrency: 10
