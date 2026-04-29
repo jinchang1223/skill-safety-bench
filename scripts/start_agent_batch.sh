@@ -125,6 +125,9 @@ Options:
   --rd <1-6>                         Use benchmark/risk-domain-<n>-*/manifest.json
   --manifest <path>                  Use an explicit manifest.json
   --agent <name>                     Harbor agent name (default: $SSB_AGENT or codex)
+  --agent-import-path <module:Class> Custom Harbor agent import path
+  --environment-import-path <module:Class>
+                                     Custom Harbor environment import path
   --jobs-dir <dir>                   Output directory (default: jobs/<agent>-<manifest>-<timestamp>)
   --model <model>                    Model name (default: env-driven; omitted if unset)
   --reasoning-effort <level>         Agent reasoning effort, passed as Harbor agent kwarg
@@ -303,6 +306,8 @@ RD=""
 MANIFEST=""
 JOBS_DIR=""
 AGENT="${SSB_AGENT:-codex}"
+AGENT_IMPORT_PATH="${SSB_AGENT_IMPORT_PATH:-}"
+ENVIRONMENT_IMPORT_PATH="${SSB_ENVIRONMENT_IMPORT_PATH:-}"
 MODEL="${SSB_MODEL:-}"
 REASONING_EFFORT="${SSB_REASONING_EFFORT:-}"
 NETWORK_MODE="${NETWORK_MODE:-}"
@@ -337,6 +342,16 @@ while [[ $# -gt 0 ]]; do
     --agent)
       require_value "$1" "${2-}"
       AGENT="$2"
+      shift 2
+      ;;
+    --agent-import-path)
+      require_value "$1" "${2-}"
+      AGENT_IMPORT_PATH="$2"
+      shift 2
+      ;;
+    --environment-import-path)
+      require_value "$1" "${2-}"
+      ENVIRONMENT_IMPORT_PATH="$2"
       shift 2
       ;;
     --model)
@@ -472,7 +487,7 @@ CATEGORY_FILTERS_JSON="$(json_array "${CATEGORY_FILTERS[@]}")"
 AGENT_KWARGS_JSON="$(json_array "${AGENT_KWARGS[@]}")"
 
 write_selection_metadata() {
-  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${AGENT}" "${MODEL}" "${REASONING_EFFORT}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" "${AGENT_KWARGS_JSON}" <<'PY'
+  python3 - "${MANIFEST}" "${JOBS_DIR}" "${ENVRC}" "${AGENT}" "${MODEL}" "${REASONING_EFFORT}" "${RETRIES}" "${AGENT_TIMEOUT_MULTIPLIER}" "${AGENT_SETUP_TIMEOUT_MULTIPLIER}" "${CASE_FILTERS_JSON}" "${CATEGORY_FILTERS_JSON}" "${AGENT_KWARGS_JSON}" "${AGENT_IMPORT_PATH}" "${ENVIRONMENT_IMPORT_PATH}" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -489,6 +504,8 @@ agent_setup_timeout_multiplier = float(sys.argv[9])
 case_filters = json.loads(sys.argv[10])
 category_filters = json.loads(sys.argv[11])
 agent_kwargs = json.loads(sys.argv[12])
+agent_import_path = sys.argv[13]
+environment_import_path = sys.argv[14]
 
 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 selected = manifest["cases"]
@@ -516,6 +533,8 @@ batch_config = {
     "retries": retries,
     "agent_timeout_multiplier": agent_timeout_multiplier,
     "agent_setup_timeout_multiplier": agent_setup_timeout_multiplier,
+    "agent_import_path": agent_import_path,
+    "environment_import_path": environment_import_path,
     "agent_kwargs": agent_kwargs,
     "case_filter": [case["case_id"] for case in selected],
     "category_filter": category_filters,
@@ -742,6 +761,12 @@ fi
 if [[ -n "${REASONING_EFFORT}" ]]; then
   printf 'reasoning_effort: %s\n' "${REASONING_EFFORT}"
 fi
+if [[ -n "${AGENT_IMPORT_PATH}" ]]; then
+  printf 'agent_import_path: %s\n' "${AGENT_IMPORT_PATH}"
+fi
+if [[ -n "${ENVIRONMENT_IMPORT_PATH}" ]]; then
+  printf 'environment_import_path: %s\n' "${ENVIRONMENT_IMPORT_PATH}"
+fi
 if [[ -n "${NETWORK_MODE}" ]]; then
   printf 'network_mode: %s\n' "${NETWORK_MODE}"
 fi
@@ -789,6 +814,12 @@ for idx in "${!SELECTED_CASES[@]}"; do
   fi
   if [[ -n "${REASONING_EFFORT}" ]]; then
     case_cmd+=(--reasoning-effort "${REASONING_EFFORT}")
+  fi
+  if [[ -n "${AGENT_IMPORT_PATH}" ]]; then
+    case_cmd+=(--agent-import-path "${AGENT_IMPORT_PATH}")
+  fi
+  if [[ -n "${ENVIRONMENT_IMPORT_PATH}" ]]; then
+    case_cmd+=(--environment-import-path "${ENVIRONMENT_IMPORT_PATH}")
   fi
   for agent_kwarg in "${AGENT_KWARGS[@]}"; do
     case_cmd+=(--agent-kwarg "${agent_kwarg}")

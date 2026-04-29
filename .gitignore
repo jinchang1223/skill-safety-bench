@@ -23,3 +23,9 @@ prompts/
 .runtime
 rerun_script_glm.sh
 rerun_script_minimax.sh
+rerun_script_kimi_1.sh
+rerun_script_kimi_2.sh
+rerun_script_gemini_1.sh
+rerun_script_gemini_2.sh
+run_claude.sh
+paper_notes/

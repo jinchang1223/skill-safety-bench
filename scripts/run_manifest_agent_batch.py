@@ -128,6 +128,8 @@ def build_harbor_command(
     retries: int,
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
+    agent_import_path: str,
+    environment_import_path: str,
     agent_kwargs: list[str],
     artifacts: list[str],
 ) -> str:
@@ -141,13 +143,18 @@ def build_harbor_command(
     parts.extend(
         [
             f"-p {task_path}",
-            f"-a {agent}",
             f"-o {jobs_dir}",
             f"--job-name {case_name}",
         ]
     )
+    if agent_import_path:
+        parts.append(f"--agent-import-path {shlex.quote(agent_import_path)}")
+    else:
+        parts.append(f"-a {agent}")
     if model:
         parts.append(f"-m {model}")
+    if environment_import_path:
+        parts.append(f"--environment-import-path {shlex.quote(environment_import_path)}")
     if reasoning_effort:
         parts.append(f"--ak {shlex.quote(f'reasoning_effort={reasoning_effort}')}")
     for agent_kwarg in agent_kwargs:
@@ -193,6 +200,8 @@ def run_case(
     retries: int,
     agent_timeout_multiplier: float,
     agent_setup_timeout_multiplier: float | None,
+    agent_import_path: str,
+    environment_import_path: str,
     agent_kwargs: list[str],
     envrc_path: Path,
     network_mode: str | None,
@@ -220,6 +229,8 @@ def run_case(
         retries=retries,
         agent_timeout_multiplier=agent_timeout_multiplier,
         agent_setup_timeout_multiplier=agent_setup_timeout_multiplier,
+        agent_import_path=agent_import_path,
+        environment_import_path=environment_import_path,
         agent_kwargs=agent_kwargs,
         artifacts=artifacts,
     )
@@ -247,6 +258,8 @@ def main() -> None:
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--agent-timeout-multiplier", type=float, default=3.0)
     parser.add_argument("--agent-setup-timeout-multiplier", type=float, default=8.0)
+    parser.add_argument("--agent-import-path", default="")
+    parser.add_argument("--environment-import-path", default="")
     parser.add_argument("--agent-kwarg", action="append", default=[])
     parser.add_argument("--case-filter", action="append", default=[])
     parser.add_argument("--category-filter", action="append", default=[])
@@ -279,6 +292,8 @@ def main() -> None:
         "network_mode": args.network_mode,
         "agent_timeout_multiplier": args.agent_timeout_multiplier,
         "agent_setup_timeout_multiplier": args.agent_setup_timeout_multiplier,
+        "agent_import_path": args.agent_import_path,
+        "environment_import_path": args.environment_import_path,
         "agent_kwargs": args.agent_kwarg,
         "retries": args.retries,
         "category_filter": sorted(category_filter),
@@ -306,6 +321,8 @@ def main() -> None:
             retries=args.retries,
             agent_timeout_multiplier=args.agent_timeout_multiplier,
             agent_setup_timeout_multiplier=args.agent_setup_timeout_multiplier,
+            agent_import_path=args.agent_import_path,
+            environment_import_path=args.environment_import_path,
             agent_kwargs=args.agent_kwarg,
             envrc_path=envrc_path,
             network_mode=args.network_mode,
