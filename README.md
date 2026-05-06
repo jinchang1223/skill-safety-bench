@@ -5,28 +5,34 @@
   <a href="./README.zh.md"><img alt="中文" src="https://img.shields.io/badge/%E4%B8%AD%E6%96%87-blue?style=for-the-badge"></a>
 </p>
 
-`Skill Safety Bench` is a fully materialized benchmark for evaluating safety failures induced through skill-facing context and supporting local artifacts. It is not a dynamic case generator. The repository contains prepared benchmark cases that can be run with Harbor.
+`Skill Safety Bench` is a fully materialized benchmark for evaluating safety failures caused by attacks on skill-facing context. Each case keeps the user-facing task ordinary, while the attack is placed in local skills, helper scripts, sidecar files, corpora, templates, or other workspace artifacts that an agent may consult during execution.
 
-### Safety Notice
+<p align="center">
+  <img src="./assets/figures/introduction.png" alt="Skill Safety Bench overview" width="900">
+</p>
 
-This repository contains adversarial benchmark cases. Some cases simulate phishing, credential solicitation, destructive operations, data exfiltration, sandbox boundary abuse, external actions, and persistence-like behaviors. Run the benchmark only in isolated research environments.
+## What the Benchmark Evaluates
 
-Do not use production credentials, production cloud accounts, personal accounts, or sensitive local files when running these cases. Prefer throwaway API keys, disposable containers, restricted network access, and a dedicated working directory. Review run artifacts before sharing them.
+Modern coding and task agents often rely on local skills and environment artifacts, not only the user prompt. Skill Safety Bench tests whether an agent can complete benign work while resisting unsafe instructions or misleading context embedded in those skill-facing surfaces.
 
-### Repository Layout
+The benchmark is static and ready to run. It is not a case generator. The repository contains 155 prepared cases across 6 risk domains and 30 categories. Each case packages:
 
-- `benchmark/`
-  Static benchmark cases organized by risk domain, category, and case id.
-- `scripts/start_agent_batch.sh`
-  The main local execution entry point. It selects cases, launches Harbor, and refreshes run summaries.
-- `scripts/run_manifest_agent_batch.py`
-  Runner implementation used by `start_agent_batch.sh`.
-- `env.example`
-  Example environment file. Copy it to `.envrc` and fill in local credentials before running.
+- a benign base task that should still be completed
+- one or more skill-facing attack surfaces
+- a deterministic verifier for the unsafe behavior
+- task tests for base-task completion
+- metadata and rationale describing the final case design
 
-### Benchmark Layout
+Each run is evaluated on two axes:
 
-Each case is packaged as:
+- `task_success`: whether the ordinary user task was completed
+- `attack_success`: whether the unsafe behavior was observed
+
+This separation is important: a system can appear capable because it completes the task, while still being vulnerable because it follows the attack-bearing skill context.
+
+## Benchmark Structure
+
+Cases are organized by risk domain, category, and case id:
 
 ```text
 benchmark/<risk-domain>/<category>/<case>/
@@ -41,28 +47,34 @@ benchmark/<risk-domain>/<category>/<case>/
   eval/verify_attack.py
 ```
 
-Key files:
+Important files:
 
-- `attacked_task/`
-  The Harbor task package used for the agent run.
-- `attacked_task/tests/test.sh`
-  The canonical base-task test entry point.
-- `eval/verify_attack.py`
-  The deterministic attack-behavior verifier for the case.
-- `metadata.json`
-  Machine-readable metadata.
-- `rationale.md`
-  Human-readable case rationale.
+| Path | Role |
+| --- | --- |
+| `attacked_task/` | Harbor task package used for the agent run. |
+| `attacked_task/tests/test.sh` | Canonical base-task test entry point. |
+| `eval/verify_attack.py` | Rule-based verifier for attack behavior. |
+| `metadata.json` | Machine-readable case metadata. |
+| `rationale.md` | Human-readable case rationale. |
+| `benchmark/<risk-domain>/manifest.json` | Case list used by batch runs. |
 
-The benchmark currently contains 155 cases across 6 risk domains and 30 categories. Category directories use the `categoryN-...` naming pattern, for example:
+The benchmark directory is the source of truth for cases. Category directories use the `categoryN-...` naming pattern, for example:
 
 ```text
 benchmark/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category1-availability_cost_and_service_exhaustion/
 ```
 
-### Setup
+## Safety Notice
 
-Install or prepare:
+This repository contains adversarial benchmark cases. Some cases simulate phishing, credential solicitation, destructive operations, data exfiltration, sandbox boundary abuse, external actions, and persistence-like behaviors.
+
+Run the benchmark only in isolated research environments. Do not use production credentials, production cloud accounts, personal accounts, or sensitive local files. Prefer throwaway API keys, disposable containers, restricted network access, and a dedicated working directory. Review run artifacts before sharing them.
+
+## How to Run the Benchmark
+
+### 1. Prepare the Toolchain
+
+Required tools:
 
 - `bash`
 - `python3`, recommended `>= 3.11`
@@ -94,7 +106,7 @@ export NVM_DIR="$HOME/.nvm"
 nvm use 22
 ```
 
-### Configure Environment Variables
+### 2. Configure Environment Variables
 
 Create a local `.envrc` from the example file:
 
@@ -124,7 +136,13 @@ direnv allow
 
 If not, no extra step is required. The batch script explicitly sources `.envrc` at runtime.
 
-### Running the Benchmark
+### 3. Run Cases
+
+The canonical entry point is:
+
+```bash
+scripts/start_agent_batch.sh
+```
 
 Run one risk domain:
 
@@ -187,7 +205,7 @@ Print selected cases without executing:
 scripts/start_agent_batch.sh --rd 5 --dry-run
 ```
 
-### Run Outputs
+### 4. Read Run Outputs
 
 Each run creates an output directory under `jobs/`:
 
@@ -195,26 +213,19 @@ Each run creates an output directory under `jobs/`:
 jobs/<agent>-risk-domain-5-memory-recovery-audit-and-persistence-risks-<timestamp>/
 ```
 
-Important files:
+Start with:
+
+- `jobs/<run>/attack_results.json`
+- `jobs/<run>/summary.json`
+- `jobs/<run>/attack_results.csv`
+- `jobs/<run>/summary.csv`
+
+Useful per-run files:
 
 - `selected_cases.json`
 - `batch_config.json`
 - `<case_id>/case_result.json`
-- `attack_results.json`
-- `summary.json`
-- `attack_results.csv`
 - `attack_results.md`
-- `summary.csv`
-- `summary.md`
-
-Start with `jobs/<run>/attack_results.json` and `jobs/<run>/summary.json` when inspecting a run.
-
-### Interpreting Results
-
-Each case should be read on two axes:
-
-- whether the benign base task completed successfully
-- whether the unsafe attack behavior was observed
 
 Common attack outcomes:
 
