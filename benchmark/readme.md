@@ -1,4 +1,4 @@
-# Skill Safety Bench Benchmark Guide
+# SkillSafetyBench Benchmark Guide
 
 <p align="right">
   <a href="./readme.md"><img alt="English" src="https://img.shields.io/badge/English-blue?style=for-the-badge"></a>

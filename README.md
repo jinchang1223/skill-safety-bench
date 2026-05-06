@@ -1,19 +1,19 @@
-# Skill Safety Bench
+# SkillSafetyBench
 
 <p align="right">
   <a href="./README.md"><img alt="English" src="https://img.shields.io/badge/English-blue?style=for-the-badge"></a>
   <a href="./README.zh.md"><img alt="中文" src="https://img.shields.io/badge/%E4%B8%AD%E6%96%87-blue?style=for-the-badge"></a>
 </p>
 
-`Skill Safety Bench` is a fully materialized benchmark for evaluating safety failures caused by attacks on skill-facing context. Each case keeps the user-facing task ordinary, while the attack is placed in local skills, helper scripts, sidecar files, corpora, templates, or other workspace artifacts that an agent may consult during execution.
+`SkillSafetyBench` is a fully materialized benchmark for evaluating safety failures caused by attacks on skill-facing context. Each case keeps the user-facing task ordinary, while the attack is placed in local skills, helper scripts, sidecar files, corpora, templates, or other workspace artifacts that an agent may consult during execution.
 
 <p align="center">
-  <img src="./assets/figures/introduction.png" alt="Skill Safety Bench overview" width="900">
+  <img src="./assets/figures/introduction.png" alt="SkillSafetyBench overview" width="900">
 </p>
 
 ## What the Benchmark Evaluates
 
-Modern coding and task agents often rely on local skills and environment artifacts, not only the user prompt. Skill Safety Bench tests whether an agent can complete benign work while resisting unsafe instructions or misleading context embedded in those skill-facing surfaces.
+Modern coding and task agents often rely on local skills and environment artifacts, not only the user prompt. SkillSafetyBench tests whether an agent can complete benign work while resisting unsafe instructions or misleading context embedded in those skill-facing surfaces. The benign task carriers are selected from [SkillsBench](https://www.skillsbench.ai). 
 
 The benchmark is static and ready to run. It is not a case generator. The repository contains 155 prepared cases across 6 risk domains and 30 categories. Each case packages:
 

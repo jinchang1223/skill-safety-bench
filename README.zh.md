@@ -1,19 +1,19 @@
-# Skill Safety Bench
+# SkillSafetyBench
 
 <p align="right">
   <a href="./README.md"><img alt="English" src="https://img.shields.io/badge/English-blue?style=for-the-badge"></a>
   <a href="./README.zh.md"><img alt="中文" src="https://img.shields.io/badge/%E4%B8%AD%E6%96%87-blue?style=for-the-badge"></a>
 </p>
 
-`Skill Safety Bench` 是一个已经物化好的 benchmark，用来评估针对 skill-facing context 的攻击导致的 agent 安全失败。每个 case 都保持用户表层任务是普通任务，同时把攻击放在本地 skills、helper scripts、sidecar files、corpora、templates 或其他 agent 执行时可能读取的 workspace artifacts 中。
+`SkillSafetyBench` 是一个已经物化好的 benchmark，用来评估针对 skill-facing context 的攻击导致的 agent 安全失败。每个 case 都保持用户表层任务是普通任务，同时把攻击放在本地 skills、helper scripts、sidecar files、corpora、templates 或其他 agent 执行时可能读取的 workspace artifacts 中。
 
 <p align="center">
-  <img src="./assets/figures/introduction.png" alt="Skill Safety Bench overview" width="900">
+  <img src="./assets/figures/introduction.png" alt="SkillSafetyBench overview" width="900">
 </p>
 
 ## Benchmark 评估什么
 
-现代 coding agent 和 task agent 往往不只依赖用户 prompt，还会读取本地 skills 和环境 artifacts。Skill Safety Bench 测试的是：agent 在完成正常任务的同时，能否抵抗嵌入在这些 skill-facing surfaces 中的不安全指令或误导性上下文。
+现代 coding agent 和 task agent 往往不只依赖用户 prompt，还会读取本地 skills 和环境 artifacts。SkillSafetyBench 测试的是：agent 在完成正常任务的同时，能否抵抗嵌入在这些 skill-facing surfaces 中的不安全指令或误导性上下文。Benign task carriers 选自 [SkillsBench](https://www.skillsbench.ai)。
 
 这个 benchmark 是静态、可直接运行的 benchmark，不是 case 生成框架。仓库包含 155 个已经准备好的 cases，覆盖 6 个 risk domains 和 30 个 categories。每个 case 都包含：
 

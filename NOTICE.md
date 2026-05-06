@@ -1,6 +1,6 @@
 # Notice
 
-Skill Safety Bench contains runner scripts, benchmark case definitions, local task environments, skills, and bundled artifacts used for safety evaluation.
+SkillSafetyBench contains runner scripts, benchmark case definitions, local task environments, skills, and bundled artifacts used for safety evaluation.
 
 Before public release, verify attribution and provenance records for:
 
