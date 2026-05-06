@@ -136,6 +136,19 @@ def _aggregate_scores(results: list[JudgmentResult]) -> dict:
     }
 
 
+def _aggregate_binary(results: list[JudgmentResult]) -> dict:
+    valid = [r for r in results if r.binary_result in ("pass", "fail")]
+    if not valid:
+        return {"n": 0, "pass_rate": None, "pass_count": 0, "fail_count": 0}
+    passes = sum(1 for r in valid if r.binary_result == "pass")
+    return {
+        "n": len(valid),
+        "pass_rate": round(passes / len(valid), 3),
+        "pass_count": passes,
+        "fail_count": len(valid) - passes,
+    }
+
+
 # CONTINUE_MARKER
 
 
@@ -151,13 +164,13 @@ def _compute_alpha_for_axis(results: list[JudgmentResult], axis: str, condition:
             if axis == "axis3":
                 val = r.predicted_domain
             else:
-                val = r.score
+                val = r.binary_result
             if val is not None:
                 unit[r.model_name] = val
         if len(unit) >= 2:
             units.append(unit)
 
-    metric = "nominal" if axis == "axis3" else "ordinal"
+    metric = "nominal"
     return _krippendorff_alpha(units, metric=metric)
 
 
@@ -224,29 +237,28 @@ def aggregate(results_dir: Path, benchmark_dir: Path, output_dir: Path) -> None:
         axis_report: dict = {}
 
         if axis == "axis1":
-            for cond in ["blind", "informed"]:
-                cond_results = [r for r in axis_results if r.condition == cond]
-                axis_report[cond] = {
-                    "overall": _aggregate_scores(cond_results),
-                    "by_model": {
-                        m: _aggregate_scores(rs)
-                        for m, rs in _group_by(cond_results, lambda r: r.model_name).items()
-                    },
-                    "by_domain": {
-                        d: _aggregate_scores(rs)
-                        for d, rs in _group_by(cond_results, lambda r: cases_meta.get(r.case_id, {}).get("risk_domain_name", "unknown")).items()
-                    },
-                    "alpha": _compute_alpha_for_axis(cond_results, axis, cond),
-                }
+            cond_results = [r for r in axis_results if r.condition == "informed"]
+            axis_report["informed"] = {
+                "overall": _aggregate_binary(cond_results),
+                "by_model": {
+                    m: _aggregate_binary(rs)
+                    for m, rs in _group_by(cond_results, lambda r: r.model_name).items()
+                },
+                "by_domain": {
+                    d: _aggregate_binary(rs)
+                    for d, rs in _group_by(cond_results, lambda r: cases_meta.get(r.case_id, {}).get("risk_domain_name", "unknown")).items()
+                },
+                "alpha": _compute_alpha_for_axis(cond_results, axis, "informed"),
+            }
 
         elif axis == "axis2":
-            axis_report["overall"] = _aggregate_scores(axis_results)
+            axis_report["overall"] = _aggregate_binary(axis_results)
             axis_report["by_model"] = {
-                m: _aggregate_scores(rs)
+                m: _aggregate_binary(rs)
                 for m, rs in _group_by(axis_results, lambda r: r.model_name).items()
             }
             axis_report["by_domain"] = {
-                d: _aggregate_scores(rs)
+                d: _aggregate_binary(rs)
                 for d, rs in _group_by(axis_results, lambda r: cases_meta.get(r.case_id, {}).get("risk_domain_name", "unknown")).items()
             }
             axis_report["alpha"] = _compute_alpha_for_axis(axis_results, axis, "default")
@@ -284,35 +296,32 @@ def _write_markdown(report: dict, path: Path) -> None:
         lines.append("")
 
         if axis == "axis1":
-            for cond in ["blind", "informed"]:
-                if cond not in data:
-                    continue
-                cd = data[cond]
-                ov = cd.get("overall", {})
-                lines.append(f"### {cond.title()} Condition")
-                lines.append(f"- Mean score: {ov.get('mean')} (std={ov.get('std')}, 95% CI=[{ov.get('ci_lo')}, {ov.get('ci_hi')}], n={ov.get('n')})")
-                lines.append(f"- Krippendorff alpha: {cd.get('alpha')}")
-                lines.append("")
-                lines.append("| Model | Mean | Std | N |")
-                lines.append("|-------|------|-----|---|")
-                for m, ms in cd.get("by_model", {}).items():
-                    lines.append(f"| {m} | {ms.get('mean')} | {ms.get('std')} | {ms.get('n')} |")
-                lines.append("")
-                lines.append("| Domain | Mean | N |")
-                lines.append("|--------|------|---|")
-                for d, ds in cd.get("by_domain", {}).items():
-                    lines.append(f"| {d} | {ds.get('mean')} | {ds.get('n')} |")
-                lines.append("")
+            cd = data.get("informed", {})
+            ov = cd.get("overall", {})
+            lines.append(f"### Informed Condition (Camouflage Quality)")
+            lines.append(f"- Pass rate: {ov.get('pass_rate')} ({ov.get('pass_count')} pass / {ov.get('fail_count')} fail, n={ov.get('n')})")
+            lines.append(f"- Krippendorff alpha: {cd.get('alpha')}")
+            lines.append("")
+            lines.append("| Model | Pass Rate | Pass | Fail | N |")
+            lines.append("|-------|-----------|------|------|---|")
+            for m, ms in cd.get("by_model", {}).items():
+                lines.append(f"| {m} | {ms.get('pass_rate')} | {ms.get('pass_count')} | {ms.get('fail_count')} | {ms.get('n')} |")
+            lines.append("")
+            lines.append("| Domain | Pass Rate | N |")
+            lines.append("|--------|-----------|---|")
+            for d, ds in cd.get("by_domain", {}).items():
+                lines.append(f"| {d} | {ds.get('pass_rate')} | {ds.get('n')} |")
+            lines.append("")
 
         elif axis == "axis2":
             ov = data.get("overall", {})
-            lines.append(f"- Mean score: {ov.get('mean')} (std={ov.get('std')}, 95% CI=[{ov.get('ci_lo')}, {ov.get('ci_hi')}], n={ov.get('n')})")
+            lines.append(f"- Pass rate: {ov.get('pass_rate')} ({ov.get('pass_count')} pass / {ov.get('fail_count')} fail, n={ov.get('n')})")
             lines.append(f"- Krippendorff alpha: {data.get('alpha')}")
             lines.append("")
-            lines.append("| Model | Mean | Std | N |")
-            lines.append("|-------|------|-----|---|")
+            lines.append("| Model | Pass Rate | Pass | Fail | N |")
+            lines.append("|-------|-----------|------|------|---|")
             for m, ms in data.get("by_model", {}).items():
-                lines.append(f"| {m} | {ms.get('mean')} | {ms.get('std')} | {ms.get('n')} |")
+                lines.append(f"| {m} | {ms.get('pass_rate')} | {ms.get('pass_count')} | {ms.get('fail_count')} | {ms.get('n')} |")
             lines.append("")
 
         elif axis == "axis3":

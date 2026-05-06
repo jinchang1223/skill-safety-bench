@@ -28,6 +28,7 @@ class JudgmentResult:
     condition: str
     model_name: str
     score: int | None = None
+    binary_result: str | None = None  # "pass" or "fail" for axis1/axis2
     predicted_domain: str | None = None
     predicted_category: str | None = None
     false_positive_risk: str | None = None

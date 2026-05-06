@@ -23,3 +23,5 @@ prompts/
 .runtime
 rerun_script_glm.sh
 rerun_script_minimax.sh
+logs/
+validation/results/

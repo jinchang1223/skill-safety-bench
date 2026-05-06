@@ -4,8 +4,9 @@ import asyncio
 import logging
 import os
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+import httpx
 import yaml
 from openai import AsyncOpenAI
 
@@ -20,6 +21,7 @@ class JudgeModel:
     api_key: str
     max_tokens: int = 4096
     temperature: float = 0.0
+    no_proxy: bool = False
 
 
 def load_config(config_path: str) -> tuple[list[JudgeModel], dict]:
@@ -38,6 +40,7 @@ def load_config(config_path: str) -> tuple[list[JudgeModel], dict]:
             api_key=api_key,
             max_tokens=j.get("max_tokens", 4096),
             temperature=j.get("temperature", 0.0),
+            no_proxy=j.get("no_proxy", False),
         ))
 
     rate_limits = cfg.get("rate_limits", {})
@@ -47,7 +50,16 @@ def load_config(config_path: str) -> tuple[list[JudgeModel], dict]:
 class JudgeClient:
     def __init__(self, judge: JudgeModel, concurrency: int = 10, rpm: int = 60):
         self.judge = judge
-        self._client = AsyncOpenAI(base_url=judge.base_url, api_key=judge.api_key)
+        timeout = httpx.Timeout(connect=10.0, read=120.0, write=30.0, pool=10.0)
+        if judge.no_proxy:
+            http_client = httpx.AsyncClient(trust_env=False, timeout=timeout)
+        else:
+            http_client = httpx.AsyncClient(timeout=timeout)
+        self._client = AsyncOpenAI(
+            base_url=judge.base_url,
+            api_key=judge.api_key or "no-key",
+            http_client=http_client,
+        )
         self._semaphore = asyncio.Semaphore(concurrency)
         self._rpm = rpm
         self._call_times: list[float] = []
@@ -75,7 +87,7 @@ class JudgeClient:
                     return resp.choices[0].message.content or ""
                 except Exception as e:
                     err_str = str(e)
-                    is_retryable = any(s in err_str for s in ["429", "500", "502", "503", "529"])
+                    is_retryable = any(s in err_str for s in ["429", "500", "502", "503", "529", "timeout", "Timeout", "ReadTimeout"])
                     if not is_retryable or attempt == max_retries - 1:
                         logger.error("API call failed for %s: %s", self.judge.name, e)
                         raise

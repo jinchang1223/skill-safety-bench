@@ -46,12 +46,20 @@ def load_all_results(output_dir: Path) -> list[JudgmentResult]:
 
 
 def parse_judge_response(raw: str, axis: str) -> dict:
-    json_match = re.search(r'\{[^{}]*\}', raw, re.DOTALL)
-    if json_match:
-        try:
-            return json.loads(json_match.group())
-        except json.JSONDecodeError:
-            pass
+    # Try to find the outermost JSON object, handling nested braces
+    start = raw.find('{')
+    if start != -1:
+        depth = 0
+        for i, ch in enumerate(raw[start:], start):
+            if ch == '{':
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+                if depth == 0:
+                    try:
+                        return json.loads(raw[start:i + 1])
+                    except json.JSONDecodeError:
+                        break
 
     parsed: dict = {"_parse_failed": True}
 
@@ -93,8 +101,9 @@ def build_judgment(
     )
 
     if axis in ("axis1", "axis2"):
-        result.score = parsed.get("score")
-    if axis == "axis2":
+        raw_result = parsed.get("result", "")
+        if isinstance(raw_result, str) and raw_result.lower() in ("pass", "fail"):
+            result.binary_result = raw_result.lower()
         result.false_positive_risk = parsed.get("false_positive_risk")
         result.false_negative_risk = parsed.get("false_negative_risk")
     if axis == "axis3":

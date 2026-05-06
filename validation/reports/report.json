@@ -1,0 +1,209 @@
+{
+  "total_judgments": 922,
+  "axes": {
+    "axis1": {
+      "informed": {
+        "overall": {
+          "n": 299,
+          "pass_rate": 0.93,
+          "pass_count": 278,
+          "fail_count": 21
+        },
+        "by_model": {
+          "glm-5": {
+            "n": 144,
+            "pass_rate": 0.931,
+            "pass_count": 134,
+            "fail_count": 10
+          },
+          "kimi-k2.5": {
+            "n": 155,
+            "pass_rate": 0.929,
+            "pass_count": 144,
+            "fail_count": 11
+          }
+        },
+        "by_domain": {
+          "Knowledge Model Supply Chain and Operational Risks": {
+            "n": 47,
+            "pass_rate": 0.809,
+            "pass_count": 38,
+            "fail_count": 9
+          },
+          "Context Trust and Prompt Manipulation Risks": {
+            "n": 50,
+            "pass_rate": 1.0,
+            "pass_count": 50,
+            "fail_count": 0
+          },
+          "Agency Scope and Authorization Risks": {
+            "n": 35,
+            "pass_rate": 0.857,
+            "pass_count": 30,
+            "fail_count": 5
+          },
+          "Execution, Runtime, Framework, and Protocol Risks": {
+            "n": 46,
+            "pass_rate": 0.935,
+            "pass_count": 43,
+            "fail_count": 3
+          },
+          "Agency Scope And Authorization Risks": {
+            "n": 13,
+            "pass_rate": 1.0,
+            "pass_count": 13,
+            "fail_count": 0
+          },
+          "Memory Recovery Audit and Persistence Risks": {
+            "n": 49,
+            "pass_rate": 0.98,
+            "pass_count": 48,
+            "fail_count": 1
+          },
+          "Data Boundary Output and Externalization Risks": {
+            "n": 48,
+            "pass_rate": 0.979,
+            "pass_count": 47,
+            "fail_count": 1
+          },
+          "Execution Runtime Framework And Protocol Risks": {
+            "n": 5,
+            "pass_rate": 1.0,
+            "pass_count": 5,
+            "fail_count": 0
+          },
+          "Data Boundary Output And Externalization Risks": {
+            "n": 2,
+            "pass_rate": 1.0,
+            "pass_count": 2,
+            "fail_count": 0
+          },
+          "unknown": {
+            "n": 2,
+            "pass_rate": 0.0,
+            "pass_count": 0,
+            "fail_count": 2
+          },
+          "Knowledge Model Supply Chain And Operational Risks": {
+            "n": 2,
+            "pass_rate": 1.0,
+            "pass_count": 2,
+            "fail_count": 0
+          }
+        },
+        "alpha": 0.7440699126092385
+      }
+    },
+    "axis2": {
+      "overall": {
+        "n": 294,
+        "pass_rate": 0.929,
+        "pass_count": 273,
+        "fail_count": 21
+      },
+      "by_model": {
+        "glm-5": {
+          "n": 156,
+          "pass_rate": 0.955,
+          "pass_count": 149,
+          "fail_count": 7
+        },
+        "kimi-k2.5": {
+          "n": 138,
+          "pass_rate": 0.899,
+          "pass_count": 124,
+          "fail_count": 14
+        }
+      },
+      "by_domain": {
+        "Knowledge Model Supply Chain and Operational Risks": {
+          "n": 42,
+          "pass_rate": 0.952,
+          "pass_count": 40,
+          "fail_count": 2
+        },
+        "Context Trust and Prompt Manipulation Risks": {
+          "n": 48,
+          "pass_rate": 0.938,
+          "pass_count": 45,
+          "fail_count": 3
+        },
+        "Agency Scope and Authorization Risks": {
+          "n": 36,
+          "pass_rate": 1.0,
+          "pass_count": 36,
+          "fail_count": 0
+        },
+        "Data Boundary Output and Externalization Risks": {
+          "n": 51,
+          "pass_rate": 1.0,
+          "pass_count": 51,
+          "fail_count": 0
+        },
+        "Agency Scope And Authorization Risks": {
+          "n": 13,
+          "pass_rate": 1.0,
+          "pass_count": 13,
+          "fail_count": 0
+        },
+        "Memory Recovery Audit and Persistence Risks": {
+          "n": 48,
+          "pass_rate": 0.958,
+          "pass_count": 46,
+          "fail_count": 2
+        },
+        "Execution Runtime Framework And Protocol Risks": {
+          "n": 6,
+          "pass_rate": 1.0,
+          "pass_count": 6,
+          "fail_count": 0
+        },
+        "Execution, Runtime, Framework, and Protocol Risks": {
+          "n": 45,
+          "pass_rate": 0.733,
+          "pass_count": 33,
+          "fail_count": 12
+        },
+        "Data Boundary Output And Externalization Risks": {
+          "n": 2,
+          "pass_rate": 1.0,
+          "pass_count": 2,
+          "fail_count": 0
+        },
+        "unknown": {
+          "n": 2,
+          "pass_rate": 0.0,
+          "pass_count": 0,
+          "fail_count": 2
+        },
+        "Knowledge Model Supply Chain And Operational Risks": {
+          "n": 1,
+          "pass_rate": 1.0,
+          "pass_count": 1,
+          "fail_count": 0
+        }
+      },
+      "alpha": 0.6405228758169934
+    },
+    "axis3": {
+      "accuracy": {
+        "total": 308,
+        "domain_accuracy": 0.974,
+        "category_accuracy": 0.916
+      },
+      "by_model": {
+        "glm-5": {
+          "total": 156,
+          "domain_accuracy": 0.974,
+          "category_accuracy": 0.904
+        },
+        "kimi-k2.5": {
+          "total": 152,
+          "domain_accuracy": 0.974,
+          "category_accuracy": 0.928
+        }
+      },
+      "alpha": 1.0
+    }
+  }
+}
