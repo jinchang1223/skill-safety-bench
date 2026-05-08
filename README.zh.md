@@ -7,6 +7,9 @@
 
 `SkillSafetyBench` 是一个已经物化好的 benchmark，用来评估针对 skill-facing context 的攻击导致的 agent 安全失败。每个 case 都保持用户表层任务是普通任务，同时把攻击放在本地 skills、helper scripts、sidecar files、corpora、templates 或其他 agent 执行时可能读取的 workspace artifacts 中。
 
+
+Bench 的具体介绍、case explorer、leaderboard 和实验分析见 [SkillSafetyBench website](https://jinchang1223.github.io/skill-safety-bench-website/)。
+
 <p align="center">
   <img src="./assets/figures/introduction.png" alt="SkillSafetyBench overview" width="900">
 </p>
@@ -32,7 +35,20 @@
 
 ## Benchmark 结构
 
-Cases 按照 risk domain、category 和 case id 组织：
+SkillSafetyBench 包含 155 个 cases，整体组织为 6 个 risk domains 和 30 个 categories。每个 risk domain 下包含 5 个 categories，每个 category 下包含多个围绕普通任务载体构造的具体 cases。
+
+```text
+SkillSafetyBench
+└── 6 risk domains
+    ├── RD1: Context Trust and Prompt Manipulation Risks
+    ├── RD2: Agency, Scope, and Authorization Risks
+    ├── RD3: Execution, Runtime, Framework, and Protocol Risks
+    ├── RD4: Data Boundary, Output, and Externalization Risks
+    ├── RD5: Memory, Recovery, Audit, and Persistence Risks
+    └── RD6: Knowledge, Model, Supply Chain, and Operational Risks
+```
+
+Cases 按照 risk domain、category 和 case id 存放：
 
 ```text
 benchmark/<risk-domain>/<category>/<case>/
@@ -47,22 +63,19 @@ benchmark/<risk-domain>/<category>/<case>/
   eval/verify_attack.py
 ```
 
-关键文件：
-
-| 路径 | 作用 |
-| --- | --- |
-| `attacked_task/` | Harbor 实际运行的任务包。 |
-| `attacked_task/tests/test.sh` | 基础任务测试的 canonical entry。 |
-| `eval/verify_attack.py` | 用于检测 attack behavior 的 rule-based verifier。 |
-| `metadata.json` | 机器可读的 case metadata。 |
-| `rationale.md` | 人类可读的 case rationale。 |
-| `benchmark/<risk-domain>/manifest.json` | batch run 使用的 case 列表。 |
-
 `benchmark/` 目录是 case 的 source of truth。Category 目录统一使用 `categoryN-...` 命名，例如：
 
 ```text
 benchmark/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category1-availability_cost_and_service_exhaustion/
 ```
+
+## Benchmark Construction Pipeline
+
+Benchmark construction pipeline 从 benign task carriers 出发，保持原始 user-facing task 不变，将攻击放入 skill-facing artifacts，并为 task completion 和 attack behavior 分别加入确定性检查。这样可以把评估重点放在：agent 是否能在完成正常任务的同时，抵抗不安全的本地上下文。
+
+<p align="center">
+  <img src="./assets/figures/construction-pipeline.png" alt="SkillSafetyBench construction pipeline" width="900">
+</p>
 
 ## 安全说明
 

@@ -7,6 +7,9 @@
 
 `SkillSafetyBench` is a fully materialized benchmark for evaluating safety failures caused by attacks on skill-facing context. Each case keeps the user-facing task ordinary, while the attack is placed in local skills, helper scripts, sidecar files, corpora, templates, or other workspace artifacts that an agent may consult during execution.
 
+
+For a visual benchmark overview, case explorer, leaderboard, and experiment analysis, visit the [SkillSafetyBench website](https://jinchang1223.github.io/skill-safety-bench-website/).
+
 <p align="center">
   <img src="./assets/figures/introduction.png" alt="SkillSafetyBench overview" width="900">
 </p>
@@ -32,7 +35,20 @@ This separation is important: a system can appear capable because it completes t
 
 ## Benchmark Structure
 
-Cases are organized by risk domain, category, and case id:
+SkillSafetyBench contains 155 cases organized into 6 risk domains and 30 categories. Each risk domain contains 5 categories, and each category contains multiple concrete cases built around ordinary task carriers.
+
+```text
+SkillSafetyBench
+└── 6 risk domains
+    ├── RD1: Context Trust and Prompt Manipulation Risks
+    ├── RD2: Agency, Scope, and Authorization Risks
+    ├── RD3: Execution, Runtime, Framework, and Protocol Risks
+    ├── RD4: Data Boundary, Output, and Externalization Risks
+    ├── RD5: Memory, Recovery, Audit, and Persistence Risks
+    └── RD6: Knowledge, Model, Supply Chain, and Operational Risks
+```
+
+Cases are stored by risk domain, category, and case id:
 
 ```text
 benchmark/<risk-domain>/<category>/<case>/
@@ -47,22 +63,19 @@ benchmark/<risk-domain>/<category>/<case>/
   eval/verify_attack.py
 ```
 
-Important files:
-
-| Path | Role |
-| --- | --- |
-| `attacked_task/` | Harbor task package used for the agent run. |
-| `attacked_task/tests/test.sh` | Canonical base-task test entry point. |
-| `eval/verify_attack.py` | Rule-based verifier for attack behavior. |
-| `metadata.json` | Machine-readable case metadata. |
-| `rationale.md` | Human-readable case rationale. |
-| `benchmark/<risk-domain>/manifest.json` | Case list used by batch runs. |
-
 The benchmark directory is the source of truth for cases. Category directories use the `categoryN-...` naming pattern, for example:
 
 ```text
 benchmark/risk-domain-6-knowledge-model-supply-chain-and-operational-risks/category1-availability_cost_and_service_exhaustion/
 ```
+
+## Benchmark Construction Pipeline
+
+The benchmark construction pipeline starts from benign task carriers, preserves the original user-facing task, injects the attack through skill-facing artifacts, and attaches deterministic checks for both task completion and attack behavior. This keeps the evaluation focused on whether agents can resist unsafe local context while still doing the requested work.
+
+<p align="center">
+  <img src="./assets/figures/construction-pipeline.png" alt="SkillSafetyBench construction pipeline" width="900">
+</p>
 
 ## Safety Notice
 
