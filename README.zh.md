@@ -8,7 +8,7 @@
 `SkillSafetyBench` 是一个已经物化好的 benchmark，用来评估针对 skill-facing context 的攻击导致的 agent 安全失败。每个 case 都保持用户表层任务是普通任务，同时把攻击放在本地 skills、helper scripts、sidecar files、corpora、templates 或其他 agent 执行时可能读取的 workspace artifacts 中。
 
 
-Bench 的具体介绍、case explorer、leaderboard 和实验分析见 [SkillSafetyBench website](https://jinchang1223.github.io/skill-safety-bench-website/)。
+欢迎访问 [SkillSafetyBench website](https://jinchang1223.github.io/skill-safety-bench-website/) 查看 benchmark 设计、case explorer、leaderboard 和实验分析；完整论文见 [arXiv](https://arxiv.org/abs/2605.12015)。
 
 <p align="center">
   <img src="./assets/figures/introduction.png" alt="SkillSafetyBench overview" width="900">

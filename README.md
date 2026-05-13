@@ -8,7 +8,7 @@
 `SkillSafetyBench` is a fully materialized benchmark for evaluating safety failures caused by attacks on skill-facing context. Each case keeps the user-facing task ordinary, while the attack is placed in local skills, helper scripts, sidecar files, corpora, templates, or other workspace artifacts that an agent may consult during execution.
 
 
-For a visual benchmark overview, case explorer, leaderboard, and experiment analysis, visit the [SkillSafetyBench website](https://jinchang1223.github.io/skill-safety-bench-website/).
+Explore the benchmark design, case explorer, leaderboard, and experiment analysis on the [SkillSafetyBench website](https://jinchang1223.github.io/skill-safety-bench-website/), and read the full paper on [arXiv](https://arxiv.org/abs/2605.12015).
 
 <p align="center">
   <img src="./assets/figures/introduction.png" alt="SkillSafetyBench overview" width="900">
