@@ -16,6 +16,15 @@ from verify_replay import parse_output_artifacts
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BENCH = SCRIPT_DIR.parent
+CLAWSENTRY_REPO = BENCH.parent.parent
+LOCAL_CALENDAR_FIXTURE = (
+    CLAWSENTRY_REPO
+    / "benchmarks"
+    / "fixtures"
+    / "skills-safety-bench"
+    / "local-calendar"
+    / "default_busy_events.json"
+)
 PROXY_ENV_KEYS = (
     "http_proxy",
     "https_proxy",
@@ -106,6 +115,43 @@ def mirror_environment_payload_into_task_root(task_path: Path) -> None:
             shutil.copy2(item, destination)
 
 
+def stage_local_calendar_fixture_if_needed(task_path: Path) -> None:
+    env_dir = task_path / "environment"
+    if not env_dir.exists():
+        return
+    has_calendar_skill = any(env_dir.glob("skills/*/scripts/calendar-events-list.js"))
+    if not has_calendar_skill:
+        return
+
+    if LOCAL_CALENDAR_FIXTURE.exists():
+        fixture_payload = json.loads(LOCAL_CALENDAR_FIXTURE.read_text(encoding="utf-8"))
+    else:
+        fixture_payload = {
+            "schema_version": "clawsentry.skills_safety_bench.local_calendar.v1",
+            "events": [{"id": "local-calendar-fixture", "start": {}, "end": {}}],
+        }
+
+    fixture_text = json.dumps(fixture_payload, ensure_ascii=False, indent=2) + "\n"
+    (task_path / "calendar_events.json").write_text(fixture_text, encoding="utf-8")
+    (env_dir / "calendar_events.json").write_text(fixture_text, encoding="utf-8")
+
+    dockerfile_path = env_dir / "Dockerfile"
+    if not dockerfile_path.exists():
+        return
+    dockerfile = dockerfile_path.read_text(encoding="utf-8")
+    copy_line = "COPY calendar_events.json /root/calendar_events.json"
+    if copy_line in dockerfile:
+        return
+    lines = dockerfile.splitlines()
+    insert_at = len(lines)
+    for idx, line in enumerate(lines):
+        if line.strip().startswith("COPY skills "):
+            insert_at = idx
+            break
+    lines.insert(insert_at, copy_line)
+    dockerfile_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def stage_task_for_run(task_path: Path, jobs_dir: Path, case_name: str) -> Path:
     staged_root = jobs_dir / STAGED_TASKS_DIRNAME
     staged_root.mkdir(parents=True, exist_ok=True)
@@ -114,6 +160,7 @@ def stage_task_for_run(task_path: Path, jobs_dir: Path, case_name: str) -> Path:
         shutil.rmtree(staged_task_path)
     shutil.copytree(task_path, staged_task_path)
     mirror_environment_payload_into_task_root(staged_task_path)
+    stage_local_calendar_fixture_if_needed(staged_task_path)
     return staged_task_path
 
 
@@ -135,24 +182,24 @@ def build_harbor_command(
 ) -> str:
     parts = [
         "harbor run -q",
-        f"-r {retries}",
-        f"--agent-timeout-multiplier {agent_timeout_multiplier}",
+        f"-r {shlex.quote(str(retries))}",
+        f"--agent-timeout-multiplier {shlex.quote(str(agent_timeout_multiplier))}",
     ]
     if agent_setup_timeout_multiplier is not None:
-        parts.append(f"--agent-setup-timeout-multiplier {agent_setup_timeout_multiplier}")
+        parts.append(f"--agent-setup-timeout-multiplier {shlex.quote(str(agent_setup_timeout_multiplier))}")
     parts.extend(
         [
-            f"-p {task_path}",
-            f"-o {jobs_dir}",
-            f"--job-name {case_name}",
+            f"-p {shlex.quote(str(task_path))}",
+            f"-o {shlex.quote(str(jobs_dir))}",
+            f"--job-name {shlex.quote(case_name)}",
         ]
     )
     if agent_import_path:
         parts.append(f"--agent-import-path {shlex.quote(agent_import_path)}")
     else:
-        parts.append(f"-a {agent}")
+        parts.append(f"-a {shlex.quote(agent)}")
     if model:
-        parts.append(f"-m {model}")
+        parts.append(f"-m {shlex.quote(model)}")
     if environment_import_path:
         parts.append(f"--environment-import-path {shlex.quote(environment_import_path)}")
     if reasoning_effort:
@@ -160,7 +207,7 @@ def build_harbor_command(
     for agent_kwarg in agent_kwargs:
         parts.append(f"--ak {shlex.quote(agent_kwarg)}")
     for artifact in artifacts:
-        parts.append(f"--artifact {artifact}")
+        parts.append(f"--artifact {shlex.quote(artifact)}")
     return " ".join(parts)
 
 
