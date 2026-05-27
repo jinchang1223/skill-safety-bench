@@ -35,6 +35,145 @@ ENVIRONMENT_MIRROR_SKIP = {
     "compose.yaml",
     "__pycache__",
 }
+LOCAL_CALENDAR_FIXTURE_NAME = "calendar_events.json"
+LOCAL_CALENDAR_FIXTURE_SCHEMA = "clawsentry.skills_safety_bench.local_calendar.v1"
+VERIFIER_PATH_BOOTSTRAP_MARKER = "# SSB_VERIFIER_PATH_BOOTSTRAP"
+VERIFIER_PATH_BOOTSTRAP_SNIPPET = """# SSB_VERIFIER_PATH_BOOTSTRAP
+export PATH="${HOME}/.local/bin:/root/.local/bin:/usr/local/bin:/usr/bin:/bin:${PATH}"
+mkdir -p "${HOME}/.local/bin" 2>/dev/null || true
+[ -f "${HOME}/.local/bin/env" ] || : > "${HOME}/.local/bin/env" 2>/dev/null || true
+ssb_python_path() {
+  if command -v python3 >/dev/null 2>&1; then
+    command -v python3
+    return 0
+  fi
+  if command -v python >/dev/null 2>&1; then
+    command -v python
+    return 0
+  fi
+  return 1
+}
+ssb_python() {
+  ssb_py="$(ssb_python_path)" || return 127
+  "${ssb_py}" "$@"
+}
+ssb_run_limited() {
+  if command -v timeout >/dev/null 2>&1; then
+    timeout 45s "$@"
+  else
+    "$@"
+  fi
+}
+ssb_run_quiet_limited() {
+  ssb_run_limited "$@" >/dev/null 2>&1
+}
+ssb_real_curl="$(command -v curl 2>/dev/null || true)"
+curl() {
+  for ssb_curl_arg in "$@"; do
+    case "${ssb_curl_arg}" in
+      https://astral.sh/uv/*|https://github.com/astral-sh/uv/*|https://github.com/astral-sh/uv/releases/*)
+        return 56
+        ;;
+    esac
+  done
+  if [ -n "${ssb_real_curl}" ]; then
+    ssb_run_limited "${ssb_real_curl}" "$@"
+    return $?
+  fi
+  return 127
+}
+ssb_real_apt_get="$(command -v apt-get 2>/dev/null || true)"
+ssb_apt_only_bootstrap_packages() {
+  for ssb_apt_arg in "$@"; do
+    case "${ssb_apt_arg}" in
+      install|-y|--no-install-recommends|curl|ca-certificates) ;;
+      *) return 1 ;;
+    esac
+  done
+  return 0
+}
+apt-get() {
+  if [ "${1:-}" = "update" ] && command -v curl >/dev/null 2>&1; then
+    return 0
+  fi
+  if [ "${1:-}" = "install" ] && command -v curl >/dev/null 2>&1 && ssb_apt_only_bootstrap_packages "$@"; then
+    return 0
+  fi
+  if [ -n "${ssb_real_apt_get}" ]; then
+    ssb_run_quiet_limited "${ssb_real_apt_get}" "$@"
+    return $?
+  fi
+  return 127
+}
+ssb_pip_install_quiet() {
+  ssb_py="$(ssb_python_path)" || return 1
+  ssb_run_quiet_limited "${ssb_py}" -m pip install --user -q "$@" || \
+    ssb_run_quiet_limited "${ssb_py}" -m pip install --break-system-packages -q "$@" || \
+    ssb_run_quiet_limited "${ssb_py}" -m pip install -q "$@" || \
+    { command -v pip3 >/dev/null 2>&1 && ssb_run_quiet_limited pip3 install --user -q "$@"; } || \
+    { command -v pip3 >/dev/null 2>&1 && ssb_run_quiet_limited pip3 install --break-system-packages -q "$@"; } || \
+    { command -v pip3 >/dev/null 2>&1 && ssb_run_quiet_limited pip3 install -q "$@"; }
+}
+ssb_ensure_uvx() {
+  if command -v uvx >/dev/null 2>&1; then
+    return 0
+  fi
+  ssb_pip_install_quiet uv || true
+  export PATH="${HOME}/.local/bin:/root/.local/bin:/usr/local/bin:/usr/bin:/bin:${PATH}"
+  hash -r 2>/dev/null || true
+  command -v uvx >/dev/null 2>&1
+}
+ssb_uvx_pytest_fallback() {
+  ssb_uvx_packages=""
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --with)
+        shift
+        [ "$#" -gt 0 ] || return 2
+        ssb_uvx_packages="${ssb_uvx_packages}${ssb_uvx_packages:+ }$1"
+        shift
+        ;;
+      --with=*)
+        ssb_uvx_pkg="${1#--with=}"
+        ssb_uvx_packages="${ssb_uvx_packages}${ssb_uvx_packages:+ }${ssb_uvx_pkg}"
+        shift
+        ;;
+      pytest)
+        shift
+        if [ -n "${ssb_uvx_packages}" ]; then
+          # shellcheck disable=SC2086
+          ssb_pip_install_quiet ${ssb_uvx_packages} || true
+        fi
+        ssb_python -m pytest "$@"
+        return $?
+        ;;
+      *)
+        return 127
+        ;;
+    esac
+  done
+  return 127
+}
+uvx() {
+  ssb_real_uvx="$(type -P uvx 2>/dev/null || true)"
+  if [ -n "${ssb_real_uvx}" ]; then
+    "${ssb_real_uvx}" "$@"
+    return $?
+  fi
+  ssb_uvx_pytest_fallback "$@"
+  ssb_uvx_status=$?
+  if [ "${ssb_uvx_status}" -ne 127 ]; then
+    return "${ssb_uvx_status}"
+  fi
+  if ssb_ensure_uvx; then
+    ssb_real_uvx="$(type -P uvx 2>/dev/null || true)"
+    if [ -n "${ssb_real_uvx}" ]; then
+      "${ssb_real_uvx}" "$@"
+      return $?
+    fi
+  fi
+  return "${ssb_uvx_status}"
+}"""
 APT_BOOTSTRAP_MARKER = "# SSB_APT_HTTPS_BOOTSTRAP"
 APT_BOOTSTRAP_SNIPPET = """# SSB_APT_HTTPS_BOOTSTRAP
 RUN set -eux; \\
@@ -50,6 +189,19 @@ RUN set -eux; \\
     rm -f /etc/apt/apt.conf.d/99ssb-bootstrap-insecure; \\
     apt-get update
 """
+GIT_LFS_PACKAGECLOUD_INSTALL = (
+    "curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \\\n"
+    "    apt-get install -y git-lfs"
+)
+GIT_LFS_APT_FIRST_INSTALL = (
+    "set -eux; \\\n"
+    "    apt-get update; \\\n"
+    "    if ! apt-get install -y git-lfs; then \\\n"
+    "      curl -fsSL https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash; \\\n"
+    "      apt-get update; \\\n"
+    "      apt-get install -y git-lfs; \\\n"
+    "    fi"
+)
 
 
 def resolve_bench_path(raw_path: str) -> Path:
@@ -72,10 +224,14 @@ def maybe_patch_task_dockerfile(task_path: Path) -> None:
         return
 
     original = dockerfile_path.read_text(encoding="utf-8")
-    if APT_BOOTSTRAP_MARKER in original or "apt-get update" not in original:
+    patched = original.replace(GIT_LFS_PACKAGECLOUD_INSTALL, GIT_LFS_APT_FIRST_INSTALL)
+
+    if APT_BOOTSTRAP_MARKER in patched or "apt-get update" not in patched:
+        if patched != original:
+            dockerfile_path.write_text(patched, encoding="utf-8")
         return
 
-    lines = original.splitlines()
+    lines = patched.splitlines()
     insert_at = None
     for idx, line in enumerate(lines):
         if line.lstrip().startswith("FROM "):
@@ -83,6 +239,8 @@ def maybe_patch_task_dockerfile(task_path: Path) -> None:
             break
 
     if insert_at is None:
+        if patched != original:
+            dockerfile_path.write_text(patched, encoding="utf-8")
         return
 
     patched_lines = lines[:insert_at] + ["", APT_BOOTSTRAP_SNIPPET.rstrip(), ""] + lines[insert_at:]
@@ -106,6 +264,98 @@ def mirror_environment_payload_into_task_root(task_path: Path) -> None:
             shutil.copy2(item, destination)
 
 
+def _task_has_calendar_skill(task_path: Path) -> bool:
+    skills_dir = task_path / "environment" / "skills"
+    if not skills_dir.exists():
+        return False
+    return any(path.name == "calendar-events-list.js" for path in skills_dir.rglob("*"))
+
+
+def _local_calendar_fixture_payload() -> dict[str, Any]:
+    return {
+        "schema_version": LOCAL_CALENDAR_FIXTURE_SCHEMA,
+        "events": [
+            {
+                "id": "work5a-busy-1",
+                "summary": "Existing calendar hold",
+                "start": {"dateTime": "2026-01-08T10:30:00-08:00"},
+                "end": {"dateTime": "2026-01-08T11:30:00-08:00"},
+            },
+            {
+                "id": "work5a-busy-2",
+                "summary": "Existing external appointment",
+                "start": {"dateTime": "2026-01-09T09:00:00-08:00"},
+                "end": {"dateTime": "2026-01-09T10:00:00-08:00"},
+            },
+        ],
+    }
+
+
+def _patch_calendar_fixture_copy(task_path: Path) -> None:
+    dockerfile_path = task_path / "environment" / "Dockerfile"
+    if not dockerfile_path.exists():
+        return
+    text = dockerfile_path.read_text(encoding="utf-8")
+    if LOCAL_CALENDAR_FIXTURE_NAME in text:
+        return
+
+    lines = text.splitlines()
+    insert_at = None
+    for idx, line in enumerate(lines):
+        if line.lstrip().startswith("COPY skills "):
+            insert_at = idx
+            break
+    if insert_at is None:
+        for idx, line in enumerate(lines):
+            if line.lstrip().startswith("FROM "):
+                insert_at = idx + 1
+                break
+    if insert_at is None:
+        return
+
+    copy_line = f"COPY {LOCAL_CALENDAR_FIXTURE_NAME} /root/{LOCAL_CALENDAR_FIXTURE_NAME}"
+    patched = lines[:insert_at] + [copy_line] + lines[insert_at:]
+    dockerfile_path.write_text("\n".join(patched) + "\n", encoding="utf-8")
+
+
+def stage_local_calendar_fixture_if_needed(task_path: Path) -> None:
+    if not _task_has_calendar_skill(task_path):
+        return
+
+    payload = _local_calendar_fixture_payload()
+    text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    for destination in (
+        task_path / LOCAL_CALENDAR_FIXTURE_NAME,
+        task_path / "environment" / LOCAL_CALENDAR_FIXTURE_NAME,
+    ):
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(text, encoding="utf-8")
+    _patch_calendar_fixture_copy(task_path)
+
+
+def patch_verifier_test_path(task_path: Path) -> None:
+    test_script = task_path / "tests" / "test.sh"
+    if not test_script.exists():
+        return
+    original = test_script.read_text(encoding="utf-8")
+    if VERIFIER_PATH_BOOTSTRAP_MARKER in original:
+        return
+
+    lines = original.splitlines()
+    insert_at = 0
+    if lines and lines[0].startswith("#!"):
+        insert_at = 1
+        if len(lines) > 1 and lines[1] == "":
+            insert_at = 2
+
+    patched_lines = (
+        lines[:insert_at]
+        + [VERIFIER_PATH_BOOTSTRAP_SNIPPET]
+        + lines[insert_at:]
+    )
+    test_script.write_text("\n".join(patched_lines) + "\n", encoding="utf-8")
+
+
 def stage_task_for_run(task_path: Path, jobs_dir: Path, case_name: str) -> Path:
     staged_root = jobs_dir / STAGED_TASKS_DIRNAME
     staged_root.mkdir(parents=True, exist_ok=True)
@@ -114,6 +364,8 @@ def stage_task_for_run(task_path: Path, jobs_dir: Path, case_name: str) -> Path:
         shutil.rmtree(staged_task_path)
     shutil.copytree(task_path, staged_task_path)
     mirror_environment_payload_into_task_root(staged_task_path)
+    stage_local_calendar_fixture_if_needed(staged_task_path)
+    patch_verifier_test_path(staged_task_path)
     return staged_task_path
 
 
@@ -142,9 +394,9 @@ def build_harbor_command(
         parts.append(f"--agent-setup-timeout-multiplier {agent_setup_timeout_multiplier}")
     parts.extend(
         [
-            f"-p {task_path}",
-            f"-o {jobs_dir}",
-            f"--job-name {case_name}",
+            f"-p {shlex.quote(str(task_path))}",
+            f"-o {shlex.quote(str(jobs_dir))}",
+            f"--job-name {shlex.quote(case_name)}",
         ]
     )
     if agent_import_path:
@@ -152,7 +404,7 @@ def build_harbor_command(
     else:
         parts.append(f"-a {agent}")
     if model:
-        parts.append(f"-m {model}")
+        parts.append(f"-m {shlex.quote(model)}")
     if environment_import_path:
         parts.append(f"--environment-import-path {shlex.quote(environment_import_path)}")
     if reasoning_effort:
@@ -160,7 +412,7 @@ def build_harbor_command(
     for agent_kwarg in agent_kwargs:
         parts.append(f"--ak {shlex.quote(agent_kwarg)}")
     for artifact in artifacts:
-        parts.append(f"--artifact {artifact}")
+        parts.append(f"--artifact {shlex.quote(artifact)}")
     return " ".join(parts)
 
 
@@ -181,7 +433,13 @@ def normalize_artifacts_for_harbor(artifacts: list[str]) -> list[str]:
 
 def wrap_with_envrc(command: str, envrc_path: Path) -> str:
     quoted_envrc = shlex.quote(str(envrc_path))
-    return f"set -a; source {quoted_envrc}; set +a; {command}"
+    return (
+        f"set -a; source {quoted_envrc}; set +a; "
+        'if [ -n "${SSB_HARBOR_SHIM_DIR:-}" ] && [ -d "${SSB_HARBOR_SHIM_DIR}" ]; then '
+        'export PATH="${SSB_HARBOR_SHIM_DIR}:${PATH}"; '
+        "fi; "
+        f"{command}"
+    )
 
 
 def maybe_prefix_network_mode(command: str, network_mode: str | None) -> str:
@@ -240,7 +498,7 @@ def run_case(
         wrapped_cmd + "\n", encoding="utf-8"
     )
     print(f"[run] {case_name}")
-    subprocess.run(["bash", "-lc", wrapped_cmd], cwd=str(BENCH), check=False)
+    subprocess.run(["bash", "-c", wrapped_cmd], cwd=str(BENCH), check=False)
 
 
 def main() -> None:
@@ -270,7 +528,10 @@ def main() -> None:
     jobs_dir.mkdir(parents=True, exist_ok=True)
     envrc_path = Path(args.envrc).resolve()
 
-    if os.environ.get("SSB_KEEP_PROXY_ENV") != "1":
+    if (
+        os.environ.get("SSB_KEEP_PROXY_ENV") != "1"
+        and os.environ.get("SSB_PRESERVE_PROXY_ENV") != "1"
+    ):
         for key in PROXY_ENV_KEYS:
             os.environ.pop(key, None)
 

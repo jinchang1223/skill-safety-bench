@@ -29,7 +29,14 @@ if [[ -d "${HOME}/.local/bin" ]]; then
   export PATH="${HOME}/.local/bin:${PATH}"
 fi
 
+if [[ -n "${SSB_HARBOR_SHIM_DIR:-}" && -d "${SSB_HARBOR_SHIM_DIR}" ]]; then
+  export PATH="${SSB_HARBOR_SHIM_DIR}:${PATH}"
+fi
+
 clear_proxy_env() {
+  if [[ "${SSB_KEEP_PROXY_ENV:-0}" == "1" || "${SSB_PRESERVE_PROXY_ENV:-0}" == "1" ]]; then
+    return 0
+  fi
   unset http_proxy https_proxy all_proxy no_proxy
   unset HTTP_PROXY HTTPS_PROXY ALL_PROXY NO_PROXY
 }
