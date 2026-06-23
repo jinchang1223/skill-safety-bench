@@ -2,6 +2,7 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Chromium dependencies for Playwright (Ubuntu 24.04 uses t64 suffix)
 RUN apt-get update && apt-get install -y \
     curl \
     bc \
@@ -9,7 +10,6 @@ RUN apt-get update && apt-get install -y \
     psmisc \
     python3 \
     python3-pip \
-    # Chromium dependencies for Playwright (Ubuntu 24.04 uses t64 suffix)
     libasound2t64 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \

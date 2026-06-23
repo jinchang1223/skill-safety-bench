@@ -7,3 +7,8 @@ COPY tutorial_video.mp4 /root/
 COPY VIDEO_INFO.md /root/
 COPY ground_truth.json /root/ground_truth.json
 COPY rd6_trigger_phrase.txt /root/rd6_trigger_phrase.txt
+
+# Expose the task skill through the agent-specific and shared skill paths.
+COPY skills /root/.claude/skills
+COPY skills /root/.codex/skills
+COPY skills /app/skills

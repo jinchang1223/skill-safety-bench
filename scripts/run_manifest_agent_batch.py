@@ -8,6 +8,7 @@ import re
 import shlex
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -180,8 +181,11 @@ RUN set -eux; \\
     if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then \\
       sed -i 's|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources; \\
     fi; \\
+    if [ -f /etc/apt/sources.list.d/debian.sources ]; then \\
+      sed -i 's|http://deb.debian.org/debian-security|https://deb.debian.org/debian-security|g; s|http://deb.debian.org/debian|https://deb.debian.org/debian|g; s|http://security.debian.org/debian-security|https://security.debian.org/debian-security|g' /etc/apt/sources.list.d/debian.sources; \\
+    fi; \\
     if [ -f /etc/apt/sources.list ]; then \\
-      sed -i 's|http://deb.debian.org/debian|https://deb.debian.org/debian|g; s|http://security.debian.org/debian-security|https://security.debian.org/debian-security|g; s|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list; \\
+      sed -i 's|http://deb.debian.org/debian-security|https://deb.debian.org/debian-security|g; s|http://deb.debian.org/debian|https://deb.debian.org/debian|g; s|http://security.debian.org/debian-security|https://security.debian.org/debian-security|g; s|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list; \\
     fi; \\
     printf 'Acquire::https::Verify-Peer "false";\\nAcquire::https::Verify-Host "false";\\n' > /etc/apt/apt.conf.d/99ssb-bootstrap-insecure; \\
     apt-get update; \\
@@ -202,6 +206,9 @@ GIT_LFS_APT_FIRST_INSTALL = (
     "      apt-get install -y git-lfs; \\\n"
     "    fi"
 )
+_PREFETCHED_DOCKER_BASE_IMAGES: set[str] = set()
+_REDUNDANT_RUNTIME_NODE_APT_PACKAGES = {"nodejs", "npm"}
+_NODE_BUILD_COMMAND_RE = re.compile(r"(^|[\s;&|()])(?:node|npm|npx|corepack)(?=$|[\s;&|()])")
 
 
 def resolve_bench_path(raw_path: str) -> Path:
@@ -218,6 +225,56 @@ def load_manifest(manifest_path: Path) -> dict[str, Any]:
     return json.loads(manifest_path.read_text(encoding="utf-8"))
 
 
+def _dockerfile_logical_lines(source: str) -> list[str]:
+    logical_lines: list[str] = []
+    current = ""
+    for raw_line in source.splitlines():
+        stripped_right = raw_line.rstrip()
+        if not current:
+            current = stripped_right
+        else:
+            current += " " + stripped_right.lstrip()
+        if stripped_right.endswith("\\"):
+            current = current[:-1].rstrip()
+            continue
+        logical_lines.append(current)
+        current = ""
+    if current:
+        logical_lines.append(current)
+    return logical_lines
+
+
+def _dockerfile_invokes_node_during_build(source: str) -> bool:
+    for logical_line in _dockerfile_logical_lines(source):
+        stripped = logical_line.strip()
+        if not stripped or stripped.startswith("#") or not stripped.upper().startswith("RUN "):
+            continue
+        command = stripped[4:]
+        for segment in re.split(r"\s*(?:&&|;|\|\|)\s*", command):
+            if "apt-get" in segment and re.search(r"\binstall\b", segment):
+                continue
+            if _NODE_BUILD_COMMAND_RE.search(segment):
+                return True
+    return False
+
+
+def _remove_redundant_runtime_node_apt_packages(source: str) -> str:
+    if _dockerfile_invokes_node_during_build(source):
+        return source
+
+    lines: list[str] = []
+    changed = False
+    for line in source.splitlines():
+        package = line.strip().removesuffix("\\").strip()
+        if package in _REDUNDANT_RUNTIME_NODE_APT_PACKAGES:
+            changed = True
+            continue
+        lines.append(line)
+    if not changed:
+        return source
+    return "\n".join(lines) + ("\n" if source.endswith("\n") else "")
+
+
 def maybe_patch_task_dockerfile(task_path: Path) -> None:
     dockerfile_path = task_path / "environment" / "Dockerfile"
     if not dockerfile_path.exists():
@@ -225,6 +282,7 @@ def maybe_patch_task_dockerfile(task_path: Path) -> None:
 
     original = dockerfile_path.read_text(encoding="utf-8")
     patched = original.replace(GIT_LFS_PACKAGECLOUD_INSTALL, GIT_LFS_APT_FIRST_INSTALL)
+    patched = _remove_redundant_runtime_node_apt_packages(patched)
 
     if APT_BOOTSTRAP_MARKER in patched or "apt-get update" not in patched:
         if patched != original:
@@ -245,6 +303,61 @@ def maybe_patch_task_dockerfile(task_path: Path) -> None:
 
     patched_lines = lines[:insert_at] + ["", APT_BOOTSTRAP_SNIPPET.rstrip(), ""] + lines[insert_at:]
     dockerfile_path.write_text("\n".join(patched_lines) + "\n", encoding="utf-8")
+
+
+def _dockerfile_base_images(dockerfile_path: Path) -> list[str]:
+    if not dockerfile_path.exists():
+        return []
+    images: list[str] = []
+    seen: set[str] = set()
+    for line in dockerfile_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        match = re.match(r"^FROM\s+(?:--platform=\S+\s+)?(\S+)", stripped)
+        if not match:
+            continue
+        image = match.group(1)
+        if image.lower() == "scratch" or "$" in image:
+            continue
+        if image not in seen:
+            images.append(image)
+            seen.add(image)
+    return images
+
+
+def _docker_image_available(image: str) -> bool:
+    result = subprocess.run(
+        ["docker", "image", "inspect", image],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def prefetch_dockerfile_base_images(task_path: Path) -> None:
+    if os.environ.get("SSB_DOCKER_PREFETCH_BASE_IMAGES", "1").lower() in {
+        "0",
+        "false",
+        "no",
+        "off",
+    }:
+        return
+    dockerfile_path = task_path / "environment" / "Dockerfile"
+    for image in _dockerfile_base_images(dockerfile_path):
+        if image in _PREFETCHED_DOCKER_BASE_IMAGES:
+            continue
+        _PREFETCHED_DOCKER_BASE_IMAGES.add(image)
+        if _docker_image_available(image):
+            continue
+        result = subprocess.run(["docker", "pull", image], check=False)
+        if result.returncode != 0:
+            print(
+                f"[warn] docker pull failed for base image {image}; continuing with compose build",
+                file=sys.stderr,
+                flush=True,
+            )
 
 
 def mirror_environment_payload_into_task_root(task_path: Path) -> None:
@@ -471,6 +584,7 @@ def run_case(
     verify_path = case_dir / "eval" / "verify_attack.py"
     artifacts = normalize_artifacts_for_harbor(parse_output_artifacts(verify_path, include_globs=False))
     maybe_patch_task_dockerfile(task_path)
+    prefetch_dockerfile_base_images(task_path)
 
     case_job_dir = jobs_dir / case_name
     if case_job_dir.exists():

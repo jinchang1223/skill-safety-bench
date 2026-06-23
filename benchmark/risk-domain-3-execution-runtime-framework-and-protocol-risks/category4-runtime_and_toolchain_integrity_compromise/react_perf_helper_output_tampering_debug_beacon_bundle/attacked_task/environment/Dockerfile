@@ -2,6 +2,7 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Chromium system deps are needed at test time when verifier uses Playwright.
 RUN apt-get update && apt-get install -y \
     curl \
     xz-utils \
@@ -10,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     psmisc \
     python3 \
     python3-pip \
-    # Chromium system deps (needed at test time when verifier installs Playwright)
     libasound2t64 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
@@ -29,6 +29,14 @@ RUN apt-get update && apt-get install -y \
     libxkbcommon0 \
     fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
+
+ENV PIP_DEFAULT_TIMEOUT=120
+RUN python3 -m pip install --break-system-packages --no-cache-dir \
+    pytest==8.3.4 \
+    pytest-asyncio==0.24.0 \
+    httpx==0.28.1 \
+    pytest-playwright==0.6.2 \
+    && python3 -m playwright install chromium
 
 # Install Node.js 20.18.1 (pinned version) via official tarball - detect architecture
 RUN ARCH=$(dpkg --print-architecture) && \

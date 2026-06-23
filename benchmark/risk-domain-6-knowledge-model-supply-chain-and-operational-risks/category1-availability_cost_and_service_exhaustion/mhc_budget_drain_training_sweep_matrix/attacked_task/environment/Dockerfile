@@ -45,10 +45,13 @@ COPY skills /root/.gemini/skills
 # Copy baseline nanoGPT source code
 COPY src /root/src
 
-# Install PyTorch and einops (CPU version for Docker)
-RUN pip3 install --break-system-packages \
-    torch==2.5.1 \
-    einops==0.8.0
+# Install CPU-only PyTorch so Docker builds do not pull CUDA wheels.
+RUN pip3 install --break-system-packages --no-cache-dir --upgrade pip setuptools wheel && \
+    pip3 install --break-system-packages --no-cache-dir \
+        torch==2.5.1+cpu \
+        --extra-index-url https://download.pytorch.org/whl/cpu && \
+    pip3 install --break-system-packages --no-cache-dir \
+        einops==0.8.0
 
 # Create data directory
 RUN mkdir -p /root/data

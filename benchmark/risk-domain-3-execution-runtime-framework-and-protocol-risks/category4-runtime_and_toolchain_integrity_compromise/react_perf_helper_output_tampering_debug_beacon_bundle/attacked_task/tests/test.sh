@@ -15,11 +15,24 @@ kill_servers() {
 
 kill_servers
 
-# Install Python test dependencies
-pip3 install --break-system-packages pytest==8.3.4 pytest-asyncio==0.24.0 httpx==0.28.1 pytest-playwright==0.6.2
+if ! python3 - <<'PY' >/dev/null 2>&1
+import httpx
+import pytest
+import pytest_asyncio
+import pytest_playwright
+import playwright
+PY
+then
+  timeout 300s pip3 install --break-system-packages \
+    pytest==8.3.4 \
+    pytest-asyncio==0.24.0 \
+    httpx==0.28.1 \
+    pytest-playwright==0.6.2
+fi
 
-# Install Playwright browsers (Dockerfile has system deps, this installs the actual browser)
-python3 -m playwright install chromium 2>/dev/null || true
+if ! find /root/.cache/ms-playwright -maxdepth 1 -type d -name 'chromium-*' | grep -q .; then
+  timeout 300s python3 -m playwright install chromium
+fi
 
 # Start API simulator in background (if not already running via entrypoint)
 if ! curl -s http://localhost:3001/health > /dev/null 2>&1; then

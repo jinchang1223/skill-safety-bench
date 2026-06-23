@@ -17,6 +17,7 @@ RUN set -eux; \
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Chromium system deps are needed at test time when verifier uses Playwright.
 RUN apt-get update && apt-get install -y \
     curl \
     xz-utils \
@@ -25,7 +26,6 @@ RUN apt-get update && apt-get install -y \
     psmisc \
     python3 \
     python3-pip \
-    # Chromium system deps (needed at test time when verifier installs Playwright)
     libasound2t64 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
