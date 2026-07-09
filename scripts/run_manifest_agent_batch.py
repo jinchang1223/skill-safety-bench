@@ -9,7 +9,7 @@ import shlex
 import shutil
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from verify_replay import parse_output_artifacts
@@ -73,7 +73,8 @@ curl() {
   for ssb_curl_arg in "$@"; do
     case "${ssb_curl_arg}" in
       https://astral.sh/uv/*|https://github.com/astral-sh/uv/*|https://github.com/astral-sh/uv/releases/*)
-        return 56
+        printf '%s\n' ':'
+        return 0
         ;;
     esac
   done
@@ -529,14 +530,63 @@ def build_harbor_command(
     return " ".join(parts)
 
 
+_BROAD_HARBOR_ARTIFACT_DIRS = {
+    ".",
+    "/",
+    "/app",
+    "/etc",
+    "/home",
+    "/root",
+    "/tmp",
+    "/usr",
+    "/var",
+    "/workspace",
+}
+_BROAD_HOME_ARTIFACT_ROOT_NAMES = {"build", "workspace", "work", "project", "projects"}
+
+
+def _contains_glob(path: str) -> bool:
+    return any(ch in path for ch in "*?[]")
+
+
+def _safe_glob_artifact_for_harbor(path: str) -> str | None:
+    parent = str(Path(path).parent)
+    if not parent or parent in _BROAD_HARBOR_ARTIFACT_DIRS:
+        return None
+    if not Path(parent).is_absolute():
+        return None
+    if _contains_glob(parent):
+        return None
+    if _is_broad_home_artifact_dir(parent):
+        return None
+    return parent
+
+
+def _is_broad_home_artifact_dir(path: str) -> bool:
+    parts = PurePosixPath(str(path or "")).parts
+    if len(parts) < 4 or parts[0] != "/" or parts[1] != "home":
+        return False
+    root_name = parts[3]
+    if root_name not in _BROAD_HOME_ARTIFACT_ROOT_NAMES:
+        return False
+    if len(parts) == 4:
+        return True
+    if len(parts) == 5 and parts[4] == "failed":
+        return True
+    if root_name == "build" and len(parts) <= 6 and parts[4] == "failed":
+        return True
+    return False
+
+
 def normalize_artifacts_for_harbor(artifacts: list[str]) -> list[str]:
     normalized: list[str] = []
     seen: set[str] = set()
     for artifact in artifacts:
         candidate = artifact
-        basename = Path(artifact).name
-        if any(ch in basename for ch in "*?[]"):
-            candidate = str(Path(artifact).parent)
+        if _contains_glob(artifact):
+            candidate = _safe_glob_artifact_for_harbor(artifact)
+        if not candidate:
+            continue
         if candidate in seen:
             continue
         seen.add(candidate)
@@ -582,7 +632,7 @@ def run_case(
     source_task_path = resolve_bench_path(case_entry.get("task_path", "")) if case_entry.get("task_path") else case_dir / "attacked_task"
     task_path = stage_task_for_run(source_task_path, jobs_dir, case_name)
     verify_path = case_dir / "eval" / "verify_attack.py"
-    artifacts = normalize_artifacts_for_harbor(parse_output_artifacts(verify_path, include_globs=False))
+    artifacts = normalize_artifacts_for_harbor(parse_output_artifacts(verify_path, include_globs=True))
     maybe_patch_task_dockerfile(task_path)
     prefetch_dockerfile_base_images(task_path)
 

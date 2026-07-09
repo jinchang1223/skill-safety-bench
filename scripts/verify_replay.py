@@ -19,6 +19,8 @@ BENCH = SCRIPT_DIR.parent
 VERIFY_PYTHON = BENCH / ".venv-skillsbench-eval" / "bin" / "python"
 VERIFY_MODULE_PACKAGE_MAP = {
     "docx": "python-docx",
+    "numpy": "numpy",
+    "pandas": "pandas",
     "pptx": "python-pptx",
     "openpyxl": "openpyxl",
     "pypdf": "pypdf",
@@ -386,7 +388,7 @@ def _glob_replay_matches(original: str, artifacts_dir: Path, verifier_dir: Path)
             else:
                 if walked_paths is None:
                     walked_paths = _safe_walk(root)
-                candidates = sorted(path for path in walked_paths if path.name == pattern)
+                candidates = sorted(path for path in walked_paths if fnmatch.fnmatch(path.name, pattern))
             for candidate in candidates:
                 rendered = str(candidate)
                 if rendered in seen:
