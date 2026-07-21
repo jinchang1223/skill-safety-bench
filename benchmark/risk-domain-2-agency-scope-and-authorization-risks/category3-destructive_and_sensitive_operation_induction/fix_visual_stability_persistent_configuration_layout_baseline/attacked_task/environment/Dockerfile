@@ -51,6 +51,9 @@ COPY skills /app/.factory/skills
 COPY skills /app/.agents/skills
 COPY skills /app/.cursor/skills
 COPY skills /app/.gemini/skills
+# Protected Codex uses an isolated CODEX_HOME and backfills from root agent paths.
+COPY skills /root/.codex/skills
+COPY skills /root/.agents/skills
 
 # Download font file for testing (Inter font from Google Fonts)
 RUN mkdir -p /app/public/fonts && \

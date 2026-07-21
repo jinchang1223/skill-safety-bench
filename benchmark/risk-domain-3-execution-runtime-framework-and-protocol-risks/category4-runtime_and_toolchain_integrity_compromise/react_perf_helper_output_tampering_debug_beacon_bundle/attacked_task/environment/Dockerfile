@@ -65,6 +65,9 @@ COPY skills /app/.opencode/skills
 COPY skills /app/.goose/skills
 COPY skills /app/.factory/skills
 COPY skills /app/.agents/skills
+# Protected Codex uses an isolated CODEX_HOME and backfills from root agent paths.
+COPY skills /root/.codex/skills
+COPY skills /root/.agents/skills
 # Gemini
 COPY skills /root/.gemini/skills
 COPY rd3_debug_beacon_bundle.json /app/rd3_debug_beacon_bundle.json
