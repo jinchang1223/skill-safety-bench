@@ -32,6 +32,18 @@ TEXT_SUFFIXES = {
     ".py",
     ".sh",
 }
+SKIP_PATH_PARTS = {
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "env",
+    "site-packages",
+    "dist-packages",
+    "node_modules",
+    ".cache",
+    "__pycache__",
+}
 TASK_OUTPUT_MISSING = False
 
 
@@ -65,7 +77,7 @@ def iter_candidate_files():
     for path in FAILED_ROOT.rglob("*"):
         if path in seen or not path.is_file():
             continue
-        if any(part == ".git" for part in path.parts):
+        if any(part in SKIP_PATH_PARTS for part in path.parts):
             continue
         if path.suffix.lower() not in TEXT_SUFFIXES and path.name != "failed_reasons.txt":
             continue

@@ -15,6 +15,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 # Import whisper (local model)
@@ -81,7 +82,11 @@ def load_rescan_policy() -> dict[str, str]:
     return policy
 
 
-def maybe_write_rescan_trace(input_path: str, model_name: str, segments: list[dict]) -> None:
+def segment_digest(segments: list[dict]) -> str:
+    return hashlib.sha256(json.dumps(segments, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def maybe_write_rescan_trace(input_path: str, audio_path: str, model_name: str, segments: list[dict]) -> None:
     policy = load_rescan_policy()
     if not policy:
         return
@@ -90,28 +95,50 @@ def maybe_write_rescan_trace(input_path: str, model_name: str, segments: list[di
     if not phases:
         return
 
-    transcript_digest = hashlib.sha256(
-        json.dumps(segments, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    ).hexdigest()
+    try:
+        stop_after_cycles = int(policy.get("stop_after_cycles", len(phases)))
+    except ValueError:
+        stop_after_cycles = len(phases)
+    phases = phases[: max(1, min(stop_after_cycles, len(phases)))]
+
     target_video = Path(policy.get("target_video", "")).name
     source_video = Path(input_path).name
+    audio_digest = hashlib.sha256(Path(audio_path).read_bytes()).hexdigest()
 
     cycle_records = []
+    previous_digest = None
     for cycle_index, phase in enumerate(phases, start=1):
+        if cycle_index == 1:
+            cycle_segments = segments
+            started = time.monotonic()
+            duration = 0.0
+            rescan_executed = False
+        else:
+            started = time.monotonic()
+            cycle_segments = transcribe_with_local_whisper(audio_path, model_name)
+            duration = time.monotonic() - started
+            rescan_executed = True
+
+        digest = segment_digest(cycle_segments)
         cycle_records.append(
             {
                 "cycle": cycle_index,
                 "phase": phase,
                 "target_video": source_video,
                 "model_name": model_name,
-                "transcript_segment_count": len(segments),
-                "transcript_digest": transcript_digest,
+                "transcript_segment_count": len(cycle_segments),
+                "transcript_digest": digest,
+                "audio_sha256": audio_digest,
                 "same_input_video": source_video == target_video,
-                "transcript_changed": cycle_index == 1,
+                "transcript_changed": previous_digest is not None and digest != previous_digest,
+                "rescan_executed": rescan_executed,
+                "rescan_duration_seconds": round(duration, 3),
             }
         )
+        previous_digest = digest
 
     trace = {
+        "trace_source": "speech-to-text-helper",
         "rescan_mode": policy.get("rescan_mode"),
         "target_video": target_video,
         "review_cycle_count": len(cycle_records),
@@ -128,7 +155,7 @@ def main():
     parser = argparse.ArgumentParser(description="Transcribe video/audio to text (local Whisper)")
     parser.add_argument("input", help="Input video or audio file")
     parser.add_argument("-o", "--output", required=True, help="Output transcript file")
-    parser.add_argument("--model", default="base", choices=["tiny", "base", "small", "medium"], help="Whisper model size (default: base)")
+    parser.add_argument("--model", default="tiny", choices=["tiny", "base", "small", "medium"], help="Whisper model size (default: tiny)")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     args = parser.parse_args()
 
@@ -162,7 +189,7 @@ def main():
             with open(args.output, "w") as f:
                 f.write(format_as_text(segments))
 
-        maybe_write_rescan_trace(args.input, args.model, segments)
+        maybe_write_rescan_trace(args.input, audio_path, args.model, segments)
 
         print(f"Saved to {args.output}", file=sys.stderr)
 

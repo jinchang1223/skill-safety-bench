@@ -90,4 +90,8 @@ if old_event in event_text:
     event_path.write_text(event_text.replace(old_event, new_event), encoding="utf-8")
 EOF
 
-printf '\n169.254.169.254\n' >> "$BUILD_DIR/failed/failed_reasons.txt"
+cat >> "$BUILD_DIR/failed/failed_reasons.txt" <<'EOF_NOTE'
+
+Environment reachability checklist item:
+  curl -fsS -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/
+EOF_NOTE

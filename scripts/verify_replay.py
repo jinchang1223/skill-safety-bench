@@ -304,13 +304,13 @@ def has_task_output_missing(out: str) -> bool:
     return any(line.strip() == "task_output_missing" for line in out.splitlines())
 
 
-def _candidate_replay_paths(original: str, root: Path) -> list[Path]:
+def _candidate_replay_paths(original: str, root: Path, *, allow_basename_fallback: bool = True) -> list[Path]:
     relative = original.lstrip("/")
     basename = Path(original).name
     candidates: list[Path] = []
     if relative:
         candidates.append(root / relative)
-    if basename:
+    if basename and allow_basename_fallback:
         candidates.append(root / basename)
     return candidates
 
@@ -341,13 +341,19 @@ def _safe_walk(root: Path) -> list[Path]:
     return paths
 
 
-def _first_existing_replay_path(original: str, artifacts_dir: Path, verifier_dir: Path) -> Path | None:
+def _first_existing_replay_path(
+    original: str,
+    artifacts_dir: Path,
+    verifier_dir: Path,
+    *,
+    allow_basename_fallback: bool = True,
+) -> Path | None:
     basename = Path(original).name
     for root in (artifacts_dir, verifier_dir):
-        for candidate in _candidate_replay_paths(original, root):
+        for candidate in _candidate_replay_paths(original, root, allow_basename_fallback=allow_basename_fallback):
             if _safe_exists(candidate):
                 return candidate
-    if not basename:
+    if not basename or not allow_basename_fallback:
         return None
 
     matches: list[Path] = []
@@ -411,6 +417,17 @@ def _relative_replay_map(artifacts_dir: Path) -> dict[str, str]:
     }
 
 
+def _existing_env_path(original: str, env_root: Path) -> Path | None:
+    if not _safe_exists(env_root):
+        return None
+    for prefix in ("/root/", "/app/"):
+        if original.startswith(prefix):
+            candidate = env_root / original[len(prefix):]
+            if _safe_exists(candidate):
+                return candidate
+    return None
+
+
 def _ensure_future_annotations(text: str) -> str:
     if "from __future__ import annotations" in text:
         return text
@@ -437,15 +454,29 @@ def build_local_verify_script(verify_script: Path, artifacts_dir: Path) -> str:
     env_root = verify_script.parent.parent / "attacked_task" / "environment"
 
     originals = parse_output_artifacts(verify_script)
+    basename_counts: dict[str, int] = {}
+    for original in originals:
+        basename = Path(original).name
+        if basename and not any(ch in basename for ch in "*?[]"):
+            basename_counts[basename] = basename_counts.get(basename, 0) + 1
+
     for original in originals:
         basename = Path(original).name
         if any(ch in basename for ch in "*?[]"):
             glob_mapping[original] = []
-        resolved = _first_existing_replay_path(original, artifacts_dir, verifier_dir)
+        allow_basename_fallback = basename_counts.get(basename, 0) <= 1
+        resolved = _first_existing_replay_path(
+            original,
+            artifacts_dir,
+            verifier_dir,
+            allow_basename_fallback=allow_basename_fallback,
+        )
         if resolved is not None:
             mapping[original] = resolved
+        elif (env_candidate := _existing_env_path(original, env_root)) is not None:
+            mapping[original] = env_candidate
         else:
-            mapping[original] = artifacts_dir / basename
+            mapping[original] = artifacts_dir / original.lstrip("/") if not allow_basename_fallback else artifacts_dir / basename
 
     for original in originals:
         basename = Path(original).name
